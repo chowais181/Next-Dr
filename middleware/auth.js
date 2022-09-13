@@ -2,7 +2,6 @@ const ErrorHander = require("../utils/errorHander");
 const catchAsyncErrors = require("./catchAsyncErrors");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
-const Doctor = require("../models/doctorModel");
 exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
   const { token } = req.cookies;
   // console.log(token);
@@ -13,22 +12,6 @@ exports.isAuthenticatedUser = catchAsyncErrors(async (req, res, next) => {
   try {
     const decodedData = jwt.verify(token, process.env.JWT_SECRET);
     req.user = await User.findById(decodedData.id);
-    next();
-  } catch (err) {
-    res.status(401).json({ msg: "token is not valid " });
-  }
-});
-
-exports.isAuthenticatedDoctor = catchAsyncErrors(async (req, res, next) => {
-  const { token } = req.cookies;
-  // console.log(token);
-  if (!token) {
-    return next(new ErrorHander("Please Login to access this resource", 401));
-  }
-
-  try {
-    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
-    req.doctor = await Doctor.findById(decodedData.id);
     next();
   } catch (err) {
     res.status(401).json({ msg: "token is not valid " });

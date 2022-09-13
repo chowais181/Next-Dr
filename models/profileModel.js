@@ -38,6 +38,10 @@ const profileSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  ratings: {
+    type: Number,
+    default: 0,
+  },
   reviews: [
     {
       user: {
@@ -47,11 +51,11 @@ const profileSchema = new mongoose.Schema({
       },
       rating: {
         type: Number,
-        required: true,
+        required: [true,"please select rating"]
       },
       comment: {
         type: String,
-        required: true,
+        required: [true,"please add comment"]
       },
     },
   ],

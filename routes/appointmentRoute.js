@@ -6,11 +6,10 @@ const {
   updateAppointmentUser,
   deleteAppointmentUser,
   getMyAppointmentsDoctor,
+  getSinglAppointmentDoctor,
+  updateStatusOfAppointment,
 } = require("../controllers/appointmentController");
-const {
-  isAuthenticatedDoctor,
-  isAuthenticatedUser,
-} = require("../middleware/auth");
+const { isAuthenticatedUser } = require("../middleware/auth");
 const router = express.Router();
 
 router
@@ -30,7 +29,12 @@ router
 
 // get appointment for doctor
 router
-  .route("/myAppointments/")
-  .get(isAuthenticatedDoctor, getMyAppointmentsDoctor);
+  .route("/myAppointments")
+  .get(isAuthenticatedUser, getMyAppointmentsDoctor);
+
+router
+  .route("/myAppointment/:id")
+  .get(isAuthenticatedUser, getSinglAppointmentDoctor)
+  .put(isAuthenticatedUser, updateStatusOfAppointment);
 
 module.exports = router;

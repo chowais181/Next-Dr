@@ -5,12 +5,24 @@ const ErrorHander = require("../utils/errorHander");
 
 // create a new Appointment
 exports.createAppointment = catchAsyncErrors(async (req, res, next) => {
-  const { subject, description, bookingDate, bookingTime } = req.body;
+  // dr cannot book appointment with his-self
+  const profile = await Profile.find({ doctor: req.user.id });
+  // to ignore the user who have no profile
+  // console.log(profile[0].doctor.toString(), req.user.id );
+  if (profile.length > 0) {
+    if (profile[0].doctor.toString() === req.user.id) {
+      return next(
+        new ErrorHander("You cannot book appointment with your own.", 404)
+      );
+    }
+  }
+
+  const { description, bookingDate, bookingTime } = req.body;
   if (!req.user) {
     return next(new ErrorHander("Please login to access this resource.", 404));
   }
+
   const appointment = await Appointment.create({
-    subject,
     description,
     bookingDate,
     bookingTime,
@@ -38,7 +50,7 @@ exports.getMyAppointmentsUser = catchAsyncErrors(async (req, res, next) => {
       select: "hospital location fees timing status specialist",
       populate: {
         path: "doctor",
-        model: "Doctor",
+        model: "User",
         select: "name phoneNumber",
       },
     }
@@ -52,15 +64,14 @@ exports.getMyAppointmentsUser = catchAsyncErrors(async (req, res, next) => {
 });
 
 // get single appointment
-
 exports.getSingleAppointmentUser = catchAsyncErrors(async (req, res, next) => {
   const appointment = await Appointment.findById(req.params.id).populate({
     path: "doctorProfile",
     select: "hospital location fees timing status specialist",
     populate: {
       path: "doctor",
-      model: "Doctor",
-      select: "name email phoneNumber",
+      model: "User",
+      select: "name phoneNumber",
     },
   });
 
@@ -72,12 +83,11 @@ exports.getSingleAppointmentUser = catchAsyncErrors(async (req, res, next) => {
 
 // updatde  Appointment -- user
 exports.updateAppointmentUser = catchAsyncErrors(async (req, res, next) => {
-  const { subject, description, bookingDate, bookingTime } = req.body;
+  const { description, bookingDate, bookingTime } = req.body;
 
   const appointment = await Appointment.findByIdAndUpdate(
     req.params.id,
     {
-      subject,
       description,
       bookingDate,
       bookingTime,
@@ -119,10 +129,8 @@ exports.getMyAppointmentsDoctor = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHander("Please login to access this resource.", 404));
   }
   // first get the doctor profile and then his/her appointments
-  const profile = await Profile.find({ doctor: req.doctor.id });
+  const profile = await Profile.find({ user: req.user.id });
 
-  // console.log(profile[0].id) ; getting the profile id
-  // getting the data using nested populate function
   const myAppointments = await Appointment.find({
     doctorProfile: profile[0].id,
   }).populate("user", "name email phoneNumber");
@@ -131,5 +139,46 @@ exports.getMyAppointmentsDoctor = catchAsyncErrors(async (req, res, next) => {
     success: true,
     total_appointments,
     myAppointments,
+  });
+});
+
+// get single appointments for Doctor
+exports.getSinglAppointmentDoctor = catchAsyncErrors(async (req, res, next) => {
+  // if (!req.user) {
+  //   return next(new ErrorHander("Please login to access this resource.", 404));
+  // }
+
+  const appointment = await Appointment.findById(req.params.id).populate(
+    "user",
+    "name phoneNumber"
+  );
+
+  res.status(200).json({
+    success: true,
+    appointment,
+  });
+});
+
+// update status of the appointment -- doctor
+exports.updateStatusOfAppointment = catchAsyncErrors(async (req, res, next) => {
+  const newStatus = {
+    status: req.body.status,
+  };
+
+  const appointment = await Appointment.findByIdAndUpdate(
+    req.params.id,
+    newStatus,
+    {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    }
+  );
+  if (!appointment) {
+    return next(new ErrorHander("No appointment found", 404));
+  }
+  res.status(200).json({
+    success: true,
+    message: "Appointment status updated successfully",
   });
 });

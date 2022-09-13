@@ -1,7 +1,7 @@
 const Profile = require("../models/profileModel");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHander = require("../utils/errorHander");
-
+const ApiFeatures = require("../utils/apiFeatures");
 // -----------------------User : role (doctor)----------------
 
 // create profile
@@ -32,13 +32,16 @@ exports.createProfile = catchAsyncErrors(async (req, res, next) => {
 
 // get profile of the user having role dr
 exports.myProfile = catchAsyncErrors(async (req, res, next) => {
-  const profile = await Profile.find({ doctor: req.user.id });
+  const profile = await Profile.find({ doctor: req.user.id }).populate(
+    "doctor",
+    "name email phoneNumber"
+  );
 
   res.status(200).json({
     success: true,
     profile,
   });
-}); 
+});
 
 // update profile
 exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
@@ -72,18 +75,33 @@ exports.getSingleProfile = catchAsyncErrors(async (req, res, next) => {
 
 // get all profiles
 exports.getAllProfiles = catchAsyncErrors(async (req, res, next) => {
-  const profiles = await Profile.find().populate("doctor", "name phoneNumber");
-  const total_profiles = docProfiles.length;
+  const resultPerPage = 8;
+
+  const apiFeature = new ApiFeatures(
+    Profile.find().populate("doctor", "name phoneNumber"),
+    req.query
+  )
+    .search()
+    .filter();
+
+  let profiles = await apiFeature.query;
+
+  let filteredProductsCount = profiles.length;
+
+  apiFeature.pagination(resultPerPage);
+
+  const total_profiles = profiles.length;
   res.status(201).json({
     success: true,
     total_profiles,
     profiles,
+    filteredProductsCount,
   });
 });
 
 // delete profile
 exports.deleteProfile = catchAsyncErrors(async (req, res, next) => {
-  const profile = await Profile.findOneAndDelete({ doctor: req.doctor.id });
+  const profile = await Profile.findOneAndDelete({ doctor: req.user.id });
   if (!profile) {
     return next(new ErrorHander("Profile not found"));
   }
@@ -96,31 +114,57 @@ exports.deleteProfile = catchAsyncErrors(async (req, res, next) => {
 
 //create doctor profile review
 exports.createProfileReview = catchAsyncErrors(async (req, res, next) => {
-  const { comment, profileId } = req.body;
+  const { rating, comment, profileId } = req.body;
 
   const review = {
     user: req.user.id,
-    name: req.user.name,
+    rating: Number(rating),
     comment,
   };
 
   const profile = await Profile.findById(profileId);
+  if (!profile) return next(new ErrorHander("profile not found", 404));
 
-  profile.reviews.push(review);
-  profile.numOfReviews = profile.reviews.length;
+  const isReviewed = profile.reviews.find(
+    (rev) => rev.user.toString() === req.user._id.toString()
+  );
+
+  if (isReviewed) {
+    profile.reviews.forEach((rev) => {
+      if (rev.user.toString() === req.user._id.toString())
+        (rev.rating = rating), (rev.comment = comment);
+    });
+  } else {
+    profile.reviews.push(review);
+    profile.numOfReviews = profile.reviews.length;
+  }
+
+  let avg = 0;
+  profile.reviews.forEach((rev) => {
+    avg += rev.rating;
+  });
+  profile.ratings = avg / profile.reviews.length;
 
   // validateBeforeSave : it checks the custom defined validations.
   await profile.save({ validateBeforeSave: false });
   res.status(200).json({
     success: true,
-    message: "Review created successfully",
+    message: "Review added successfully",
     profile,
   });
 });
 
 // Get All Reviews of a doctor profile
 exports.getProfileReviews = catchAsyncErrors(async (req, res, next) => {
-  const profile = await Profile.findById(req.query.id);
+  // getting the profile and getting th name who gave review
+  const profile = await Profile.findById(req.query.id).populate({
+    path: "reviews",
+    populate: {
+      path: "user",
+      model: "User",
+      select: "name",
+    },
+  });
 
   if (!profile) {
     return next(new ErrorHander("Profile not found", 404));
@@ -140,19 +184,31 @@ exports.deleteProfileReview = catchAsyncErrors(async (req, res, next) => {
   if (!profile) {
     return next(new ErrorHander("Profile not found", 404));
   }
-
   // first we ignore the review that we want to delete
   const reviews = profile.reviews.filter(
     (rev) => rev._id.toString() !== req.query.id.toString()
   );
 
+  let avg = 0;
+  reviews.forEach((rev) => {
+    avg += rev.rating;
+  });
+  let ratings = 0;
+  if (reviews.length === 0) {
+    ratings = 0;
+  } else {
+    ratings = avg / reviews.length;
+  }
+
   const numOfReviews = reviews.length;
+
   // pass only desired reviews and modfy the reviews
   await Profile.findByIdAndUpdate(
     req.query.profileId,
     {
-      reviews,
+      ratings,
       numOfReviews,
+      reviews,
     },
     {
       new: true,

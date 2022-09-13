@@ -11,10 +11,6 @@ const appointmentSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
-  subject: {
-    type: String,
-    required: [true, "Enter subject"],
-  },
   description: {
     type: String,
   },

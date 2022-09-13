@@ -23,14 +23,12 @@ app.use(cors());
 // .....Routes imports
 
 const user = require("./routes/userRoute");
-const doctor = require("./routes/doctorRoute");
-const profile=require("./routes/profileRoute");
-const appointment=require("./routes/appointmentRoute");
+const profile = require("./routes/profileRoute");
+const appointment = require("./routes/appointmentRoute");
 
 app.use("/api/v1", user);
-app.use("/api/v1", doctor);
 app.use("/api/v1", profile);
-app.use("/api/v1",appointment);
+app.use("/api/v1", appointment);
 
 // ..error middleware we handle the error through it so over server would not stop
 const errormiddleware = require("./middleware/error");
