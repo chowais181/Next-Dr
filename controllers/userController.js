@@ -25,7 +25,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
   const isPasswordMatched = await user.comparePassword(password);
 
   if (!isPasswordMatched) {
-    return next(new ErrorHander("Invalid cridentials", 401));
+    return next(new ErrorHander("Invalid credentials", 401));
   }
 
   sendToken(user, 200, res);
@@ -33,7 +33,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
 // logout user
 exports.logoutUser = catchAsyncErrors(async (req, res, next) => {
-  res.cookie("token", null, {
+  res.cookie("userToken", null, {
     expires: new Date(Date.now()),
     httpOnly: true,
   });

@@ -86,7 +86,7 @@ exports.getAllProfiles = catchAsyncErrors(async (req, res, next) => {
 
   let profiles = await apiFeature.query;
 
-  let filteredProductsCount = profiles.length;
+  let filteredProfilesCount = profiles.length;
 
   apiFeature.pagination(resultPerPage);
 
@@ -95,7 +95,7 @@ exports.getAllProfiles = catchAsyncErrors(async (req, res, next) => {
     success: true,
     total_profiles,
     profiles,
-    filteredProductsCount,
+    filteredProfilesCount,
   });
 });
 

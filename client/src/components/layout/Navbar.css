@@ -2,5 +2,17 @@
   padding: 20px;
 }
 .NavIcon {
-  margin-right: 5%;
+  margin-right: 10%;
+  align-items: center;
+}
+.Active {
+  border: 2px solid white;
+  border-top: hidden;
+  border-left: hidden;
+  border-right: hidden;
+}
+@media (max-width: 991px) {
+  .NavIcon {
+    align-items: unset;
+  }
 }

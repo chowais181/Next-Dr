@@ -10,9 +10,7 @@ const {
   getProfileReviews,
   deleteProfileReview,
 } = require("../controllers/profileController");
-const {
-  isAuthenticatedUser,
-} = require("../middleware/auth");
+const { isAuthenticatedUser } = require("../middleware/auth");
 const router = express.Router();
 
 // first dr login then create profile
