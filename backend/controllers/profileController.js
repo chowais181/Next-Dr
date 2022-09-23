@@ -12,11 +12,6 @@ exports.createProfile = catchAsyncErrors(async (req, res, next) => {
   if (checkProfile.length > 0) {
     return next(new ErrorHander("Profile already created", 400));
   }
-  // check the user role is doctor -- only dr can create profile
-
-  if (req.user.role !== "doctor") {
-    return next(new ErrorHander("Only doctor can create profile", 400));
-  }
 
   // assigning the id of the user who created his profile -- role
   req.body.doctor = req.user.id;
@@ -34,7 +29,7 @@ exports.createProfile = catchAsyncErrors(async (req, res, next) => {
 exports.myProfile = catchAsyncErrors(async (req, res, next) => {
   const profile = await Profile.find({ doctor: req.user.id }).populate(
     "doctor",
-    "name email phoneNumber"
+    "name email phoneNumber avatar"
   );
 
   res.status(200).json({
@@ -60,13 +55,29 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
     profile,
   });
 });
+// .populate({
+//   path: "reviews",
+//   populate: {
+//     path: "user",
+//     model: "User",
+//     select: "name avatar",
+// })
 
 // get single profile
 exports.getSingleProfile = catchAsyncErrors(async (req, res, next) => {
-  const profile = await Profile.findById(req.params.id).populate(
-    "doctor",
-    "name phoneNumber"
-  );
+  const profile = await Profile.findById(req.params.id)
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "user",
+        model: "User",
+        select: "name avatar",
+      },
+    })
+    .populate({
+      path: "doctor",
+      select: "name phoneNumber avatar",
+    });
   res.status(201).json({
     success: true,
     profile,
@@ -78,7 +89,7 @@ exports.getAllProfiles = catchAsyncErrors(async (req, res, next) => {
   const resultPerPage = 8;
 
   const apiFeature = new ApiFeatures(
-    Profile.find().populate("doctor", "name phoneNumber"),
+    Profile.find().populate("doctor", "name phoneNumber avatar"),
     req.query
   )
     .search()

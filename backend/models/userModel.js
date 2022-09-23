@@ -9,8 +9,8 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "Enter name"],
-      minLength: [3, "Name must be greater than or equal to 3 characters"],
-      maxLength: [30, "Name cannot exceeds 30 characters"],
+      minLength: [3, "Enter full name"],
+      maxLength: [30, "Name length exceeds"],
       validate: {
         validator: function (v) {
           return /^[a-zA-Z\s*]+$/.test(v);
@@ -50,7 +50,7 @@ const userSchema = new mongoose.Schema(
           var no = /^(\+92|0|92)[0-9]{10}$/;
           return no.test(v);
         },
-        message: "{VALUE} is not a valid 11 digit number!",
+        message: "Not a valid number",
       },
     },
     avatar: {

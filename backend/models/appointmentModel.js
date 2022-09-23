@@ -12,6 +12,19 @@ const appointmentSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    patientName: {
+      type: String,
+      required: true,
+      required: [true, "Enter patient name"],
+    },
+    fatherName: {
+      type: String,
+      required: [true, "Enter father name "],
+    },
+    age: {
+      type: Number,
+      required: [true, "Enter age"],
+    },
     description: {
       type: String,
     },

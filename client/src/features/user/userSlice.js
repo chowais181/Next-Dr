@@ -17,6 +17,8 @@ const initialState = {
   userToken,
   error: null,
   success: false,
+  isLogin: false,
+  isRegister: false,
 };
 
 const userSlice = createSlice({
@@ -28,16 +30,18 @@ const userSlice = createSlice({
     [userLogout.pending]: (state) => {
       state.loading = true;
       state.error = null;
+      state.isLogin = false;
     },
     [userLogout.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.userInfo = null;
       state.userToken = null;
-      state.success = true;
+      state.isLogin = false;
     },
     [userLogout.rejected]: (state, { payload }) => {
       state.loading = false;
       state.error = payload;
+      state.isLogin = true;
     },
     // login user
     [userLogin.pending]: (state) => {
@@ -48,6 +52,8 @@ const userSlice = createSlice({
       state.loading = false;
       state.userInfo = payload.user;
       state.userToken = payload.userToken;
+      state.success = true;
+      state.isLogin = true;
     },
     [userLogin.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -61,6 +67,7 @@ const userSlice = createSlice({
     [registerUser.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.success = true; // registration successful
+      state.isRegister = true;
     },
     [registerUser.rejected]: (state, { payload }) => {
       state.loading = false;

@@ -1,8 +1,17 @@
-import React, { Fragment } from "react";
-import { Link, Redirect } from "react-router-dom";
-import "../App.css";
+import React, { Fragment, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import "../assets/App.css";
 
 export default function LandingPage() {
+  const navigate = useNavigate();
+  const { userInfo, isLogin } = useSelector((state) => state.user);
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/home");
+    }
+  }, [navigate, userInfo, isLogin]);
   return (
     <Fragment>
       <section id="landing">
@@ -27,6 +36,7 @@ export default function LandingPage() {
               <Link to="/login" type="button" className="item btn btn-info">
                 Login
               </Link>
+              <br />
             </div>
             <div className="user-signup">
               <h2 className="item heading-sub">
@@ -41,6 +51,7 @@ export default function LandingPage() {
               <Link to="/register" className="item btn btn-outline-info">
                 Sign up
               </Link>
+              <br />
             </div>
           </div>
           <br />
@@ -48,13 +59,14 @@ export default function LandingPage() {
             <div className="img-1">
               <img
                 alt="doctor"
-                src={require("../imges/landingPage.svg").default}
+                src={process.env.PUBLIC_URL + "images/landingPage.svg"}
               />
             </div>
           </div>
         </div>
         <br />
       </section>
+      <br />
     </Fragment>
   );
 }

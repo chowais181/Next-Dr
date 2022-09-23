@@ -1,11 +1,25 @@
 const User = require("../models/userModel");
+const gravtar = require("gravatar");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHander = require("../utils/errorHander");
 const { sendToken } = require("../utils/jwtToken");
 
 // register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const user = await User.create(req.body);
+  const { name, email, phoneNumber, password } = req.body;
+  //get gravtar for profile picture
+  const avatar = gravtar.url(req.body.email, {
+    s: "200",
+    r: "pg",
+    d: "mm",
+  });
+  const user = await User.create({
+    name,
+    email,
+    phoneNumber,
+    password,
+    avatar,
+  });
 
   sendToken(user, 201, res);
 });

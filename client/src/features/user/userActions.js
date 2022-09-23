@@ -5,7 +5,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 export const userLogin = createAsyncThunk(
   "user/login",
   async ({ email, password }, { rejectWithValue }) => {
-    console.log(email, password);
     try {
       // configure header's Content-Type as JSON
       const config = {
@@ -34,31 +33,24 @@ export const userLogin = createAsyncThunk(
   }
 );
 // logout user action
-export const userLogout = createAsyncThunk(
-  "user/logout",
-  async () => {
-    try {
-     await axios.get(
-        "/api/v1/logout-user"
-      );
-    } catch (error) {
-      // return custom error message from API if any
-      if (error.response && error.response.data.message) {
-        return (error.response.data.message);
-      } else {
-        return (error.message);
-      }
+export const userLogout = createAsyncThunk("user/logout", async () => {
+  try {
+    await axios.get("/api/v1/logout-user");
+  } catch (error) {
+    // return custom error message from API if any
+    if (error.response && error.response.data.message) {
+      return error.response.data.message;
+    } else {
+      return error.message;
     }
   }
-);
-
-
-
+});
 
 //register user action
 export const registerUser = createAsyncThunk(
   "user/register",
-  async ({ firstName, email, password }, { rejectWithValue }) => {
+  async ({ name, email, password, phoneNumber }, { rejectWithValue }) => {
+    console.log(phoneNumber);
     try {
       const config = {
         headers: {
@@ -67,8 +59,8 @@ export const registerUser = createAsyncThunk(
       };
 
       await axios.post(
-        "/api/user/register-user",
-        { firstName, email, password },
+        "/api/v1/register-user",
+        { name, email, password, phoneNumber },
         config
       );
     } catch (error) {
@@ -96,7 +88,7 @@ export const getUserDetails = createAsyncThunk(
         },
       };
 
-      const { data } = await axios.get(`api/v1/me`, config);
+      const { data } = await axios.get(`/api/v1/me`, config);
       return data;
     } catch (error) {
       if (error.response && error.response.data.message) {

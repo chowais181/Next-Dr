@@ -1,55 +1,129 @@
-import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../../features/user/userActions";
-import { useEffect } from "react";
-import Error from "../Error";
-
+import { useEffect, Fragment } from "react";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+import * as Yup from "yup";
+// import Error from "../Error";
+import toast from "react-hot-toast";
+import Alert from "@mui/material/Alert";
 const Login = () => {
-  const { loading, userInfo, error } = useSelector((state) => state.user);
-  console.log(userInfo);
-  const dispatch = useDispatch();
+  const initialValues = {
+    email: "",
+    password: "",
+  };
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().required("Email is required").email("Email is invalid"),
+    password: Yup.string().required("Password is required"),
+  });
 
-  const { register, handleSubmit } = useForm();
+  const { loading, userInfo, error, isLogin } = useSelector(
+    (state) => state.user
+  );
+
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   // redirect authenticated user to profile screen
   useEffect(() => {
-    if (userInfo) {
-      navigate("/");
+    if (isLogin) {
+      toast.success("Login successfully");
     }
-  }, [navigate, userInfo]);
+    if (userInfo) {
+      navigate("/home");
+    }
+  }, [navigate, userInfo, isLogin]);
 
-  const submitForm = (data) => {
+  const handleSubmit = (data) => {
     dispatch(userLogin(data));
   };
 
   return (
-    <form onSubmit={handleSubmit(submitForm)}>
-      {error && <Error>{error}</Error>}
-      <div className="form-group">
-        <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          className="form-input"
-          {...register("email")}
-          required
-        />
-      </div>
-      <div className="form-group">
-        <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          className="form-input"
-          {...register("password")}
-          required
-        />
-      </div>
-      <button type="submit" className="button" disabled={loading}>
-        Login
-      </button>
-    </form>
+    <Fragment>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        <section id="common">
+          <div className="container">
+            <div className="common-form">
+              <div className="form-side">
+                <div className="heading-common">
+                  <h1>
+                    <strong>Login </strong>
+                    <i className="fas fa-sign-in-alt"></i>
+                  </h1>
+                </div>
+
+                <div className="register-form">
+                  <hr />
+                  {error && (
+                    <Alert variant="outlined" severity="error">
+                      {error}
+                    </Alert>
+                  )}
+
+                  <Form>
+                    <div className="form-group">
+                      <label htmlFor="email" className="label">
+                        {" "}
+                        Email{" "}
+                      </label>
+                      <Field
+                        name="email"
+                        type="email"
+                        className="form-control"
+                      />
+                      <ErrorMessage
+                        name="email"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label htmlFor="password" className="label">
+                        {" "}
+                        Password{" "}
+                      </label>
+                      <Field
+                        name="password"
+                        type="password"
+                        className="form-control"
+                      />
+                      <ErrorMessage
+                        name="password"
+                        component="div"
+                        className="text-danger"
+                      />
+                    </div>
+                    <br />
+                    <div className="form-group">
+                      <button
+                        type="submit"
+                        className="btn btn-info"
+                        disabled={loading}
+                      >
+                        Login
+                      </button>
+                    </div>
+                  </Form>
+                </div>
+              </div>
+              <div className="img-side">
+                <img
+                  alt="login"
+                  className="register-user"
+                  src={process.env.PUBLIC_URL + "/images/loginPage.svg"}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      </Formik>
+    </Fragment>
   );
 };
 

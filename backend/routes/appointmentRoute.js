@@ -1,6 +1,7 @@
 const express = require("express");
 const {
   createAppointment,
+  checkAppointmentAvailability,
   getMyAppointmentsUser,
   getSingleAppointmentUser,
   updateAppointmentUser,
@@ -11,10 +12,17 @@ const {
 } = require("../controllers/appointmentController");
 const { isAuthenticatedUser } = require("../middleware/auth");
 const router = express.Router();
-
+// createAppointment
 router
   .route("/create-appointment")
   .post(isAuthenticatedUser, createAppointment);
+
+// checkAppointmentAvailability
+router
+  .route("/check-appointment-availability")
+  .post(isAuthenticatedUser, checkAppointmentAvailability);
+
+
 // get appointment for user
 router
   .route("/my-appointments")

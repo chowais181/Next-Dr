@@ -17,8 +17,24 @@ const profileSchema = new mongoose.Schema(
     },
     timing: {
       type: String,
-      required: [true, "Please enter time of availability "],
+      required: [true, "Please enter timing"],
     },
+    // startDay: {
+    //   type: String,
+    //   required: [true, "Please enter start day "],
+    // },
+    // endDay: {
+    //   type: String,
+    //   required: [true, "Please enter end time "],
+    // },
+    // startTime: {
+    //   type: String,
+    //   required: [true, "Please enter start time of availability "],
+    // },
+    // endTime: {
+    //   type: String,
+    //   required: [true, "Please enter end time of availability "],
+    // },
     status: {
       type: String,
       enum: ["available", "not-available"],
@@ -31,8 +47,12 @@ const profileSchema = new mongoose.Schema(
     fees: {
       type: Number,
       required: [true, "please enter fees"],
+      min: 0,
     },
     bio: {
+      type: String,
+    },
+    website: {
       type: String,
     },
     numOfReviews: {
@@ -46,7 +66,7 @@ const profileSchema = new mongoose.Schema(
     reviews: [
       {
         user: {
-          type: mongoose.Schema.ObjectId,
+          type: mongoose.Schema.Types.ObjectId,
           ref: "User",
           required: true,
         },

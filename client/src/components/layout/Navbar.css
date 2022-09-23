@@ -1,11 +1,15 @@
 .navbars {
   padding: 20px;
+  background-color: rgb(13, 35, 48) !important;
 }
+
+
 .NavIcon {
   margin-right: 10%;
   align-items: center;
 }
 .Active {
+  color: rgb(156, 236, 136) !important;
   border: 2px solid white;
   border-top: hidden;
   border-left: hidden;
@@ -13,6 +17,8 @@
 }
 @media (max-width: 991px) {
   .NavIcon {
-    align-items: unset;
+   align-items: unset;
+   margin-left:10% ;
+   margin-right: unset;
   }
 }

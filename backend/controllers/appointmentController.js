@@ -2,28 +2,38 @@ const Appointment = require("../models/appointmentModel");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const Profile = require("../models/profileModel");
 const ErrorHander = require("../utils/errorHander");
-
+const moment = require("moment");
 // create a new Appointment
 exports.createAppointment = catchAsyncErrors(async (req, res, next) => {
   // dr cannot book appointment with his-self
-  const profile = await Profile.find({ doctor: req.user.id });
+  const profile = await Profile.findById(req.query.profileId);
   // to ignore the user who have no profile
-  // console.log(profile[0].doctor.toString(), req.user.id );
-  if (profile.length > 0) {
-    if (profile[0].doctor.toString() === req.user.id) {
+  // console.log(profile?.doctor.toString(), req.user.id);
+  if (profile) {
+    if (profile?.doctor.toString() === req.user.id) {
       return next(
         new ErrorHander("You cannot book appointment with your own.", 404)
       );
     }
   }
 
-  const { description, bookingDate, bookingTime } = req.body;
+  const {
+    description,
+    bookingDate,
+    bookingTime,
+    patientName,
+    fatherName,
+    age,
+  } = req.body;
   if (!req.user) {
     return next(new ErrorHander("Please login to access this resource.", 404));
   }
 
   const appointment = await Appointment.create({
     description,
+    patientName,
+    fatherName,
+    age,
     bookingDate,
     bookingTime,
     // paymentInfo,
@@ -38,6 +48,41 @@ exports.createAppointment = catchAsyncErrors(async (req, res, next) => {
     appointment,
   });
 });
+
+// check appointment availability
+exports.checkAppointmentAvailability = catchAsyncErrors(
+  async (req, res, next) => {
+    // const date = moment(req.body.bookingDate, "DD-MM-YYYY").toISOString();
+    const fromTime = moment(req.body.bookingTime, "HH:mm")
+      .subtract(1, "hours")
+      .format("hh:mm");
+
+    const toTime = moment(req.body.bookingTime, "HH:mm")
+      .add(1, "hours")
+      .format("hh:mm");
+
+    console.log(fromTime, toTime);
+
+    const doctorProfile = req.body.doctorProfile;
+    const appointments = await Appointment.find({
+      doctorProfile: doctorProfile,
+      bookingDate: req.body.bookingDate,
+      bookingTime: { $gte: fromTime, $lte: toTime },
+    });
+
+    if (appointments.length > 0) {
+      return res.status(200).send({
+        message: "Appointment not available",
+        success: false,
+      });
+    } else {
+      return res.status(200).send({
+        message: "Appointment available",
+        success: true,
+      });
+    }
+  }
+);
 
 // get my appointments for User
 exports.getMyAppointmentsUser = catchAsyncErrors(async (req, res, next) => {
@@ -83,7 +128,14 @@ exports.getSingleAppointmentUser = catchAsyncErrors(async (req, res, next) => {
 
 // updatde  Appointment -- user
 exports.updateAppointmentUser = catchAsyncErrors(async (req, res, next) => {
-  const { description, bookingDate, bookingTime } = req.body;
+  const {
+    patientName,
+    fatherName,
+    age,
+    description,
+    bookingDate,
+    bookingTime,
+  } = req.body;
 
   const appointment = await Appointment.findByIdAndUpdate(
     req.params.id,
@@ -91,6 +143,9 @@ exports.updateAppointmentUser = catchAsyncErrors(async (req, res, next) => {
       description,
       bookingDate,
       bookingTime,
+      patientName,
+      fatherName,
+      age,
     },
     {
       new: true,
