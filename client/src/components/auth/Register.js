@@ -56,8 +56,10 @@ const Register = () => {
     if (isRegister) {
       toast.success("Sign Up successfully");
       navigate("/login");
+      //for false is register
+      dispatch(registerUser());
     }
-  }, [navigate, isRegister]);
+  }, [navigate, isRegister,dispatch]);
 
   return (
     <Fragment>

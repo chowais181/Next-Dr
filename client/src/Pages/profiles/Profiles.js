@@ -9,12 +9,7 @@ import SearchNotFound from "../../components/SearchNotFound";
 export default function Profiles() {
   const dispatch = useDispatch();
   const [name, setKeyword] = useState("");
-  console.log(name.toLowerCase());
   const { profiles, loading } = useSelector((state) => state.profile);
-
-  profiles
-    ?.filter((profiles) => profiles.specialist.includes(name))
-    .map((profiles) => console.log("Goood", profiles));
 
   let isProfileNotFound = 0;
   if (loading === false) {

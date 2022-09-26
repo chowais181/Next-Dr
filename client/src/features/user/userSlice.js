@@ -25,6 +25,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {},
+
   extraReducers: {
     // logout reducers
     [userLogout.pending]: (state) => {
@@ -63,6 +64,7 @@ const userSlice = createSlice({
     [registerUser.pending]: (state) => {
       state.loading = true;
       state.error = null;
+      state.isRegister = false;
     },
     [registerUser.fulfilled]: (state, { payload }) => {
       state.loading = false;
@@ -86,7 +88,5 @@ const userSlice = createSlice({
     },
   },
 });
-
-// export const { logout } = userSlice.actions;
 
 export default userSlice.reducer;

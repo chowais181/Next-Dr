@@ -127,6 +127,10 @@ const profileSchema = new mongoose.Schema(
         description: {
           type: String,
         },
+        current: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
     social: {

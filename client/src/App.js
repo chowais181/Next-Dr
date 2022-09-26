@@ -16,6 +16,8 @@ import PublicRoute from "./components/routing/PublicRoute";
 import Profile from "./components/profile/Profile";
 import AppointmentForm from "./components/bookAppointment/AppointmentForm";
 import CreateProfile from "./components/profile-forms/CreateProfile";
+import AddEducation from "./components/profile-forms/AddEducation";
+import AddExperience from "./components/profile-forms/AddExperience";
 
 function App() {
   return (
@@ -53,6 +55,22 @@ function App() {
             element={
               <ProtectedRoute>
                 <CreateProfile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-education"
+            element={
+              <ProtectedRoute>
+                <AddEducation />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-experience"
+            element={
+              <ProtectedRoute>
+                <AddExperience />
               </ProtectedRoute>
             }
           />

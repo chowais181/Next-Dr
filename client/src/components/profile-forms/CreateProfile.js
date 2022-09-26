@@ -1,10 +1,19 @@
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { createProfile } from "../../features/profile/profileActions";
 
 const CreateProfile = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { loading, isCreated } = useSelector((state) => state.profile);
+  const [social, setSocial] = useState({
+    twitter: "",
+    facebook: "",
+    youtube: "",
+    instagram: "",
+  });
   const [formData, setFormData] = useState({
     hospital: "",
     website: "",
@@ -13,38 +22,36 @@ const CreateProfile = () => {
     fees: "",
     timing: "",
     bio: "",
-    twitter: "",
-    facebook: "",
-    youtube: "",
-    instagram: "",
   });
 
   const [displySocialInputs, toggleSocialInputs] = useState(false);
 
-  const {
-    hospital,
-    website,
-    location,
-    specialist,
-    fees,
-    timing,
-    bio,
-    twitter,
-    facebook,
-    youtube,
-    instagram,
-  } = formData;
+  const { hospital, website, location, specialist, fees, timing, bio } =
+    formData;
+  const { twitter, facebook, youtube, instagram } = social;
+
+  const onChangeSocial = (e) =>
+    setSocial({
+      ...social,
+      [e.target.name]: e.target.value,
+    });
 
   const onChange = (e) =>
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-
+  const profileData = { ...formData, social };
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(createProfile(formData));
+    dispatch(createProfile(profileData));
   };
+  // redirect to home page
+  useEffect(() => {
+    if (isCreated) {
+      // navigate("/home");
+    }
+  }, [navigate, isCreated]);
 
   return (
     <Fragment>
@@ -185,7 +192,7 @@ const CreateProfile = () => {
                           placeholder="Twitter Profile URL"
                           name="twitter"
                           value={twitter}
-                          onChange={(e) => onChange(e)}
+                          onChange={(e) => onChangeSocial(e)}
                         />
                       </div>
                       <div className="input-group mb-3">
@@ -200,7 +207,7 @@ const CreateProfile = () => {
                           placeholder="Facebook Profile URL"
                           name="facebook"
                           value={facebook}
-                          onChange={(e) => onChange(e)}
+                          onChange={(e) => onChangeSocial(e)}
                         />
                       </div>
                       <div className="input-group mb-3">
@@ -215,7 +222,7 @@ const CreateProfile = () => {
                           placeholder="Youtube Profile URL"
                           name="youtube"
                           value={youtube}
-                          onChange={(e) => onChange(e)}
+                          onChange={(e) => onChangeSocial(e)}
                         />
                       </div>
                       <div className="input-group mb-3">
@@ -230,13 +237,17 @@ const CreateProfile = () => {
                           placeholder="Instagram Profile URL"
                           name="instagram"
                           value={instagram}
-                          onChange={(e) => onChange(e)}
+                          onChange={(e) => onChangeSocial(e)}
                         />
                       </div>
                     </div>
                   </Fragment>
                 )}
-                <input type="submit" className="btn btn-info" />{" "}
+                <input
+                  type="submit"
+                  className="btn btn-info"
+                  disabled={loading}
+                />{" "}
                 <Link to="/home" className="btn btn-outline-secondary">
                   Go Back
                 </Link>

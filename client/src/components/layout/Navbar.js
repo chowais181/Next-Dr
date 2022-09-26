@@ -20,9 +20,20 @@ const userMenu = [
     name: "Appointments",
     path: "/appointments",
   },
+];
+
+const profileUserDropdown = [
   {
-    name: "Apply Doctor",
+    name: "Create Profile",
     path: "/apply-doctor",
+  },
+  {
+    name: "Add Education",
+    path: "/add-education",
+  },
+  {
+    name: "Add Experience",
+    path: "/add-experience",
   },
 ];
 
@@ -100,7 +111,7 @@ function NavMenu() {
           <img
             alt="logo"
             style={{ width: "3.2rem" }}
-            src={process.env.PUBLIC_URL + "logo.png"}
+            src={process.env.PUBLIC_URL + "/logo.png"}
           />
         </Link>
         <Navbar.Toggle aria-controls="navbarScroll" />
@@ -127,23 +138,28 @@ function NavMenu() {
             })}
             {userInfo ? (
               <>
-                <NavDropdown title="List" id="navbarScrollingDropdown">
-                  <NavDropdown.Item as={Link} to="/login">
-                    Login
-                  </NavDropdown.Item>
-                  <NavDropdown.Item href="#action4">Action 2</NavDropdown.Item>
-                  <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action5">Somet</NavDropdown.Item>
+                <NavDropdown
+                  id="navbarScrollingDropdown"
+                  className={profileUserDropdown.map((item) => {
+                    return item.path === pathname ? "Active" : undefined;
+                  })}
+                  title="Apply Doctor"
+                >
+                  {profileUserDropdown.map((item) => {
+                    const isActive = pathname === item.path;
+                    return (
+                      <div key={item.name + "3asfd2"}>
+                        <NavDropdown.Item
+                          as={Link}
+                          to={item.path}
+                          className={isActive ? "Active" : undefined}
+                        >
+                          {item.name}
+                        </NavDropdown.Item>
+                      </div>
+                    );
+                  })}
                 </NavDropdown>
-                {/* <Form className="d-flex">
-                  <Form.Control
-                    type="search"
-                    placeholder="Search"
-                    className="me-2"
-                    aria-label="Search"
-                  />
-                  <Button variant="outline-success">Search</Button>
-                </Form> */}
               </>
             ) : null}
           </Nav>
@@ -174,6 +190,12 @@ function NavMenu() {
                   }
                   id="collasible-nav-dropdown"
                 >
+                  <div className="profile-popover">
+                    <strong>{userInfo.role}</strong>
+                    <br />
+                    <h6> {userInfo.name}</h6>
+                  </div>
+                  <NavDropdown.Divider />
                   <NavDropdown.Item href="#action/3.2">
                     Profile
                   </NavDropdown.Item>
@@ -181,7 +203,7 @@ function NavMenu() {
                     Something
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  {/* <NavDropdown.Item href="#"> */}{" "}
+
                   <Button
                     variant="dark"
                     style={{ marginLeft: "5%" }}

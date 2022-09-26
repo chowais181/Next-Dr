@@ -3,7 +3,10 @@ import {
   getAllProfiles,
   getSingleProfile,
   createProfile,
+  myProfile,
+  updateProfile,
 } from "./profileActions";
+import toast from "react-hot-toast";
 
 const initialState = {
   loading: false,
@@ -12,6 +15,8 @@ const initialState = {
   total_profiles: null,
   success: false,
   profile: null,
+  isCreated: false,
+  isUpdated: false,
 };
 
 const profileSlice = createSlice({
@@ -27,15 +32,38 @@ const profileSlice = createSlice({
     [createProfile.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.success = true; // profile created successfully
+      state.isCreated = true;
+      toast.success("Doctor profile created successfully");
     },
     [createProfile.rejected]: (state, { payload }) => {
       state.loading = false;
       state.error = payload;
+      toast.error(payload);
+    },
+
+    //update profile
+
+    [updateProfile.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [updateProfile.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true; // profile created successfully
+      state.isUpdated = true;
+      toast.success("Profile updated successfully");
+    },
+    [updateProfile.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      toast.error(payload);
     },
 
     //all  profiles
     [getAllProfiles.pending]: (state) => {
       state.loading = true;
+      state.isCreated = false;
+      state.isUpdated = false;
     },
     [getAllProfiles.fulfilled]: (state, { payload }) => {
       state.loading = false;

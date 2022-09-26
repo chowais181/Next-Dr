@@ -11,6 +11,11 @@ body {
   background-size: cover;
 }
 
+.profile-popover {
+  color: #17a2b8;
+  
+  margin-left: 5%;
+}
 .input-group-text {
   display: flex;
   align-items: center;

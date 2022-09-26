@@ -3,7 +3,6 @@
   background-color: rgb(13, 35, 48) !important;
 }
 
-
 .NavIcon {
   margin-right: 10%;
   align-items: center;
@@ -17,8 +16,8 @@
 }
 @media (max-width: 991px) {
   .NavIcon {
-   align-items: unset;
-   margin-left:10% ;
-   margin-right: unset;
+    align-items: unset;
+    margin-left: 10%;
+    margin-right: unset;
   }
 }
