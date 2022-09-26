@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const ProfileItem = ({
   profile: {
     _id,
-    doctor: {  name, avatar },
+    doctor: { name, avatar },
     hospital,
     location,
     specialist,

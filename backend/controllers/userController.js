@@ -6,7 +6,8 @@ const { sendToken } = require("../utils/jwtToken");
 
 // register
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const { name, email, phoneNumber, password } = req.body;
+  const { email, phoneNumber, password } = req.body;
+  let name = req.body.name.toUpperCase();
   //get gravtar for profile picture
   const avatar = gravtar.url(req.body.email, {
     s: "200",

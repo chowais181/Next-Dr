@@ -89,10 +89,7 @@ const ProfileTop = ({
         </div>
       </div>
       <div className="top-profile-img">
-        <img
-          alt=""
-          src={process.env.PUBLIC_URL + "images/doctor4.svg"}
-        />
+        <img alt="" src={process.env.PUBLIC_URL + "/images/doctor4.svg"} />
       </div>
     </div>
   );

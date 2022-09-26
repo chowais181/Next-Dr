@@ -48,7 +48,7 @@ export default function Profiles() {
                     type="text"
                     onChange={(e) => setKeyword(e.target.value)}
                     className="form-control"
-                    placeholder="Search Doctor..."
+                    placeholder="Search Doctor by name or specialist..."
                   />
                 </div>
               </div>
@@ -60,7 +60,9 @@ export default function Profiles() {
                       profiles.specialist
                         .toLowerCase()
                         .includes(name.toLowerCase()) ||
-                      profiles.doctor.name.includes(name)
+                      profiles?.doctor?.name
+                        .toLowerCase()
+                        .includes(name.toLowerCase())
                   )
                   .map((profile) => (
                     <ProfileItem key={profile._id} profile={profile} />

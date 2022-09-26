@@ -116,7 +116,7 @@ const Login = () => {
                 <img
                   alt="login"
                   className="register-user"
-                  src={process.env.PUBLIC_URL + "/images/loginPage.svg"}
+                  src={process.env.PUBLIC_URL + "images/undraw_forms_78yw.svg"}
                 />
               </div>
             </div>

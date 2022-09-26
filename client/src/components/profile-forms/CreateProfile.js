@@ -1,13 +1,14 @@
 import React, { useState, Fragment } from "react";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { createProfile } from "../../features/profile/profileActions";
 
-const CreateProfile = ({ createProfile, history }) => {
+const CreateProfile = () => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     hospital: "",
     website: "",
     location: "",
-    status: "",
     specialist: "",
     fees: "",
     timing: "",
@@ -24,7 +25,6 @@ const CreateProfile = ({ createProfile, history }) => {
     hospital,
     website,
     location,
-    status,
     specialist,
     fees,
     timing,
@@ -40,20 +40,21 @@ const CreateProfile = ({ createProfile, history }) => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+
   const onSubmit = (e) => {
     e.preventDefault();
-    createProfile(formData, history);
+    dispatch(createProfile(formData));
   };
 
   return (
     <Fragment>
-      <section id="Login">
+      <section className="Login">
         <div className="container">
-          <div style={{ height: "auto" }} class="common-form">
+          <div style={{ height: "auto" }} className="common-form">
             <div className="form-side">
               <div className="heading-common">
                 <h1>
-                  <strong>Add Profile</strong>
+                  <strong>Add Profile </strong>
                   <i className="far fa-id-card"></i>
                 </h1>
                 <p className="lead">
@@ -63,20 +64,6 @@ const CreateProfile = ({ createProfile, history }) => {
               </div>
               <form onSubmit={(e) => onSubmit(e)}>
                 <small>* = required field</small>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="* Enter your status. eg. Professor, Senior Specalist etc."
-                    name="status"
-                    value={status}
-                    onChange={(e) => onChange(e)}
-                    required
-                  />
-                  <small className="form-text text-muted">
-                    Give us an idea of where you are at in your career
-                  </small>
-                </div>
                 <div className="form-group">
                   <input
                     type="text"
@@ -95,7 +82,7 @@ const CreateProfile = ({ createProfile, history }) => {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Specalist"
+                    placeholder="* Specialist"
                     name="specialist"
                     value={specialist}
                     onChange={(e) => onChange(e)}
@@ -109,7 +96,7 @@ const CreateProfile = ({ createProfile, history }) => {
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="* Timing"
+                    placeholder="* Timing. e.g. Mon-Fri 10:00 am to 5:00 pm"
                     name="timing"
                     value={timing}
                     onChange={(e) => onChange(e)}
@@ -122,7 +109,7 @@ const CreateProfile = ({ createProfile, history }) => {
                 </div>
                 <div className="form-group">
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
                     placeholder="* Fees"
                     name="fees"
@@ -131,22 +118,7 @@ const CreateProfile = ({ createProfile, history }) => {
                     required
                   />
                   <small className="form-text text-muted">
-                    At which time you are available for patients, mention day
-                    with time.{" "}
-                  </small>
-                </div>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="* Website."
-                    name="website"
-                    value={website}
-                    onChange={(e) => onChange(e)}
-                    required
-                  />
-                  <small className="form-text text-muted">
-                    Could be your own or a clinic website{" "}
+                    Checkup fee per appointment booking.{" "}
                   </small>
                 </div>
                 <div className="form-group">
@@ -164,13 +136,25 @@ const CreateProfile = ({ createProfile, history }) => {
                   </small>
                 </div>
                 <div className="form-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Website."
+                    name="website"
+                    value={website}
+                    onChange={(e) => onChange(e)}
+                  />
+                  <small className="form-text text-muted">
+                    Could be your own or a clinic website{" "}
+                  </small>
+                </div>
+                <div className="form-group">
                   <textarea
                     className="form-control"
-                    placeholder="* A short bio of yourself"
+                    placeholder=" A short bio of yourself"
                     name="bio"
                     value={bio}
                     onChange={(e) => onChange(e)}
-                    required
                   />
                   <small className="form-text">
                     Tell us a little about yourself
@@ -253,7 +237,7 @@ const CreateProfile = ({ createProfile, history }) => {
                   </Fragment>
                 )}
                 <input type="submit" className="btn btn-info" />{" "}
-                <Link to="/dashboard" className="btn btn-outline-secondary">
+                <Link to="/home" className="btn btn-outline-secondary">
                   Go Back
                 </Link>
               </form>
@@ -261,7 +245,7 @@ const CreateProfile = ({ createProfile, history }) => {
             </div>
             <div className="img-side">
               <img
-                src={process.env.PUBLIC_URL + "imges/mention.svg".default}
+                src={process.env.PUBLIC_URL + "images/mention.svg"}
                 alt=""
                 className="register-user"
               />
