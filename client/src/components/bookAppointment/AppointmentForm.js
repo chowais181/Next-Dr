@@ -1,43 +1,50 @@
 import React, { useEffect, Fragment } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getSingleProfile } from "../../features/profile/profileActions";
+import Loader from "../Loader";
 import Form from "./Form";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const AppointmentForm = () => {
   const { id } = useParams();
-
+  const navigate = useNavigate();
+  const { loading, isCreated } = useSelector((state) => state.appointment);
   const dispatch = useDispatch();
-  const { loading, profile } = useSelector((state) => state.profile);
-  if (loading === false) {
-    console.log(profile);
-  }
+  const { profile } = useSelector((state) => state.profile);
+
   useEffect(() => {
     dispatch(getSingleProfile(id));
-  }, [id, dispatch]);
+    if (isCreated) {
+      navigate("/home");
+    }
+  }, [id, dispatch, isCreated, navigate]);
 
   return (
     <Fragment>
-      <section id="Login">
-        <div className="container">
-          <div className="common-form">
-            <div className="form-side">
-              {profile !== null ? (
-                <Form profile={profile} doctorId={profile.doctor._id} />
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="img-side">
-              <img
-                src={process.env.PUBLIC_URL + "imges/calendar.svg".default}
-                alt=""
-                className="register-user"
-              />
+      {loading ? (
+        <Loader />
+      ) : (
+        <section id="Login">
+          <div className="container">
+            <div className="common-form">
+              <div className="form-side">
+                {profile !== null ? (
+                  <Form profile={profile} profileId={profile?._id} />
+                ) : (
+                  ""
+                )}
+              </div>
+              <div className="img-side">
+                <img
+                  src={process.env.PUBLIC_URL + "imges/calendar.svg".default}
+                  alt=""
+                  className="register-user"
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
     </Fragment>
   );
 };

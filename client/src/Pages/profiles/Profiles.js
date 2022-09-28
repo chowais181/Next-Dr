@@ -22,7 +22,7 @@ export default function Profiles() {
     profiles,
     loading,
     resultPerPage,
-    total_profiles,
+
     filteredProfilesCount,
   } = useSelector((state) => state.profile);
 

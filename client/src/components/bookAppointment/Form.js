@@ -1,20 +1,31 @@
 import React, { Fragment, useState } from "react";
-
-// import { addAppointment } from "../../actions/appointment";
+import { createAppointment } from "../../features/appointment/appointmentActions";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
-const Form = ({ profile, doctorId, history, addAppointment }) => {
+const Form = ({ profile, profileId }) => {
+  console.log(profileId);
+
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
-    time: "",
+    bookingTime: "",
     patientName: "",
     fatherName: "",
     age: "",
-    date: "",
+    bookingDate: "",
     description: "",
   });
 
-  const { patientName, fatherName, age, time, date, description } = formData;
-console.log(formData)
+  const {
+    patientName,
+    fatherName,
+    age,
+    bookingTime,
+    bookingDate,
+    description,
+  } = formData;
+  
+
   const onChange = (e) =>
     setFormData({
       ...formData,
@@ -59,7 +70,7 @@ console.log(formData)
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          // addAppointment(doctorId, formData, history);
+          dispatch(createAppointment({ profileId, formData }));
         }}
       >
         <small>* = required field</small>
@@ -71,6 +82,7 @@ console.log(formData)
             name="patientName"
             value={patientName}
             onChange={(e) => onChange(e)}
+            required
           />
         </div>
         <div className="form-group">
@@ -81,16 +93,18 @@ console.log(formData)
             name="fatherName"
             value={fatherName}
             onChange={(e) => onChange(e)}
+            required
           />
         </div>
         <div className="form-group">
           <input
-            type="text"
+            type="number"
             className="form-control"
             placeholder="* Age"
             name="age"
             value={age}
             onChange={(e) => onChange(e)}
+            required
           />
         </div>
         <h6>Date</h6>
@@ -98,8 +112,8 @@ console.log(formData)
           <input
             type="date"
             className="form-control"
-            name="date"
-            value={date}
+            name="bookingDate"
+            value={bookingDate}
             required
             onChange={(e) => onChange(e)}
           />
@@ -109,8 +123,8 @@ console.log(formData)
           <input
             type="time"
             className="form-control"
-            name="time"
-            value={time}
+            name="bookingTime"
+            value={bookingTime}
             required
             onChange={(e) => onChange(e)}
           />

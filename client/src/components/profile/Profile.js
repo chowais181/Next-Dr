@@ -16,7 +16,6 @@ const Profile = () => {
   const dispatch = useDispatch();
   const { loading, profile } = useSelector((state) => state.profile);
   const { userInfo } = useSelector((state) => state.user);
-  console.log(userInfo?._id, id);
 
   useEffect(() => {
     dispatch(getSingleProfile(id));

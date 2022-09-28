@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import Moment from "react-moment";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteReview } from "../../features/profile/profileActions";

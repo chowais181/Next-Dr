@@ -5,8 +5,8 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const createProfile = createAsyncThunk(
   "profile/createProfile",
-  async (education, { rejectWithValue }) => {
-    console.log(education);
+  async ( formData , { rejectWithValue }) => {
+    console.log(formData);
     try {
       const config = {
         headers: {
@@ -14,7 +14,7 @@ export const createProfile = createAsyncThunk(
         },
       };
 
-      await axios.post(`/api/v1/create-profile`, education, config);
+      await axios.post(`/api/v1/create-profile`, formData, config);
     } catch (error) {
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);

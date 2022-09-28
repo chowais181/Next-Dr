@@ -49,7 +49,7 @@ const CreateProfile = () => {
   // redirect to home page
   useEffect(() => {
     if (isCreated) {
-      // navigate("/home");
+      navigate("/home");
     }
   }, [navigate, isCreated]);
 
