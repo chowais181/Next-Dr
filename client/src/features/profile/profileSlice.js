@@ -5,6 +5,8 @@ import {
   createProfile,
   myProfile,
   updateProfile,
+  addReview,
+  deleteReview,
 } from "./profileActions";
 import toast from "react-hot-toast";
 
@@ -15,8 +17,11 @@ const initialState = {
   total_profiles: null,
   success: false,
   profile: null,
+  resultPerPage: null,
+  filteredProfilesCount: null,
   isCreated: false,
   isUpdated: false,
+  isDeleted: false,
 };
 
 const profileSlice = createSlice({
@@ -70,6 +75,8 @@ const profileSlice = createSlice({
       state.success = true;
       state.profiles = payload.profiles;
       state.total_profiles = payload.total_profiles;
+      state.resultPerPage = payload.resultPerPage;
+      state.filteredProfilesCount = payload.filteredProfilesCount;
     },
     [getAllProfiles.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -78,6 +85,7 @@ const profileSlice = createSlice({
     //get single profile
     [getSingleProfile.pending]: (state) => {
       state.loading = true;
+      state.isCreated = false;
     },
     [getSingleProfile.fulfilled]: (state, { payload }) => {
       state.loading = false;
@@ -87,6 +95,40 @@ const profileSlice = createSlice({
     [getSingleProfile.rejected]: (state, { payload }) => {
       state.loading = false;
       state.error = payload;
+    },
+
+    //add Review
+    [addReview.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [addReview.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true; // review created successfully
+      state.isCreated = true;
+      toast.success("Review added successfully");
+    },
+    [addReview.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      toast.error(payload);
+    },
+
+    //delete Profile Review
+    [deleteReview.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [deleteReview.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true; // review deleted
+      state.profile = payload.profile;
+      toast.success("Profile review deleted successfully");
+    },
+    [deleteReview.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      toast.error(payload);
     },
   },
 });

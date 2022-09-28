@@ -7,6 +7,9 @@ const profileSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    name: {
+      type: String,
+    },
     hospital: {
       type: String,
       required: [true, "Please enter hospital name"],
@@ -72,7 +75,6 @@ const profileSchema = new mongoose.Schema(
         },
         rating: {
           type: Number,
-          required: [true, "please select rating"],
         },
         comment: {
           type: String,

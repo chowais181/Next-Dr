@@ -1,4 +1,5 @@
 import "./assets/App.css";
+import ScrollToTop from "react-scroll-to-top";
 import Navbar from "./components/layout/Navbar";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 //--------------------pages-------------------
@@ -25,6 +26,8 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Toaster position="bottom-center" reverseOrder={false} />
+        <ScrollToTop smooth />
+
         <Routes>
           <Route
             path="/home"

@@ -1,15 +1,12 @@
-import React, { Fragment } from "react";
-// import PropTypes from 'prop-types';
+import React, { Fragment, useEffect } from "react";
 import Moment from "react-moment";
-// import {deleteReview} from '../../actions/profile';
-// import { connect } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
+import { deleteReview } from "../../features/profile/profileActions";
 
-const ProfileReview = ({
-  doctorId,
-  review: { _id, comment, date, user },
-  // authUser,
-  // deleteReview
-}) => {
+const ProfileReview = ({ doctorId, review: { _id, comment, date, user } }) => {
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.user);
+
   return (
     <Fragment>
       <div className="current-review">
@@ -24,13 +21,14 @@ const ProfileReview = ({
           <p className="post-date">
             Posted on <Moment format="YYYY/MM/DD">{date}</Moment>
           </p>
-
-          <button
-            // onClick={(e) => deleteReview(doctorId, _id)}
-            className="btn btn-danger"
-          >
-            X
-          </button>
+          {user?._id === userInfo?._id && (
+            <button
+              onClick={() => dispatch(deleteReview({ _id, doctorId }))}
+              className="btn btn-danger"
+            >
+              <i className="fa fa-trash" />
+            </button>
+          )}
         </div>
       </div>
     </Fragment>

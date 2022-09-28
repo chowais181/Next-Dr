@@ -11,7 +11,7 @@ const ProfileAbout = ({
         <Fragment>
             <div className="top-bio">
                 <div className="bio">
-                    <h2 className="heading-bio">Dr. {(name.split(' ')[1])}'s Bio</h2>
+                    <h2 className="heading-bio">Dr. {(name?.split(' ')[1])}'s Bio</h2>
                     <p className="bio-p">{bio}</p>
                 </div>
                 <hr />

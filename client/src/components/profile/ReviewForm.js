@@ -1,8 +1,20 @@
-import React, { Fragment, useState } from "react";
-// import {addReview} from '../../actions/review';
+import React, { Fragment, useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addReview,
+  getSingleProfile,
+} from "../../features/profile/profileActions";
 
-const ReviewForm = ({ doctorId, addReview }) => {
-  const [text, setText] = useState("");
+const ReviewForm = ({ profileId }) => {
+  const [comment, setText] = useState("");
+  const { isCreated } = useSelector((state) => state.profile);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (isCreated) {
+      dispatch(getSingleProfile(profileId));
+    }
+  });
 
   return (
     <Fragment>
@@ -10,18 +22,18 @@ const ReviewForm = ({ doctorId, addReview }) => {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            // addReview(doctorId, { text });
+            dispatch(addReview({ profileId, comment }));
             setText("");
           }}
         >
           <textarea
             className="text-area"
             name="text"
-            cols="30"
-            rows="5"
+            cols="20"
+            rows="3"
             placeholder="Write a review"
             required
-            value={text}
+            value={comment}
             onChange={(e) => setText(e.target.value)}
           ></textarea>
           <input type="submit" value="Submit" className="btn btn-secondary" />

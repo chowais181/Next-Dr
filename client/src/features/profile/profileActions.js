@@ -93,9 +93,16 @@ export const deleteProfile = createAsyncThunk(
 //get all profiles
 export const getAllProfiles = createAsyncThunk(
   "profile/getAllProfiles",
-  async () => {
+  async ({ currentPage, keyword }) => {
     try {
-      const { data } = await axios.get(`/api/v1/all-profiles`);
+      let link;
+      if (keyword === "") {
+        link = `/api/v1/all-profiles?page=${currentPage}`;
+      } else {
+        link = `/api/v1/all-profiles?page=${currentPage}&keyword=${keyword}`;
+      }
+
+      const { data } = await axios.get(link);
       return data;
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -120,6 +127,57 @@ export const getSingleProfile = createAsyncThunk(
         return rejectWithValue(error.response.data.message);
       } else {
         return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+//create profile  review
+export const addReview = createAsyncThunk(
+  "review/addReview",
+  async ({ profileId, comment }, { rejectWithValue }) => {
+    console.log(profileId, comment);
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.post(
+        `/api/v1/create-profile-review`,
+        {
+          profileId,
+          comment,
+        },
+        config
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+// delete profile review
+export const deleteReview = createAsyncThunk(
+  "review/deleteReview",
+  async ({ _id, doctorId }) => {
+    try {
+      const { data } = await axios.delete(
+        `/api/v1/profile-reviews?id=${_id}&profileId=${doctorId}`
+      );
+      return data;
+    } catch (error) {
+      // return custom error message from API if any
+      if (error.response && error.response.data.message) {
+        return error.response.data.message;
+      } else {
+        return error.message;
       }
     }
   }

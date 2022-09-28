@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect } from "react";
-// import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Loader";
 import { getSingleProfile } from "../../features/profile/profileActions";
@@ -16,9 +15,9 @@ const Profile = () => {
 
   const dispatch = useDispatch();
   const { loading, profile } = useSelector((state) => state.profile);
-  // if (loading === false) {
-  //   console.log(profile);
-  // }
+  const { userInfo } = useSelector((state) => state.user);
+  console.log(userInfo?._id, id);
+
   useEffect(() => {
     dispatch(getSingleProfile(id));
   }, [id, dispatch]);
@@ -47,16 +46,16 @@ const Profile = () => {
                     </Link>
                   </Fragment>
 
-                  {/* {authDoctor.isDoctorAuthenticated &&
-                    authDoctor.loadingDoctor === false &&
-                    authDoctor.doctor._id === profileById.doctor._id && ( */}
-                  <Link
-                    to="/edit-profile"
-                    className="rounded-pill btn btn-secondary"
-                  >
-                    <i className="fas fa-edit"></i>
-                  </Link>
-                  {/* )} */}
+                  {id === userInfo?._id ? (
+                    <Link
+                      to="/edit-profile"
+                      className="rounded-pill btn btn-secondary"
+                    >
+                      <i className="fas fa-edit"></i>
+                    </Link>
+                  ) : (
+                    ""
+                  )}
                 </div>
                 <ProfileTop profile={profile} />
                 <ProfileAbout profile={profile} />
@@ -94,14 +93,17 @@ const Profile = () => {
                 </div>
                 <div className="patient-review">
                   <h2 className="exp-common-heading">Patient Reviews</h2>
-                  <ReviewForm doctorId={profile?.doctor._id} />
+                  <ReviewForm profileId={profile?._id} />
                   {profile?.reviews?.length > 0 ? (
                     <Fragment>
+                      <h4 className="exp-common-heading1">
+                        Total Reviews: {profile?.reviews?.length}
+                      </h4>
                       {profile.reviews.map((rev) => (
                         <ProfileReview
                           key={rev._id}
                           review={rev}
-                          doctorId={profile?.doctor._id}
+                          doctorId={profile?._id}
                         />
                       ))}
                     </Fragment>

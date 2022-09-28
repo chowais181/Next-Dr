@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import Moment from "react-moment";
 
 const ProfileEducation = ({
-  education: { university, degree, fieldofstudy, from, to, description },
+  education: { university, degree, from, to, description },
 }) => {
   return (
     <Fragment>
@@ -17,10 +17,7 @@ const ProfileEducation = ({
         <p>
           <strong>University: </strong> {university}
         </p>
-        <p>
-          <strong>Field of Study: </strong>
-          {fieldofstudy}
-        </p>
+
         <p>
           <strong>Description: </strong>
           {description}

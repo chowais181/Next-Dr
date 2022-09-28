@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import { updateProfile } from "../../features/profile/profileActions";
 const AddExperience = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, isCreated } = useSelector((state) => state.profile);
+  const { loading, isUpdated } = useSelector((state) => state.profile);
 
   const [formData, setFormData] = useState({
     position: "",
@@ -26,12 +26,20 @@ const AddExperience = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
+
+  // redirect to home page
+  useEffect(() => {
+    if (isUpdated) {
+      navigate("/home");
+    }
+  }, [navigate, isUpdated]);
+
   return (
     <div>
       <Fragment>
-        <section id="Login">
+        <section className="Login">
           <div className="container">
-            <div style={{ height: "auto" }} class="common-form">
+            <div style={{ height: "auto" }} className="common-form">
               <div className="form-side">
                 <div className="heading-common">
                   <h1>
@@ -46,7 +54,7 @@ const AddExperience = () => {
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
-                    dispatch(updateProfile(formData));
+                    dispatch(updateProfile({ experience: formData }));
                   }}
                 >
                   <small>* = required field</small>
