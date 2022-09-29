@@ -1,13 +1,11 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
-// create profile
+// create Appointment
 
 export const createAppointment = createAsyncThunk(
   "appointment/createAppointment",
   async ({ profileId, formData }, { rejectWithValue }) => {
-    console.log(profileId, formData);
-
     try {
       const config = {
         headers: {
@@ -17,9 +15,9 @@ export const createAppointment = createAsyncThunk(
 
       await axios.post(
         `/api/v1/create-appointment?profileId=${profileId}`,
-        
-          formData,
-        
+
+        formData,
+
         config
       );
     } catch (error) {
@@ -27,6 +25,63 @@ export const createAppointment = createAsyncThunk(
         return rejectWithValue(error.response.data.message);
       } else {
         return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+// get my appointments ---- user
+export const getMyAppointmentsUser = createAsyncThunk(
+  "appointment/getMyAppointmentsUser",
+  async ({ currentPage }) => {
+    try {
+      let link = `/api/v1/my-appointments?page=${currentPage}`;
+
+      const { data } = await axios.get(link);
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return error.response.data.message;
+      } else {
+        return error.message;
+      }
+    }
+  }
+);
+
+// get my appointments ---- doctor
+export const getMyAppointmentsDoctor = createAsyncThunk(
+  "appointment/getMyAppointmentsDoctor",
+  async () => {
+    try {
+      let link = `/api/v1/myAppointments`;
+
+      const { data } = await axios.get(link);
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return error.response.data.message;
+      } else {
+        return error.message;
+      }
+    }
+  }
+);
+
+// delete appointment user
+export const deleteAppointmentUser = createAsyncThunk(
+  "appointment/deleteAppointmentUser",
+  async (id) => {
+    console.log(id);
+    try {
+      const { data } = await axios.delete(`/api/v1/appointment/${id}`);
+      return data;
+    } catch (error) {
+      // return custom error message from API if any
+      if (error.response && error.response.data.message) {
+        return error.response.data.message;
+      } else {
+        return error.message;
       }
     }
   }

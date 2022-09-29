@@ -4,8 +4,6 @@ import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Form = ({ profile, profileId }) => {
-  console.log(profileId);
-
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     bookingTime: "",
@@ -24,7 +22,6 @@ const Form = ({ profile, profileId }) => {
     bookingDate,
     description,
   } = formData;
-  
 
   const onChange = (e) =>
     setFormData({
@@ -102,6 +99,8 @@ const Form = ({ profile, profileId }) => {
             className="form-control"
             placeholder="* Age"
             name="age"
+            min="1"
+            max="150"
             value={age}
             onChange={(e) => onChange(e)}
             required
@@ -115,6 +114,7 @@ const Form = ({ profile, profileId }) => {
             name="bookingDate"
             value={bookingDate}
             required
+            min={new Date().toISOString().split("T")[0]}
             onChange={(e) => onChange(e)}
           />
         </div>
@@ -122,12 +122,28 @@ const Form = ({ profile, profileId }) => {
         <div className="form-group">
           <input
             type="time"
+            list="times"
             className="form-control"
             name="bookingTime"
             value={bookingTime}
             required
+            step="1800"
             onChange={(e) => onChange(e)}
           />
+          <datalist id="times">
+            <option value="08:00:00" />
+            <option value="09:00:00" />
+            <option value="10:00:00" />
+            <option value="11:00:00" />
+            <option value="12:00:00" />
+            <option value="13:00:00" />
+            <option value="14:00:00" />
+            <option value="15:00:00" />
+            <option value="16:00:00" />
+            <option value="17:00:00" />
+            <option value="18:00:00" />
+            <option value="19:00:00" />
+          </datalist>
         </div>
         <div className="form-group">
           <textarea

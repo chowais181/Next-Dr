@@ -6,7 +6,7 @@ import { updateProfile } from "../../features/profile/profileActions";
 const AddExperience = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, isUpdated } = useSelector((state) => state.profile);
+  const { isUpdated } = useSelector((state) => state.profile);
 
   const [formData, setFormData] = useState({
     position: "",
@@ -114,6 +114,7 @@ const AddExperience = () => {
                       value={to}
                       onChange={(e) => onChange(e)}
                       disabled={toDateDisabled ? "disabled" : ""}
+                      required={!toDateDisabled ? "required" : ""}
                     />
                   </div>
                   <div className="form-group">

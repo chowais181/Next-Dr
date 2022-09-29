@@ -12,6 +12,21 @@ body {
   background-size: cover;
 }
 
+.profile-status {
+  background: linear-gradient(90deg, #1cb5e0 0%, #000851 100%);
+  color: #d9c6c6;
+  justify-content: center;
+  display: flex;
+  border: 1px solid;
+  border-radius: 20px;
+  font-family: cursive;
+  padding-top: 1%;
+  /* margin: 1%; */
+}
+.profile-status p {
+  padding: 2%;
+}
+
 #profile-page {
   overflow-x: auto;
 }
@@ -463,8 +478,10 @@ h5 {
   grid-template-rows: repeat(1, 1fr);
   grid-template-areas: "profile-img profile-details profile-buttons";
   grid-column-gap: 10px;
-  background-color: lightgray;
+  /* background-color: rgb(23, 62, 168); */
+  background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
   border-radius: 0.5rem;
+  /* color: white; */
   margin-bottom: 1rem;
   overflow: auto;
 }

@@ -124,7 +124,6 @@ const profileSchema = new mongoose.Schema(
         },
         to: {
           type: Date,
-          required: [true, "please enter end date"],
         },
         description: {
           type: String,

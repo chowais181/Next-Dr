@@ -29,7 +29,7 @@ exports.createProfile = catchAsyncErrors(async (req, res, next) => {
 
 // get profile of the user having role dr
 exports.myProfile = catchAsyncErrors(async (req, res, next) => {
-  const profile = await Profile.find({ doctor: req.user.id }).populate(
+  const profile = await Profile.findOne({ doctor: req.user.id }).populate(
     "doctor",
     "name email phoneNumber avatar"
   );

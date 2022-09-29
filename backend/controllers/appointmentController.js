@@ -2,6 +2,7 @@ const Appointment = require("../models/appointmentModel");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const Profile = require("../models/profileModel");
 const ErrorHander = require("../utils/errorHander");
+const ApiFeatures = require("../utils/apiFeatures");
 const moment = require("moment");
 // create a new Appointment
 exports.createAppointment = catchAsyncErrors(async (req, res, next) => {
@@ -86,24 +87,33 @@ exports.checkAppointmentAvailability = catchAsyncErrors(
 
 // get my appointments for User
 exports.getMyAppointmentsUser = catchAsyncErrors(async (req, res, next) => {
+  let resultPerPage = 6;
+
   if (!req.user) {
     return next(new ErrorHander("Please login to access this resource.", 404));
   }
-  const myAppointments = await Appointment.find({ user: req.user.id }).populate(
-    {
+  const apiFeature = new ApiFeatures(
+    Appointment.find({ user: req.user.id }).populate({
       path: "doctorProfile",
       select: "hospital location fees timing status specialist",
       populate: {
         path: "doctor",
         model: "User",
-        select: "name phoneNumber",
+        select: "name phoneNumber avatar",
       },
-    }
-  );
-  const total_appointments = myAppointments.length;
+    }),
+    req.query
+  ).pagination(resultPerPage);
+
+  // counting the total appointments of the user
+  const total_appointments = (await Appointment.find({ user: req.user.id }))
+    .length;
+  myAppointments = await apiFeature.query;
+
   res.status(200).json({
     success: true,
     total_appointments,
+    resultPerPage,
     myAppointments,
   });
 });
@@ -116,12 +126,12 @@ exports.getSingleAppointmentUser = catchAsyncErrors(async (req, res, next) => {
     populate: {
       path: "doctor",
       model: "User",
-      select: "name phoneNumber",
+      select: "name phoneNumber avatar",
     },
   });
 
   res.status(200).json({
-    sucess: true,
+    success: true,
     appointment,
   });
 });
@@ -173,7 +183,7 @@ exports.deleteAppointmentUser = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHander("Appointment not found with this Id", 404));
   }
   res.status(200).json({
-    sucess: true,
+    success: true,
     message: "Appointment Cancelled successfully",
   });
 });
@@ -185,11 +195,16 @@ exports.getMyAppointmentsDoctor = catchAsyncErrors(async (req, res, next) => {
   }
   // first get the doctor profile and then his/her appointments
   const profile = await Profile.find({ user: req.user.id });
+  const resultPerPage = 6;
 
   const myAppointments = await Appointment.find({
     doctorProfile: profile[0].id,
-  }).populate("user", "name email phoneNumber");
+  })
+    .populate("user", "name email phoneNumber avatar")
+    .pagination(resultPerPage);
+
   const total_appointments = myAppointments.length;
+
   res.status(200).json({
     success: true,
     total_appointments,
@@ -205,7 +220,7 @@ exports.getSinglAppointmentDoctor = catchAsyncErrors(async (req, res, next) => {
 
   const appointment = await Appointment.findById(req.params.id).populate(
     "user",
-    "name phoneNumber"
+    "name phoneNumber avatar"
   );
 
   res.status(200).json({

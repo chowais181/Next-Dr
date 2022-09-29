@@ -6,6 +6,7 @@ import {
   updateProfile,
   addReview,
   deleteReview,
+  myProfile,
 } from "./profileActions";
 import toast from "react-hot-toast";
 
@@ -72,6 +73,7 @@ const profileSlice = createSlice({
     [getAllProfiles.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.success = true;
+
       state.profiles = payload.profiles;
       state.total_profiles = payload.total_profiles;
       state.resultPerPage = payload.resultPerPage;
@@ -95,7 +97,20 @@ const profileSlice = createSlice({
       state.loading = false;
       state.error = payload;
     },
-
+    //my profile
+    [myProfile.pending]: (state) => {
+      state.loading = true;
+      state.isCreated = false;
+    },
+    [myProfile.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.profile = payload.profile;
+    },
+    [myProfile.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+    },
     //add Review
     [addReview.pending]: (state) => {
       state.loading = true;

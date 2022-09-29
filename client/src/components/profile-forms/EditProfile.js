@@ -1,83 +1,87 @@
 import React, { useState, Fragment, useEffect } from "react";
-import { Link, withRouter } from "react-router-dom";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { createProfile, getCurrentProfile } from "../../actions/profile";
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { updateProfile } from "../../features/profile/profileActions";
 
-const Edit = ({
-  profile: { profile, loading },
-  createProfile,
-  getCurrentProfile,
-  history,
-}) => {
-  const [formData, setFormData] = useState({
-    clinic: "",
-    website: "",
-    location: "",
-    status: "",
-    specialists: "",
-    ruppess: "",
-    timing: "",
-    bio: "",
+const EditProfile = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, isUpdated, profile } = useSelector((state) => state.profile);
+
+  const [social, setSocial] = useState({
     twitter: "",
     facebook: "",
     youtube: "",
     instagram: "",
   });
+  const [formData, setFormData] = useState({
+    hospital: "",
+    website: "",
+    location: "",
+    specialist: "",
+    fees: "",
+    timing: "",
+    bio: "",
+  });
 
   const [displySocialInputs, toggleSocialInputs] = useState(false);
-  useEffect(() => {
-    getCurrentProfile();
-    setFormData({
-      clinic: loading || !profile.clinic ? "" : profile.clinic,
-      website: loading || !profile.website ? "" : profile.website,
-      location: loading || !profile.location ? "" : profile.location,
-      status: loading || !profile.status ? "" : profile.status,
-      specialists: loading || !profile.specialists ? "" : profile.specialists,
-      ruppess: loading || !profile.ruppess ? "" : profile.ruppess,
-      timing: loading || !profile.timing ? "" : profile.timing,
-      bio: loading || !profile.bio ? "" : profile.bio,
-      twitter: loading || !profile.social ? "" : profile.social.twitter,
-      facebook: loading || !profile.social ? "" : profile.social.facebook,
-      youtube: loading || !profile.social ? "" : profile.social.youtube,
-      instagram: loading || !profile.social ? "" : profile.social.instagram,
-    });
-  }, [loading, getCurrentProfile]);
 
-  const {
-    clinic,
-    website,
-    location,
-    status,
-    specialists,
-    ruppess,
-    timing,
-    bio,
-    twitter,
-    facebook,
-    youtube,
-    instagram,
-  } = formData;
+  const { hospital, website, location, specialist, fees, timing, bio } =
+    formData;
+  const { twitter, facebook, youtube, instagram } = social;
+
+  const onChangeSocial = (e) =>
+    setSocial({
+      ...social,
+      [e.target.name]: e.target.value,
+    });
 
   const onChange = (e) =>
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
+  const profileData = { ...formData, social };
   const onSubmit = (e) => {
     e.preventDefault();
-    createProfile(formData, history);
+    dispatch(updateProfile(profileData));
   };
+  // redirect to home page
+  useEffect(() => {
+    if (isUpdated) {
+      navigate("/home");
+    }
+  }, [navigate, isUpdated]);
+
+  useEffect(() => {
+    setFormData({
+      hospital: loading || !profile.hospital ? "" : profile.hospital,
+      website: loading || !profile.website ? "" : profile.website,
+      location: loading || !profile.location ? "" : profile.location,
+      specialist: loading || !profile.specialist ? "" : profile.specialist,
+      fees: loading || !profile.fees ? "" : profile.fees,
+      timing: loading || !profile.timing ? "" : profile.timing,
+      bio: loading || !profile.bio ? "" : profile.bio,
+    });
+
+    setSocial({
+      twitter: loading || !profile.social ? "" : profile.social.twitter,
+      facebook: loading || !profile.social ? "" : profile.social.facebook,
+      youtube: loading || !profile.social ? "" : profile.social.youtube,
+      instagram: loading || !profile.social ? "" : profile.social.instagram,
+    });
+  }, [loading, profile]);
 
   return (
     <Fragment>
-      <section id="Login">
+      <section className="Login">
         <div className="container">
-          <div style={{ height: "auto" }} class="common-form">
+          <div style={{ height: "auto" }} className="common-form">
             <div className="form-side">
               <div className="heading-common">
                 <h1>
-                  <strong>Edit Profile</strong>{" "}
+                  <strong>Edit Profile </strong>
                   <i className="far fa-id-card"></i>
                 </h1>
                 <p className="lead">
@@ -91,23 +95,9 @@ const Edit = ({
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="* Enter your status. eg. Professor, Senior Specalist etc."
-                    name="status"
-                    value={status}
-                    onChange={(e) => onChange(e)}
-                    required
-                  />
-                  <small className="form-text text-muted">
-                    Give us an idea of where you are at in your career
-                  </small>
-                </div>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="* Clinic"
-                    name="clinic"
-                    value={clinic}
+                    placeholder="* Hospital or Clinic"
+                    name="hospital"
+                    value={hospital}
                     onChange={(e) => onChange(e)}
                     required
                   />
@@ -119,9 +109,9 @@ const Edit = ({
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="Specalist"
-                    name="specialists"
-                    value={specialists}
+                    placeholder="* Specialist"
+                    name="specialist"
+                    value={specialist}
                     onChange={(e) => onChange(e)}
                     required
                   />
@@ -133,7 +123,7 @@ const Edit = ({
                   <input
                     type="text"
                     className="form-control"
-                    placeholder="* Timing"
+                    placeholder="* Timing. e.g. Mon-Fri 10:00 am to 5:00 pm"
                     name="timing"
                     value={timing}
                     onChange={(e) => onChange(e)}
@@ -146,31 +136,16 @@ const Edit = ({
                 </div>
                 <div className="form-group">
                   <input
-                    type="text"
+                    type="number"
                     className="form-control"
-                    placeholder="* Ruppess"
-                    name="ruppess"
-                    value={ruppess}
+                    placeholder="* Fees"
+                    name="fees"
+                    value={fees}
                     onChange={(e) => onChange(e)}
                     required
                   />
                   <small className="form-text text-muted">
-                    At which time you are available for patients, mention day
-                    with time.{" "}
-                  </small>
-                </div>
-                <div className="form-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    placeholder="* Website."
-                    name="website"
-                    value={website}
-                    onChange={(e) => onChange(e)}
-                    required
-                  />
-                  <small className="form-text text-muted">
-                    Could be your own or a clinic website{" "}
+                    Checkup fee per appointment booking.{" "}
                   </small>
                 </div>
                 <div className="form-group">
@@ -188,13 +163,25 @@ const Edit = ({
                   </small>
                 </div>
                 <div className="form-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Website."
+                    name="website"
+                    value={website}
+                    onChange={(e) => onChange(e)}
+                  />
+                  <small className="form-text text-muted">
+                    Could be your own or a clinic website{" "}
+                  </small>
+                </div>
+                <div className="form-group">
                   <textarea
                     className="form-control"
-                    placeholder="* A short bio of yourself"
+                    placeholder=" A short bio of yourself"
                     name="bio"
                     value={bio}
                     onChange={(e) => onChange(e)}
-                    required
                   />
                   <small className="form-text">
                     Tell us a little about yourself
@@ -225,7 +212,7 @@ const Edit = ({
                           placeholder="Twitter Profile URL"
                           name="twitter"
                           value={twitter}
-                          onChange={(e) => onChange(e)}
+                          onChange={(e) => onChangeSocial(e)}
                         />
                       </div>
                       <div className="input-group mb-3">
@@ -236,11 +223,11 @@ const Edit = ({
                         </div>
                         <input
                           type="text"
-                          className="form-control form-control-lg"
+                          className="form-control"
                           placeholder="Facebook Profile URL"
                           name="facebook"
                           value={facebook}
-                          onChange={(e) => onChange(e)}
+                          onChange={(e) => onChangeSocial(e)}
                         />
                       </div>
                       <div className="input-group mb-3">
@@ -251,11 +238,11 @@ const Edit = ({
                         </div>
                         <input
                           type="text"
-                          className="form-control form-control-lg"
+                          className="form-control"
                           placeholder="Youtube Profile URL"
                           name="youtube"
                           value={youtube}
-                          onChange={(e) => onChange(e)}
+                          onChange={(e) => onChangeSocial(e)}
                         />
                       </div>
                       <div className="input-group mb-3">
@@ -270,14 +257,18 @@ const Edit = ({
                           placeholder="Instagram Profile URL"
                           name="instagram"
                           value={instagram}
-                          onChange={(e) => onChange(e)}
+                          onChange={(e) => onChangeSocial(e)}
                         />
                       </div>
                     </div>
                   </Fragment>
                 )}
-                <input type="submit" className="btn btn-info" />{" "}
-                <Link to="/dashboard" className="btn btn-outline-secondary">
+                <input
+                  type="submit"
+                  className="btn btn-info"
+                  disabled={loading}
+                />{" "}
+                <Link to="/home" className="btn btn-outline-secondary">
                   Go Back
                 </Link>
               </form>
@@ -285,7 +276,7 @@ const Edit = ({
             </div>
             <div className="img-side">
               <img
-                src={require("../../img/mention.svg")}
+                src={process.env.PUBLIC_URL + "images/mention.svg"}
                 alt=""
                 className="register-user"
               />
@@ -297,15 +288,4 @@ const Edit = ({
   );
 };
 
-Edit.propTypes = {
-  createProfile: PropTypes.func.isRequired,
-  getCurrentProfile: PropTypes.func.isRequired,
-  profile: PropTypes.object.isRequired,
-};
-const mapStateToProps = (state) => ({
-  profile: state.profile,
-});
-
-export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
-  withRouter(Edit)
-);
+export default EditProfile;

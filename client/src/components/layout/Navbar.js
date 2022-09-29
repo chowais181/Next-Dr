@@ -37,6 +37,21 @@ const profileUserDropdown = [
   },
 ];
 
+const profileDoctorDropdown = [
+  {
+    name: "Edit Profile",
+    path: "/edit-profile",
+  },
+  {
+    name: "Add Education",
+    path: "/add-education",
+  },
+  {
+    name: "Add Experience",
+    path: "/add-experience",
+  },
+];
+
 const doctorMenu = [
   {
     name: "Home",
@@ -136,6 +151,8 @@ function NavMenu() {
                 </div>
               );
             })}
+
+            {/* --------------------------for user ------------------ */}
             {userInfo ? (
               <>
                 <NavDropdown
@@ -146,6 +163,34 @@ function NavMenu() {
                   title="Apply Doctor"
                 >
                   {profileUserDropdown.map((item) => {
+                    const isActive = pathname === item.path;
+                    return (
+                      <div key={item.name + "3asfd2"}>
+                        <NavDropdown.Item
+                          as={Link}
+                          to={item.path}
+                          className={isActive ? "Active" : undefined}
+                        >
+                          {item.name}
+                        </NavDropdown.Item>
+                      </div>
+                    );
+                  })}
+                </NavDropdown>
+              </>
+            ) : null}
+
+            {/* ------------------------for doctor------------------ */}
+            {userInfo ? (
+              <>
+                <NavDropdown
+                  id="navbarScrollingDropdown"
+                  className={profileDoctorDropdown.map((item) => {
+                    return item.path === pathname ? "Active" : undefined;
+                  })}
+                  title="My Profile"
+                >
+                  {profileDoctorDropdown.map((item) => {
                     const isActive = pathname === item.path;
                     return (
                       <div key={item.name + "3asfd2"}>

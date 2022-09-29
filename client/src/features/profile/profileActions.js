@@ -5,7 +5,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 export const createProfile = createAsyncThunk(
   "profile/createProfile",
-  async ( formData , { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     console.log(formData);
     try {
       const config = {

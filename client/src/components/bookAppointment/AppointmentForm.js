@@ -15,7 +15,7 @@ const AppointmentForm = () => {
   useEffect(() => {
     dispatch(getSingleProfile(id));
     if (isCreated) {
-      navigate("/home");
+      navigate("/appointments");
     }
   }, [id, dispatch, isCreated, navigate]);
 
@@ -36,7 +36,7 @@ const AppointmentForm = () => {
               </div>
               <div className="img-side">
                 <img
-                  src={process.env.PUBLIC_URL + "imges/calendar.svg".default}
+                  src={process.env.PUBLIC_URL + "/images/calendar.svg"}
                   alt=""
                   className="register-user"
                 />

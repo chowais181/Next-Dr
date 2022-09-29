@@ -53,8 +53,7 @@ const AddEducation = () => {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  dispatch(updateProfile({education:formData}));
-           
+                  dispatch(updateProfile({ education: formData }));
                 }}
               >
                 <small>* = required field</small>
@@ -114,6 +113,7 @@ const AddEducation = () => {
                     value={to}
                     onChange={(e) => onChange(e)}
                     disabled={toDateDisabled ? "disabled" : ""}
+                    required={!toDateDisabled ? "required" : ""}
                   />
                 </div>
                 <div className="form-group">
