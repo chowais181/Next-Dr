@@ -32,6 +32,6 @@ router
   .delete(isAuthenticatedUser, deleteProfileReview);
 
 // view all doctors and their profile
-router.route("/single-profile/:id").get(getSingleProfile);
-router.route("/all-profiles").get(getAllProfiles);
+router.route("/single-profile/:id").get(isAuthenticatedUser, getSingleProfile);
+router.route("/all-profiles").get(isAuthenticatedUser, getAllProfiles);
 module.exports = router;

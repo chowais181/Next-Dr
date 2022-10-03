@@ -7,7 +7,7 @@ import Pagination from "react-js-pagination";
 
 const Appointments = () => {
   const dispatch = useDispatch();
-  const { loading, appointments, resultPerPage, total_appointments } =
+  const { loading, appointments, resultPerPage, total_appointments,isDeleted } =
     useSelector((state) => state.appointment);
   const { userInfo } = useSelector((state) => state.user);
 
@@ -19,7 +19,8 @@ const Appointments = () => {
 
   useEffect(() => {
     dispatch(getMyAppointmentsUser({ currentPage }));
-  }, [dispatch, currentPage]);
+    
+  }, [dispatch, currentPage,isDeleted]);
 
   return (
     <Fragment>
@@ -37,18 +38,6 @@ const Appointments = () => {
                   <i className="fas fa-calendar-check"></i> {userInfo?.name}'s
                   appointments
                 </h2>
-                <div
-                  className="mt-3"
-                  style={{ display: "flex", justifyContent: "flex-end" }}
-                >
-                  <button
-                    className="btn btn-danger"
-                    // onClick={() => deleteAccountUser()}
-                  >
-                    <i className="fas fa-user-minus"></i>
-                    Delete My Account
-                  </button>
-                </div>
               </div>
               <div className="common-details">
                 <br />

@@ -29,10 +29,16 @@ exports.createProfile = catchAsyncErrors(async (req, res, next) => {
 
 // get profile of the user having role dr
 exports.myProfile = catchAsyncErrors(async (req, res, next) => {
-  const profile = await Profile.findOne({ doctor: req.user.id }).populate(
-    "doctor",
-    "name email phoneNumber avatar"
-  );
+  const profile = await Profile.findOne({ doctor: req.user.id })
+    .populate("doctor", "name email phoneNumber avatar")
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "user",
+        model: "User",
+        select: "name avatar",
+      },
+    });
 
   res.status(200).json({
     success: true,
@@ -57,13 +63,6 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
     profile,
   });
 });
-// .populate({
-//   path: "reviews",
-//   populate: {
-//     path: "user",
-//     model: "User",
-//     select: "name avatar",
-// })
 
 // get single profile
 exports.getSingleProfile = catchAsyncErrors(async (req, res, next) => {
@@ -89,10 +88,14 @@ exports.getSingleProfile = catchAsyncErrors(async (req, res, next) => {
 // get all profiles
 exports.getAllProfiles = catchAsyncErrors(async (req, res, next) => {
   const resultPerPage = 3;
+
   const total_profiles = await Profile.countDocuments();
 
   const apiFeature = new ApiFeatures(
-    Profile.find().populate("doctor", "name phoneNumber avatar"),
+    Profile.find({ doctor: { $ne: req.user.id } }).populate(
+      "doctor",
+      "name phoneNumber avatar"
+    ),
     req.query
   )
     .search()
@@ -103,7 +106,10 @@ exports.getAllProfiles = catchAsyncErrors(async (req, res, next) => {
   let filteredProfilesCount = profiles.length;
 
   const apiFeature1 = new ApiFeatures(
-    Profile.find().populate("doctor", "name phoneNumber avatar"),
+    Profile.find({ doctor: { $ne: req.user.id } }).populate(
+      "doctor",
+      "name phoneNumber avatar"
+    ),
     req.query
   )
     .search()

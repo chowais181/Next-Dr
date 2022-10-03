@@ -99,3 +99,47 @@ export const getUserDetails = createAsyncThunk(
     }
   }
 );
+
+// admin ------ get all users ---
+
+export const getAllUser = createAsyncThunk("user/getAllUser", async () => {
+  try {
+    // configure authorization header with user's token
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+
+    const { data } = await axios.get(`/api/v1/admin/users`, config);
+    return data;
+  } catch (error) {
+    if (error.response && error.response.data.message) {
+      return error.response.data.message;
+    } else {
+      return error.message;
+    }
+  }
+});
+
+// admin ------ get all doctors ---
+
+
+// admin -------delete user ----------
+export const deleteUser = createAsyncThunk(
+  "user/deleteUser",
+  async (id) => {
+    console.log(id);
+    try {
+      const { data } = await axios.delete(`/api/v1/admin/user/${id}`);
+      return data;
+    } catch (error) {
+      // return custom error message from API if any
+      if (error.response && error.response.data.message) {
+        return error.response.data.message;
+      } else {
+        return error.message;
+      }
+    }
+  }
+);

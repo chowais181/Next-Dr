@@ -6,6 +6,7 @@ import {
   updateProfile,
   addReview,
   deleteReview,
+  deleteProfile,
   myProfile,
 } from "./profileActions";
 import toast from "react-hot-toast";
@@ -64,11 +65,30 @@ const profileSlice = createSlice({
       toast.error(payload);
     },
 
+    //delete profile
+
+    [deleteProfile.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [deleteProfile.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true; // profile created successfully
+      state.isDeleted = true;
+      toast.success("Profile deleted successfully");
+    },
+    [deleteProfile.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      toast.error(payload);
+    },
+
     //all  profiles
     [getAllProfiles.pending]: (state) => {
       state.loading = true;
       state.isCreated = false;
       state.isUpdated = false;
+      state.isDeleted = false;
     },
     [getAllProfiles.fulfilled]: (state, { payload }) => {
       state.loading = false;

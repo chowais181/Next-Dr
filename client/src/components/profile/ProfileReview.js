@@ -3,7 +3,10 @@ import Moment from "react-moment";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteReview } from "../../features/profile/profileActions";
 
-const ProfileReview = ({ doctorId, review: { _id, comment, date, user } }) => {
+const ProfileReview = ({
+  doctorId,
+  review: { _id, comment, date, user, createdAt },
+}) => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.user);
 
@@ -19,7 +22,7 @@ const ProfileReview = ({ doctorId, review: { _id, comment, date, user } }) => {
         <div className="user-review">
           <p>{comment}</p>
           <p className="post-date">
-            Posted on <Moment format="YYYY/MM/DD">{date}</Moment>
+            Posted on <Moment format="YYYY/MM/DD">{createdAt}</Moment>
           </p>
           {user?._id === userInfo?._id && (
             <button

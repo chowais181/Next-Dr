@@ -13,9 +13,11 @@ export default function Profiles() {
   const [searchValue, setSearchValue] = useState("");
   const searchRef = useRef(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
   const handleClick = (e) => {
     e.preventDefault();
     setKeyword(searchRef.current.value);
+    setCurrentPage(1);
   };
 
   const {
@@ -27,7 +29,7 @@ export default function Profiles() {
   } = useSelector((state) => state.profile);
 
   ///pagination
-  const [currentPage, setCurrentPage] = useState(1);
+
   const setCurrentPageNo = (e) => {
     setCurrentPage(e);
   };
@@ -61,7 +63,7 @@ export default function Profiles() {
               <div className="search-profile">
                 <div className="form-group has-search">
                   <span className="fa fa-search form-control-feedback"></span>
-                  <form onSubmit={handleClick}>
+                  <form onSubmit={handleClick} className="srch">
                     <input
                       ref={searchRef}
                       type="text"
@@ -89,9 +91,11 @@ export default function Profiles() {
                     <ProfileItem key={profile._id} profile={profile} />
                   ))
               ) : (
-                <h4 style={{ textAlign: "center", margin: "5%", color: "red" }}>
+                <h2
+                  style={{ textAlign: "center", margin: "15%", color: "red" }}
+                >
                   No Profiles found..
-                </h4>
+                </h2>
               )}
 
               {profiles?.length > 0 && (

@@ -58,8 +58,12 @@ const doctorMenu = [
     path: "/home",
   },
   {
+    name: "Dashboard",
+    path: "/dashboard",
+  },
+  {
     name: "Appointments",
-    path: "/appointments",
+    path: "/patient-appointments",
   },
   {
     name: "Profile",
@@ -75,11 +79,11 @@ const adminMenu = [
   },
   {
     name: "Users",
-    path: "/admin/userslist",
+    path: "/user-list",
   },
   {
     name: "Doctors",
-    path: "/admin/doctorslist",
+    path: "/doctor-list",
   },
   {
     name: "Profile",

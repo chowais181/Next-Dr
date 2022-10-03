@@ -15,6 +15,7 @@ import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./components/routing/ProtectedRoute";
 import PublicRoute from "./components/routing/PublicRoute";
 import ProtectedDoctorRoute from "./components/routing/ProtectedDoctorRoute";
+import ProtectedAdminRoute from "./components/routing/ProtectedAdminRoute";
 //------------------------------
 
 import Profile from "./components/profile/Profile";
@@ -23,8 +24,13 @@ import CreateProfile from "./components/profile-forms/CreateProfile";
 import AddEducation from "./components/profile-forms/AddEducation";
 import AddExperience from "./components/profile-forms/AddExperience";
 import Appointments from "./Pages/patient/Appointments";
-// ----------Dr routes---------------
+// ---------- Dr routes ---------------
 import EditProfile from "./components/profile-forms/EditProfile";
+import PatientAppointments from "./Pages/doctor/PatientAppointments";
+import DoctorDashboard from "./components/doctor-dashboard/Dashboard";
+
+// ---------- Admin routes --------------
+import UsersList from "./components/admin/UsersList";
 
 //------------------------------
 
@@ -119,11 +125,36 @@ function App() {
           />
           {/*------------ doctor routes --------------*/}
           <Route
+            path="/dashboard"
+            element={
+              <ProtectedDoctorRoute>
+                <DoctorDashboard />
+              </ProtectedDoctorRoute>
+            }
+          />
+          <Route
             path="/edit-profile"
             element={
               <ProtectedDoctorRoute>
                 <EditProfile />
               </ProtectedDoctorRoute>
+            }
+          />
+          <Route
+            path="/patient-appointments"
+            element={
+              <ProtectedDoctorRoute>
+                <PatientAppointments />
+              </ProtectedDoctorRoute>
+            }
+          />
+          {/*------------ admin routes --------------*/}
+          <Route
+            path="/user-list"
+            element={
+              <ProtectedAdminRoute>
+                <UsersList />
+              </ProtectedAdminRoute>
             }
           />
         </Routes>

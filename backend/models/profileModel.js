@@ -22,22 +22,7 @@ const profileSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please enter timing"],
     },
-    // startDay: {
-    //   type: String,
-    //   required: [true, "Please enter start day "],
-    // },
-    // endDay: {
-    //   type: String,
-    //   required: [true, "Please enter end time "],
-    // },
-    // startTime: {
-    //   type: String,
-    //   required: [true, "Please enter start time of availability "],
-    // },
-    // endTime: {
-    //   type: String,
-    //   required: [true, "Please enter end time of availability "],
-    // },
+   
     status: {
       type: String,
       enum: ["available", "not-available"],
@@ -79,6 +64,10 @@ const profileSchema = new mongoose.Schema(
         comment: {
           type: String,
           required: [true, "please add comment"],
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now(),
         },
       },
     ],

@@ -23,7 +23,7 @@ const AppointmentItems = ({ appointment }) => {
       <div className="profile-details">
         <div className="appointment-p profile-desc">
           <h2 className="profile-heading">
-            <strong>{appnt.patientName}</strong>
+            <strong>{appnt.patientName.toUpperCase()}</strong>
           </h2>
           <p className="profile-p">
             <strong>Father's name: {appnt.fatherName}</strong>
@@ -73,14 +73,17 @@ const AppointmentItems = ({ appointment }) => {
         ) : (
           ""
         )}
-
-        <button
-          onClick={() => dispatch(deleteAppointmentUser(appnt._id))}
-          type="button"
-          className="profile-btn btn btn-danger"
-        >
-          Cancel
-        </button>
+        {appnt.status === "cancelled" ? (
+          ""
+        ) : (
+          <button
+            onClick={() => dispatch(deleteAppointmentUser(appnt._id))}
+            type="button"
+            className="profile-btn btn btn-danger"
+          >
+            Cancel
+          </button>
+        )}
       </div>
     </div>
   ));

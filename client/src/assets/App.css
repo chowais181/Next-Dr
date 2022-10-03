@@ -12,6 +12,21 @@ body {
   background-size: cover;
 }
 
+/* for action buttons  */
+
+.btn-action {
+  all: unset;
+  padding: 10%;
+}
+
+/* styling data grid  */
+
+.css-f3jnds-MuiDataGrid-columnHeaders {
+  background-color: #7482b9;
+  color: rgb(241, 242, 240);
+  font-size: larger;
+}
+
 .profile-status {
   background: linear-gradient(90deg, #1cb5e0 0%, #000851 100%);
   color: #d9c6c6;
@@ -19,7 +34,7 @@ body {
   display: flex;
   border: 1px solid;
   border-radius: 20px;
-  font-family: cursive;
+
   padding-top: 1%;
   /* margin: 1%; */
 }
@@ -450,6 +465,13 @@ h5 {
   vertical-align: baseline;
   color: #f4f4f4;
 }
+@media  screen and (max-width: 1000px) {
+  .review-graph {
+    display: block;
+    
+  }
+}
+
 .review-graph {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -707,9 +729,10 @@ h5 {
   border-radius: 0.25rem;
 }
 .user-graph {
+  width: auto;
   display: flex;
   flex-direction: column;
-  height: 19.3rem;
+  /* height: 19.3rem; */
   justify-content: center;
   border: 2px solid #17a2b8;
   border-radius: 0.25rem;
@@ -879,6 +902,7 @@ h5 {
       "user-review";
   }
   .review-graph {
+    overflow-x: auto;
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows: repeat(1, 1fr);
     grid-template-areas:

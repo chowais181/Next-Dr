@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const Profile = require("../models/profileModel");
 const gravtar = require("gravatar");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHander = require("../utils/errorHander");
@@ -129,7 +130,7 @@ exports.updateUserRole = catchAsyncErrors(async (req, res, next) => {
 
 // Get all users(admin)
 exports.getAllUser = catchAsyncErrors(async (req, res, next) => {
-  const users = await User.find();
+  const users = await User.find({ _id: { $ne: req.user.id } });
   const total_user = users.length;
   res.status(200).json({
     success: true,
@@ -156,6 +157,8 @@ exports.getSingleUser = catchAsyncErrors(async (req, res, next) => {
 
 // Delete User --Admin
 exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
+  await Profile.findOneAndDelete({ doctor: req.params.id });
+
   const user = await User.findById(req.params.id);
 
   if (!user) {

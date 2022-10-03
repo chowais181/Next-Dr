@@ -4,6 +4,7 @@ import {
   getMyAppointmentsUser,
   getMyAppointmentsDoctor,
   deleteAppointmentUser,
+  updateAppointmentStatusDoctor,
 } from "./appointmentActions";
 import toast from "react-hot-toast";
 
@@ -64,6 +65,7 @@ const profileSlice = createSlice({
     [getMyAppointmentsDoctor.pending]: (state) => {
       state.loading = true;
       state.error = null;
+      state.isUpdated = false;
     },
     [getMyAppointmentsDoctor.fulfilled]: (state, { payload }) => {
       state.loading = false;
@@ -75,8 +77,23 @@ const profileSlice = createSlice({
       state.loading = false;
       state.error = payload;
     },
+    //update appointment status doctor
+    [updateAppointmentStatusDoctor.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [updateAppointmentStatusDoctor.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.isUpdated = true;
+      toast.success("Appointment status updated successfully");
+    },
+    [updateAppointmentStatusDoctor.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+    },
 
-    //create appointment
+    //delete appointment user
     [deleteAppointmentUser.pending]: (state) => {
       state.loading = true;
       state.error = null;

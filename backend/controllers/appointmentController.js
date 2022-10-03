@@ -30,13 +30,24 @@ exports.createAppointment = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHander("Please login to access this resource.", 404));
   }
 
+  //coverting into into 12 hour format am pm from 24 hour format
+  let time = new Date("1970-01-01T" + bookingTime + "Z").toLocaleTimeString(
+    "en-US",
+    {
+      timeZone: "UTC",
+      hour12: true,
+      hour: "numeric",
+      minute: "numeric",
+    }
+  );
+
   const appointment = await Appointment.create({
     description,
     patientName,
     fatherName,
     age,
     bookingDate,
-    bookingTime,
+    bookingTime: time,
     // paymentInfo,
     // paidAt: Date.now(),
     doctorProfile: req.query.profileId,
@@ -194,14 +205,10 @@ exports.getMyAppointmentsDoctor = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHander("Please login to access this resource.", 404));
   }
   // first get the doctor profile and then his/her appointments
-  const profile = await Profile.find({ user: req.user.id });
-  const resultPerPage = 6;
-
+  const profile = await Profile.findOne({ doctor: req.user.id });
   const myAppointments = await Appointment.find({
-    doctorProfile: profile[0].id,
-  })
-    .populate("user", "name email phoneNumber avatar")
-    .pagination(resultPerPage);
+    doctorProfile: profile.id,
+  }).populate("user", "name email phoneNumber avatar");
 
   const total_appointments = myAppointments.length;
 

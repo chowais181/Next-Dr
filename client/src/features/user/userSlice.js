@@ -4,8 +4,10 @@ import {
   registerUser,
   userLogin,
   userLogout,
+  getAllUser,
+  deleteUser,
 } from "./userActions";
-
+import toast from "react-hot-toast";
 // initialize userToken from local storage
 const userToken = localStorage.getItem("userToken")
   ? localStorage.getItem("userToken")
@@ -16,9 +18,13 @@ const initialState = {
   userInfo: null,
   userToken,
   error: null,
+  users: null,
+  total_user: null,
   success: false,
   isLogin: false,
   isRegister: false,
+  isDeleted: false,
+  isUpdated: false,
 };
 
 const userSlice = createSlice({
@@ -85,6 +91,36 @@ const userSlice = createSlice({
     },
     [getUserDetails.rejected]: (state, { payload }) => {
       state.loading = false;
+    },
+
+    // get all users -- admin
+    [getAllUser.pending]: (state) => {
+      state.loading = true;
+    },
+    [getAllUser.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.total_user = payload.total_user;
+      state.users = payload.users;
+    },
+    [getAllUser.rejected]: (state, { payload }) => {
+      state.loading = false;
+    },
+
+    // delete user -- admin
+    [deleteUser.pending]: (state) => {
+      state.loading = true;
+    },
+    [deleteUser.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.isDeleted = true;
+      toast.success("User deleted successfully");
+    },
+    [deleteUser.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      toast.error(payload);
     },
   },
 });

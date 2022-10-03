@@ -86,3 +86,30 @@ export const deleteAppointmentUser = createAsyncThunk(
     }
   }
 );
+
+// update appointment status doctor
+
+export const updateAppointmentStatusDoctor = createAsyncThunk(
+  "appointment/updateAppointmentStatusDoctor",
+  async ({ id, status }, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.put(
+        `/api/v1/myAppointment/${id}`,
+        { status },
+        config
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
