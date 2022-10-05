@@ -12,6 +12,10 @@ body {
   background-size: cover;
 }
 
+.container {
+  min-height: 100vh;
+}
+
 /* for action buttons  */
 
 .btn-action {
@@ -40,10 +44,6 @@ body {
 }
 .profile-status p {
   padding: 2%;
-}
-
-#profile-page {
-  overflow-x: auto;
 }
 
 .pagination {
@@ -465,10 +465,9 @@ h5 {
   vertical-align: baseline;
   color: #f4f4f4;
 }
-@media  screen and (max-width: 1000px) {
+@media screen and (max-width: 1000px) {
   .review-graph {
     display: block;
-    
   }
 }
 
@@ -538,8 +537,8 @@ h5 {
   justify-content: center;
 }
 #profile-page .current-profile {
-  height: 100vh;
-  display: grid;
+  /* height: 100vh; */
+  /* display: grid; */
   grid-template-columns: repeat(1, 1fr);
   grid-template-rows: repeat(5, 1fr);
   grid-template-areas:
@@ -844,8 +843,21 @@ h5 {
   }
 }
 
+@media only screen and (max-width: 375px) {
+  .top-profile {
+    /* width: 300px;
+     */
+    height: auto;
+    flex-direction: column;
+  }
+  .logos {
+    display: block;
+    justify-content: center;
+  }
+}
+
 /* Smart Phones */
-@media (max-width: 575.98px) {
+@media only screen and (max-width: 575.98px) {
   .appointment-p {
     text-align: center;
   }
@@ -919,6 +931,7 @@ h5 {
     justify-content: space-around;
     height: 6rem;
     flex-direction: column;
+    width: fit-content;
   }
   .profile-desc {
     text-align: center;
@@ -947,7 +960,7 @@ h5 {
     width: 40vh;
   }
   .top-profile {
-    width: 366px;
+    /* width: 400px; */
     height: auto;
     flex-direction: column;
   }
@@ -1041,8 +1054,6 @@ h5 {
   .pagination {
     margin: 3%;
     justify-content: center;
-
-    width: 100px;
   }
   .page-item {
     width: fit-content;

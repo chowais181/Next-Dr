@@ -8,6 +8,8 @@ import {
   deleteReview,
   deleteProfile,
   myProfile,
+  updateProfileStatus,
+  getAllProfilesUser,
 } from "./profileActions";
 import toast from "react-hot-toast";
 
@@ -15,11 +17,11 @@ const initialState = {
   loading: false,
   profiles: null,
   error: null,
-  total_profiles: null,
+  total_profiles: 0,
   success: false,
   profile: null,
-  resultPerPage: null,
-  filteredProfilesCount: null,
+  resultPerPage: 0,
+  filteredProfilesCount: 0,
   isCreated: false,
   isUpdated: false,
   isDeleted: false,
@@ -65,6 +67,23 @@ const profileSlice = createSlice({
       toast.error(payload);
     },
 
+    //update profile status - admin
+    [updateProfileStatus.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [updateProfileStatus.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true; // profile created successfully
+      state.isUpdated = true;
+      toast.success("Profile status updated successfully");
+    },
+    [updateProfileStatus.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      toast.error(payload);
+    },
+
     //delete profile
 
     [deleteProfile.pending]: (state) => {
@@ -83,7 +102,7 @@ const profileSlice = createSlice({
       toast.error(payload);
     },
 
-    //all  profiles
+    //all  profiles   -- admin
     [getAllProfiles.pending]: (state) => {
       state.loading = true;
       state.isCreated = false;
@@ -93,7 +112,6 @@ const profileSlice = createSlice({
     [getAllProfiles.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.success = true;
-
       state.profiles = payload.profiles;
       state.total_profiles = payload.total_profiles;
       state.resultPerPage = payload.resultPerPage;
@@ -103,6 +121,26 @@ const profileSlice = createSlice({
       state.loading = false;
       state.error = payload;
     },
+
+    //all  profiles user
+    [getAllProfilesUser.pending]: (state) => {
+      state.loading = true;
+      state.isCreated = false;
+      state.isUpdated = false;
+      state.isDeleted = false;
+    },
+    [getAllProfilesUser.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.profiles = payload.profiles;
+      state.resultPerPage = payload.resultPerPage;
+      state.filteredProfilesCount = payload.filteredProfilesCount;
+    },
+    [getAllProfilesUser.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+    },
+
     //get single profile
     [getSingleProfile.pending]: (state) => {
       state.loading = true;

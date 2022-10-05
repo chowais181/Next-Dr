@@ -10,7 +10,7 @@ const AppointmentItems = ({ appointment }) => {
 
   const { loading } = useSelector((state) => state.appointment);
 
-  const appointments = appointment.map((appnt) => (
+  const appointments = appointment?.map((appnt) => (
     <div key={appnt._id} className="profile-1">
       <div className="profile-img">
         <Link to={`/home/doctor/${appnt.doctorProfile?._id}`}>

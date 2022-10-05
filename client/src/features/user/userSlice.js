@@ -6,6 +6,7 @@ import {
   userLogout,
   getAllUser,
   deleteUser,
+  updateUserRole,
 } from "./userActions";
 import toast from "react-hot-toast";
 // initialize userToken from local storage
@@ -19,7 +20,9 @@ const initialState = {
   userToken,
   error: null,
   users: null,
-  total_user: null,
+  total_doctors: 0,
+  total_user: 0,
+  resultPerPage: 0,
   success: false,
   isLogin: false,
   isRegister: false,
@@ -96,12 +99,16 @@ const userSlice = createSlice({
     // get all users -- admin
     [getAllUser.pending]: (state) => {
       state.loading = true;
+      state.isDeleted = false;
+      state.isUpdated = false;
     },
     [getAllUser.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.success = true;
       state.total_user = payload.total_user;
+      state.total_doctors = payload.total_doctors;
       state.users = payload.users;
+      state.resultPerPage = payload.resultPerPage;
     },
     [getAllUser.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -118,6 +125,22 @@ const userSlice = createSlice({
       toast.success("User deleted successfully");
     },
     [deleteUser.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      toast.error(payload);
+    },
+
+    // update user  role -- admin
+    [updateUserRole.pending]: (state) => {
+      state.loading = true;
+    },
+    [updateUserRole.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.isUpdated = true;
+      toast.success("User role updated successfully");
+    },
+    [updateUserRole.rejected]: (state, { payload }) => {
       state.loading = false;
       state.error = payload;
       toast.error(payload);

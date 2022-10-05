@@ -1,8 +1,10 @@
 import "./assets/App.css";
 import ScrollToTop from "react-scroll-to-top";
 import Navbar from "./components/layout/Navbar";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Footer from "./components/layout/Footer";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 //--------------------pages-------------------
+import PageNotFound from "./Pages/PageNotFound";
 import Home from "./Pages/Home";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
@@ -31,7 +33,8 @@ import DoctorDashboard from "./components/doctor-dashboard/Dashboard";
 
 // ---------- Admin routes --------------
 import UsersList from "./components/admin/UsersList";
-
+import DoctorsList from "./components/admin/DoctorsList";
+import AdminDashboard from "./components/admin/Dashboard";
 //------------------------------
 
 function App() {
@@ -157,7 +160,33 @@ function App() {
               </ProtectedAdminRoute>
             }
           />
+          <Route
+            path="/doctor-list"
+            element={
+              <ProtectedAdminRoute>
+                <DoctorsList />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/admin-dashboard"
+            element={
+              <ProtectedAdminRoute>
+                <AdminDashboard />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/404"
+            element={
+              <PublicRoute>
+                <PageNotFound />
+              </PublicRoute>
+            }
+          />
+          <Route path="*" element={<Navigate replace to="/404" />} />
         </Routes>
+        <Footer />
       </BrowserRouter>
     </div>
   );

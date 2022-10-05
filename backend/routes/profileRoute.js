@@ -9,6 +9,9 @@ const {
   createProfileReview,
   getProfileReviews,
   deleteProfileReview,
+  updateProfileStatus,
+  getAllProfilesUser,
+  getAllProfilesAdmin,
 } = require("../controllers/profileController");
 const { isAuthenticatedUser } = require("../middleware/auth");
 const router = express.Router();
@@ -34,4 +37,15 @@ router
 // view all doctors and their profile
 router.route("/single-profile/:id").get(isAuthenticatedUser, getSingleProfile);
 router.route("/all-profiles").get(isAuthenticatedUser, getAllProfiles);
+router.route("/all-profiles-user").get(isAuthenticatedUser, getAllProfilesUser);
+
+// admin -----
+router
+  .route("/update-profile-status/:id")
+  .put(isAuthenticatedUser, updateProfileStatus);
+
+router
+  .route("/all-profiles-admin")
+  .get(isAuthenticatedUser, getAllProfilesAdmin);
+
 module.exports = router;

@@ -25,9 +25,7 @@ const DoctorDashboard = () => {
     }
   }, [dispatch, isDeleted, navigate]);
 
-  return loading && profile === null ? (
-    <Loader />
-  ) : (
+  return (
     <Fragment>
       <section id="dashboard">
         <div className="container">
@@ -40,33 +38,39 @@ const DoctorDashboard = () => {
             </h2>
           </div>
           <br />
-          {profile ? (
-            <Fragment>
-              {appointments !== null && appointments?.length > 0 ? (
-                <Patient patient={appointments} />
-              ) : (
-                <h5 style={{ color: "#738f93" }}>No Appointments yet..</h5>
-              )}
-              <Review
-                patient={appointments && appointments}
-                review={profile?.reviews}
-              />
-              <Experience experience={profile?.experience} />
-              <Education education={profile?.education} />
-              <button
-                onClick={() => dispatch(deleteProfile())}
-                type="button"
-                className="btn btn-danger"
-              >
-                <i className="fas fa-user-minus"></i> Delete My Account
-              </button>
-            </Fragment>
+          {loading && profile === null ? (
+            <Loader />
           ) : (
             <Fragment>
-              <p>You have not any Profile add your Profile..</p>
-              <Link to="/apply-doctor" className="btn btn-info">
-                Create Profile
-              </Link>
+              {profile ? (
+                <Fragment>
+                  {appointments !== null && appointments?.length > 0 ? (
+                    <Patient patient={appointments} />
+                  ) : (
+                    <h5 style={{ color: "#738f93" }}>No Appointments yet..</h5>
+                  )}
+                  <Review
+                    patient={appointments && appointments}
+                    review={profile?.reviews}
+                  />
+                  <Experience experience={profile?.experience} />
+                  <Education education={profile?.education} />
+                  <button
+                    onClick={() => dispatch(deleteProfile())}
+                    type="button"
+                    className="btn btn-danger"
+                  >
+                    <i className="fas fa-user-minus"></i> Delete My Account
+                  </button>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <p>You have not any Profile add your Profile..</p>
+                  <Link to="/apply-doctor" className="btn btn-info">
+                    Create Profile
+                  </Link>
+                </Fragment>
+              )}
             </Fragment>
           )}
         </div>

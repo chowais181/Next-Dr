@@ -7,8 +7,13 @@ import Pagination from "react-js-pagination";
 
 const Appointments = () => {
   const dispatch = useDispatch();
-  const { loading, appointments, resultPerPage, total_appointments,isDeleted } =
-    useSelector((state) => state.appointment);
+  const {
+    loading,
+    appointments,
+    resultPerPage,
+    total_appointments,
+    isDeleted,
+  } = useSelector((state) => state.appointment);
   const { userInfo } = useSelector((state) => state.user);
 
   ///pagination
@@ -19,26 +24,25 @@ const Appointments = () => {
 
   useEffect(() => {
     dispatch(getMyAppointmentsUser({ currentPage }));
-    
-  }, [dispatch, currentPage,isDeleted]);
+  }, [dispatch, currentPage, isDeleted]);
 
   return (
     <Fragment>
-      {loading && appointments !== null ? (
-        <Loader />
-      ) : (
-        <Fragment>
-          <section id="dashboard">
-            <div className="container">
-              <div className="heading-common">
-                <h1>
-                  <strong>Appointments</strong>
-                </h1>
-                <h2 className="welcome-heading">
-                  <i className="fas fa-calendar-check"></i> {userInfo?.name}'s
-                  appointments
-                </h2>
-              </div>
+      <section id="dashboard">
+        <div className="container">
+          <div className="heading-common">
+            <h1>
+              <strong>Appointments</strong>
+            </h1>
+            <h2 className="welcome-heading">
+              <i className="fas fa-calendar-check"></i> {userInfo?.name}'s
+              appointments
+            </h2>
+          </div>
+          {loading && appointments !== null ? (
+            <Loader />
+          ) : (
+            <Fragment>
               <div className="common-details">
                 <br />
                 {appointments?.length > 0 ? (
@@ -66,10 +70,10 @@ const Appointments = () => {
                   />
                 </div>
               )}
-            </div>
-          </section>
-        </Fragment>
-      )}
+            </Fragment>
+          )}
+        </div>
+      </section>
     </Fragment>
   );
 };

@@ -23,40 +23,43 @@ const Profile = () => {
 
   return (
     <Fragment>
-      {profile === null || loading ? (
-        <Loader />
-      ) : (
-        <Fragment>
-          <br />
-          <section id="profile-page">
-            <div className="container">
-              <div className="current-profile">
-                <div className="current-btn">
-                  <Link className="rounded-pill btn btn-dark" to="/home">
-                    Back to Profiles
-                  </Link>
-                  <Fragment>
-                    <Link
-                      to={`/home/appointment/${id}`}
-                      type="button"
-                      className="rounded-pill btn btn-info"
-                    >
-                      <i className="fas fa-calendar-check"></i> Book Appointment
-                    </Link>
-                  </Fragment>
+      <br />
+      <section id="profile-page">
+        <div className="container">
+          <div className="current-profile">
+            <div className="current-btn">
+              <Link className="rounded-pill btn btn-dark" to="/home">
+                Back to Profiles
+              </Link>
+              <Fragment>
+                <Link
+                  to={`/home/appointment/${id}`}
+                  type="button"
+                  className="rounded-pill btn btn-info"
+                >
+                  <i className="fas fa-calendar-check"></i> Book Appointment
+                </Link>
+              </Fragment>
 
-                  {id === userInfo?._id ? (
-                    <Link
-                      to="/edit-profile"
-                      className="rounded-pill btn btn-secondary"
-                    >
-                      <i className="fas fa-edit"></i>
-                    </Link>
-                  ) : (
-                    ""
-                  )}
-                </div>
+              {id === userInfo?._id ? (
+                <Link
+                  to="/edit-profile"
+                  className="rounded-pill btn btn-secondary"
+                >
+                  <i className="fas fa-edit"></i>
+                </Link>
+              ) : (
+                ""
+              )}
+            </div>
+            <br />
+            {profile === null || loading ? (
+              <Loader />
+            ) : (
+              <Fragment>
                 <ProfileTop profile={profile} />
+                <br />
+
                 <ProfileAbout profile={profile} />
                 <div className="exp-edu">
                   <div className="exp-bottom">
@@ -110,11 +113,11 @@ const Profile = () => {
                     <h4>No Reviews</h4>
                   )}
                 </div>
-              </div>
-            </div>
-          </section>
-        </Fragment>
-      )}
+              </Fragment>
+            )}
+          </div>
+        </div>
+      </section>
     </Fragment>
   );
 };

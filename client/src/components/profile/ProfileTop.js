@@ -11,6 +11,7 @@ const ProfileTop = ({
   },
 }) => {
   return (
+    
     <div className="top-profile">
       <div className="top-details">
         <div className="top-img">
@@ -88,10 +89,12 @@ const ProfileTop = ({
           </div>
         </div>
       </div>
+      
       <div className="top-profile-img">
         <img alt="" src={process.env.PUBLIC_URL + "/images/doctor4.svg"} />
       </div>
     </div>
+
   );
 };
 

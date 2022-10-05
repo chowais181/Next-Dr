@@ -9,6 +9,7 @@ const {
   getMyAppointmentsDoctor,
   getSinglAppointmentDoctor,
   updateStatusOfAppointment,
+  getAppointmentsStat,
 } = require("../controllers/appointmentController");
 const { isAuthenticatedUser } = require("../middleware/auth");
 const router = express.Router();
@@ -43,5 +44,9 @@ router
   .route("/myAppointment/:id")
   .get(isAuthenticatedUser, getSinglAppointmentDoctor)
   .put(isAuthenticatedUser, updateStatusOfAppointment);
+
+router
+  .route("/admin-appointments-stats")
+  .get(isAuthenticatedUser, getAppointmentsStat);
 
 module.exports = router;

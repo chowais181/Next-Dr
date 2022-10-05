@@ -3,6 +3,7 @@ const Profile = require("../models/profileModel");
 const gravtar = require("gravatar");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHander = require("../utils/errorHander");
+const ApiFeatures = require("../utils/apiFeatures");
 const { sendToken } = require("../utils/jwtToken");
 
 // register
@@ -112,11 +113,7 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 
 // update User Role -- Admin
 exports.updateUserRole = catchAsyncErrors(async (req, res, next) => {
-  const newUserData = {
-    role: req.body.role,
-  };
-
-  await User.findByIdAndUpdate(req.params.id, newUserData, {
+  await User.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
     useFindAndModify: false,
@@ -130,12 +127,28 @@ exports.updateUserRole = catchAsyncErrors(async (req, res, next) => {
 
 // Get all users(admin)
 exports.getAllUser = catchAsyncErrors(async (req, res, next) => {
-  const users = await User.find({ _id: { $ne: req.user.id } });
+  const resultPerPage = 15;
+  //--------------find total drs ----------
+  let total_doctors = await User.find({ role: "doctor" });
+  total_doctors = total_doctors.length;
+  //----------------------
+
+  let users = await User.find({ _id: { $ne: req.user.id } });
   const total_user = users.length;
+
+  const apiFeature1 = new ApiFeatures(
+    User.find({ _id: { $ne: req.user.id } }),
+    req.query
+  ).pagination(resultPerPage);
+
+  users = await apiFeature1.query;
+
   res.status(200).json({
     success: true,
-    users,
+    resultPerPage,
     total_user,
+    total_doctors,
+    users,
   });
 });
 

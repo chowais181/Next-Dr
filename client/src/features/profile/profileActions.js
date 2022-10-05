@@ -90,7 +90,7 @@ export const deleteProfile = createAsyncThunk(
   }
 );
 
-//get all profiles
+//get all profiles -- admin
 export const getAllProfiles = createAsyncThunk(
   "profile/getAllProfiles",
   async ({ currentPage, keyword }) => {
@@ -100,6 +100,30 @@ export const getAllProfiles = createAsyncThunk(
         link = `/api/v1/all-profiles?page=${currentPage}`;
       } else {
         link = `/api/v1/all-profiles?page=${currentPage}&keyword=${keyword}`;
+      }
+
+      const { data } = await axios.get(link);
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return error.response.data.message;
+      } else {
+        return error.message;
+      }
+    }
+  }
+);
+
+//get all profiles user
+export const getAllProfilesUser = createAsyncThunk(
+  "profile/getAllProfilesUser",
+  async ({ currentPage, keyword }) => {
+    try {
+      let link;
+      if (keyword === "") {
+        link = `/api/v1/all-profiles-user?page=${currentPage}`;
+      } else {
+        link = `/api/v1/all-profiles-user?page=${currentPage}&keyword=${keyword}`;
       }
 
       const { data } = await axios.get(link);
@@ -136,7 +160,6 @@ export const getSingleProfile = createAsyncThunk(
 export const addReview = createAsyncThunk(
   "review/addReview",
   async ({ profileId, comment }, { rejectWithValue }) => {
-    console.log(profileId, comment);
     try {
       const config = {
         headers: {
@@ -183,3 +206,28 @@ export const deleteReview = createAsyncThunk(
   }
 );
 
+// update profile status ----admin
+export const updateProfileStatus = createAsyncThunk(
+  "profile/updateProfileStatus",
+  async ({ id, status }, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.put(
+        `/api/v1/update-profile-status/${id}`,
+        { status },
+        config
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);

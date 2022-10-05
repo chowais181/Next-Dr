@@ -7,7 +7,7 @@ import { Badge } from "antd";
 import { Icon } from "@iconify/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
-import "./Navbar.css";
+import "../../assets/Navbar.css";
 
 const logoutUserMenu = [];
 
@@ -76,6 +76,10 @@ const adminMenu = [
   {
     name: "Home",
     path: "/home",
+  },
+  {
+    name: "Dashboard",
+    path: "/admin-dashboard",
   },
   {
     name: "Users",

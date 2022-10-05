@@ -50,7 +50,6 @@ export const userLogout = createAsyncThunk("user/logout", async () => {
 export const registerUser = createAsyncThunk(
   "user/register",
   async ({ name, email, password, phoneNumber }, { rejectWithValue }) => {
-    console.log(phoneNumber);
     try {
       const config = {
         headers: {
@@ -102,18 +101,41 @@ export const getUserDetails = createAsyncThunk(
 
 // admin ------ get all users ---
 
-export const getAllUser = createAsyncThunk("user/getAllUser", async () => {
-  try {
-    // configure authorization header with user's token
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
+export const getAllUser = createAsyncThunk(
+  "user/getAllUser",
+  async (currentPage) => {
+    try {
+      // configure authorization header with user's token
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
 
-    const { data } = await axios.get(`/api/v1/admin/users`, config);
+      const { data } = await axios.get(
+        `/api/v1/admin/users?page=${currentPage}`,
+        config
+      );
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return error.response.data.message;
+      } else {
+        return error.message;
+      }
+    }
+  }
+);
+
+// admin ------ get all doctors ---
+
+// admin -------delete user ----------
+export const deleteUser = createAsyncThunk("user/deleteUser", async (id) => {
+  try {
+    const { data } = await axios.delete(`/api/v1/admin/user/${id}`);
     return data;
   } catch (error) {
+    // return custom error message from API if any
     if (error.response && error.response.data.message) {
       return error.response.data.message;
     } else {
@@ -122,23 +144,28 @@ export const getAllUser = createAsyncThunk("user/getAllUser", async () => {
   }
 });
 
-// admin ------ get all doctors ---
-
-
-// admin -------delete user ----------
-export const deleteUser = createAsyncThunk(
-  "user/deleteUser",
-  async (id) => {
-    console.log(id);
+// admin -------update user status ----------
+export const updateUserRole = createAsyncThunk(
+  "user/updateUserRole",
+  async (arg, { rejectWithValue }) => {
     try {
-      const { data } = await axios.delete(`/api/v1/admin/user/${id}`);
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.put(
+        `/api/v1/admin/user/${arg.id}`,
+        { role: arg.role },
+        config
+      );
       return data;
     } catch (error) {
       // return custom error message from API if any
       if (error.response && error.response.data.message) {
-        return error.response.data.message;
+        return rejectWithValue(error.response.data.message);
       } else {
-        return error.message;
+        return rejectWithValue(error.message);
       }
     }
   }

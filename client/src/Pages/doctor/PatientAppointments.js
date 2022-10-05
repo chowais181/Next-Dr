@@ -245,21 +245,21 @@ export default function PatientAppointments() {
 
   return (
     <Fragment>
-      {loading ? (
-        <Loader />
-      ) : (
-        <Fragment>
-          <section className="profiles-page">
-            <div className="container">
-              <div className="heading-common">
-                <h1>
-                  <strong>Appointments</strong>
-                </h1>
-              </div>
-              <h2 className="welcome-heading">
-                <i className="fas fa-user"></i> Patient Appointments
-              </h2>
-              <br />
+      <section className="profiles-page">
+        <div className="container">
+          <div className="heading-common">
+            <h1>
+              <strong>Appointments</strong>
+            </h1>
+          </div>
+          <h2 className="welcome-heading">
+            <i className="fas fa-user"></i> Patient Appointments
+          </h2>
+          <br />
+          {loading ? (
+            <Loader />
+          ) : (
+            <Fragment>
               <MyVerticallyCenteredModal
                 show={modalShow}
                 onHide={() => setModalShow(false)}
@@ -288,10 +288,10 @@ export default function PatientAppointments() {
                   No appointment found..
                 </h2>
               )}
-            </div>
-          </section>
-        </Fragment>
-      )}
+            </Fragment>
+          )}
+        </div>
+      </section>
     </Fragment>
   );
 }

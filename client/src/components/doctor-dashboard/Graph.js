@@ -1,12 +1,10 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment } from "react";
 import { CardHeader, Card } from "@mui/material";
 import { Line } from "react-chartjs-2";
 import "chart.js/auto";
 
 const Graph = ({ patient }) => {
-  // console.log(patient);
-  const [chartData, setChartData] = useState([]);
-
+ 
   const patientData = [];
   const jan = [0];
   const feb = [0];

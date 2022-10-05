@@ -1,4 +1,5 @@
 const Profile = require("../models/profileModel");
+const User = require("../models/userModel");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ErrorHander = require("../utils/errorHander");
 const ApiFeatures = require("../utils/apiFeatures");
@@ -64,6 +65,39 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+// update profile status --- admin
+
+exports.updateProfileStatus = catchAsyncErrors(async (req, res, next) => {
+  const newStatus = {
+    profileStatus: req.body.status,
+  };
+
+  const profile = await Profile.findByIdAndUpdate(req.params.id, newStatus, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
+  if (!profile) {
+    return next(new ErrorHander("No profile found", 404));
+  }
+
+  if (req.body.status === "accepted") {
+    const role = {
+      role: "doctor",
+    };
+    const user = await User.findByIdAndUpdate(profile?.doctor._id, role, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    });
+  }
+
+  res.status(200).json({
+    success: true,
+    message: "Profile status updated successfully",
+  });
+});
 // get single profile
 exports.getSingleProfile = catchAsyncErrors(async (req, res, next) => {
   const profile = await Profile.findById(req.params.id)
@@ -87,10 +121,8 @@ exports.getSingleProfile = catchAsyncErrors(async (req, res, next) => {
 
 // get all profiles
 exports.getAllProfiles = catchAsyncErrors(async (req, res, next) => {
-  const resultPerPage = 3;
-
+  const resultPerPage = 5;
   const total_profiles = await Profile.countDocuments();
-
   const apiFeature = new ApiFeatures(
     Profile.find({ doctor: { $ne: req.user.id } }).populate(
       "doctor",
@@ -102,9 +134,7 @@ exports.getAllProfiles = catchAsyncErrors(async (req, res, next) => {
     .filter();
 
   let profiles = await apiFeature.query;
-
   let filteredProfilesCount = profiles.length;
-
   const apiFeature1 = new ApiFeatures(
     Profile.find({ doctor: { $ne: req.user.id } }).populate(
       "doctor",
@@ -120,6 +150,42 @@ exports.getAllProfiles = catchAsyncErrors(async (req, res, next) => {
   res.status(201).json({
     success: true,
     total_profiles,
+    resultPerPage,
+    filteredProfilesCount,
+    profiles,
+  });
+});
+
+// get all profiles
+exports.getAllProfilesUser = catchAsyncErrors(async (req, res, next) => {
+  const resultPerPage = 3;
+
+  const apiFeature = new ApiFeatures(
+    Profile.find({
+      doctor: { $ne: req.user.id },
+      profileStatus: "accepted",
+    }).populate("doctor", "name phoneNumber avatar"),
+    req.query
+  )
+    .search()
+    .filter();
+
+  let profiles = await apiFeature.query;
+  let filteredProfilesCount = profiles.length;
+  const apiFeature1 = new ApiFeatures(
+    Profile.find({
+      doctor: { $ne: req.user.id },
+      profileStatus: "accepted",
+    }).populate("doctor", "name phoneNumber avatar"),
+    req.query
+  )
+    .search()
+    .pagination(resultPerPage);
+
+  profiles = await apiFeature1.query;
+
+  res.status(201).json({
+    success: true,
     resultPerPage,
     filteredProfilesCount,
     profiles,
@@ -242,5 +308,36 @@ exports.deleteProfileReview = catchAsyncErrors(async (req, res, next) => {
     success: true,
     message: "Review deleted successfully",
     profile,
+  });
+});
+
+//profiles -----stats---- get all profiles ---- admin
+exports.getAllProfilesAdmin = catchAsyncErrors(async (req, res, next) => {
+  const profiles = await Profile.find({
+    doctor: { $ne: req.user.id },
+    profileStatus: "accepted",
+  }).populate("doctor", "name phoneNumber avatar");
+
+  let avg_fee = 0;
+  let rev = 0;
+  let dr = {};
+  let max = 1;
+  profiles?.map((p) => {
+    avg_fee += p.fees;
+    rev = p.reviews.length;
+    if (rev > max) {
+      max = rev;
+      dr.name = p.name;
+      dr.reviews = rev;
+      dr.id = p.id;
+    }
+  });
+
+  avg_fee = Math.round(avg_fee / profiles.length);
+
+  res.status(201).json({
+    success: true,
+    avg_fee,
+    dr,
   });
 });
