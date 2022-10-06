@@ -3,12 +3,9 @@ import { Icon } from "@iconify/react";
 import { alpha, styled } from "@mui/material/styles";
 import { Card, Typography } from "@mui/material";
 // utils
-
-import { useDispatch, useSelector } from "react-redux";
-import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import numeral from "numeral";
-import { getAdminAppStats } from "../../../features/appointment/appointmentActions";
-
+import { Link } from "react-router-dom";
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Card)(({ theme }) => ({
@@ -16,7 +13,7 @@ const RootStyle = styled(Card)(({ theme }) => ({
   textAlign: "center",
   padding: theme.spacing(5, 0),
   color: "white",
-  backgroundColor: "#630406",
+  backgroundColor: "#ed8907",
 }));
 
 const IconWrapperStyle = styled("div")(({ theme }) => ({
@@ -28,6 +25,7 @@ const IconWrapperStyle = styled("div")(({ theme }) => ({
   height: theme.spacing(8),
   justifyContent: "center",
   marginBottom: theme.spacing(3),
+  // backgroundColor: "black",
   backgroundImage: `linear-gradient(135deg, ${alpha(
     theme.palette.info.dark,
     0
@@ -36,28 +34,25 @@ const IconWrapperStyle = styled("div")(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-
-
-export default function TotalAppointments() {
-  const dispatch = useDispatch();
-
-  const { all_no_appointments } = useSelector((state) => state.appointment);
-
-  useEffect(() => {
-    dispatch(getAdminAppStats());
-  }, [dispatch]);
+export default function TotalUser() {
+  const top_dr = useSelector((state) => state.profile?.top_dr);
 
   return (
     <RootStyle>
-      <IconWrapperStyle>
-        <Icon icon="wpf:doctors-bag" width="26" height="26" />
-      </IconWrapperStyle>
-      <Typography variant="h3">
-        {numeral(all_no_appointments).format()}
-      </Typography>
-      <Typography variant="subtitle2" sx={{ opacity: 0.72, fontSize: 20 }}>
-        Total Appointments
-      </Typography>
+      <Link
+        to={`/home/doctor/${top_dr?.id}`}
+        style={{ all: "unset", cursor: "pointer" }}
+      >
+        <IconWrapperStyle>
+          <Icon icon="ic:outline-reviews" width="26" height="26" />
+        </IconWrapperStyle>
+        <Typography variant="h3">
+          {numeral(top_dr?.reviews).format()}
+        </Typography>
+        <Typography variant="subtitle2" sx={{ opacity: 0.72, fontSize: 20 }}>
+          Top Reviewd Dr : {top_dr?.name}
+        </Typography>
+      </Link>
     </RootStyle>
   );
 }

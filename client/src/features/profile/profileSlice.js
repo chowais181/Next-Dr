@@ -10,6 +10,7 @@ import {
   myProfile,
   updateProfileStatus,
   getAllProfilesUser,
+  getAdminProfilesStats,
 } from "./profileActions";
 import toast from "react-hot-toast";
 
@@ -20,11 +21,15 @@ const initialState = {
   total_profiles: 0,
   success: false,
   profile: null,
+  myProfile: null,
   resultPerPage: 0,
   filteredProfilesCount: 0,
   isCreated: false,
   isUpdated: false,
   isDeleted: false,
+  avg_fee: 0,
+  top_dr: null,
+  total_pending_requests: 0,
 };
 
 const profileSlice = createSlice({
@@ -41,6 +46,7 @@ const profileSlice = createSlice({
       state.loading = false;
       state.success = true; // profile created successfully
       state.isCreated = true;
+      state.myProfile = payload.docProfile;
       toast.success("Doctor profile created successfully");
     },
     [createProfile.rejected]: (state, { payload }) => {
@@ -59,6 +65,7 @@ const profileSlice = createSlice({
       state.loading = false;
       state.success = true; // profile created successfully
       state.isUpdated = true;
+      state.myProfile = payload.profile;
       toast.success("Profile updated successfully");
     },
     [updateProfile.rejected]: (state, { payload }) => {
@@ -117,7 +124,23 @@ const profileSlice = createSlice({
       state.resultPerPage = payload.resultPerPage;
       state.filteredProfilesCount = payload.filteredProfilesCount;
     },
-    [getAllProfiles.rejected]: (state, { payload }) => {
+
+    //all  profiles  stats  -- admin
+    [getAdminProfilesStats.pending]: (state) => {
+      state.loading = true;
+      state.isCreated = false;
+      state.isUpdated = false;
+      state.isDeleted = false;
+    },
+    [getAdminProfilesStats.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.avg_fee = payload.avg_fee;
+      state.top_dr = payload.top_dr;
+      state.total_pending_requests = payload.pending_requests;
+    },
+
+    [getAdminProfilesStats.rejected]: (state, { payload }) => {
       state.loading = false;
       state.error = payload;
     },
@@ -163,7 +186,7 @@ const profileSlice = createSlice({
     [myProfile.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.success = true;
-      state.profile = payload.profile;
+      state.myProfile = payload.profile;
     },
     [myProfile.rejected]: (state, { payload }) => {
       state.loading = false;

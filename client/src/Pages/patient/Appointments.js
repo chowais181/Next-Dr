@@ -61,6 +61,7 @@ const Appointments = () => {
                   <Pagination
                     activePage={currentPage}
                     itemsCountPerPage={resultPerPage}
+                    rowsPerPageOptions={[resultPerPage]}
                     totalItemsCount={total_appointments}
                     onChange={setCurrentPageNo}
                     firstPageText="1st"

@@ -72,6 +72,32 @@ export const registerUser = createAsyncThunk(
   }
 );
 
+//update user profile
+export const updateUser = createAsyncThunk(
+  "user/updateUser",
+  async ({ name, email, phoneNumber }, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      await axios.put(
+        "/api/v1/me/update",
+        { name, email, phoneNumber },
+        config
+      );
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
 //get user details action
 export const getUserDetails = createAsyncThunk(
   "user/getUserDetails",

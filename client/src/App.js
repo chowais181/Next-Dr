@@ -3,12 +3,14 @@ import ScrollToTop from "react-scroll-to-top";
 import Navbar from "./components/layout/Navbar";
 import Footer from "./components/layout/Footer";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 //--------------------pages-------------------
 import PageNotFound from "./Pages/PageNotFound";
 import Home from "./Pages/Home";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import LandingPage from "./Pages/LandingPage";
+import MyInfo from "./Pages/user/MyInfo";
 // -------------------------------------------
 
 import { Toaster } from "react-hot-toast";
@@ -30,6 +32,7 @@ import Appointments from "./Pages/patient/Appointments";
 import EditProfile from "./components/profile-forms/EditProfile";
 import PatientAppointments from "./Pages/doctor/PatientAppointments";
 import DoctorDashboard from "./components/doctor-dashboard/Dashboard";
+import ViewProfile from "./components/profile-forms/ViewProfile";
 
 // ---------- Admin routes --------------
 import UsersList from "./components/admin/UsersList";
@@ -38,6 +41,8 @@ import AdminDashboard from "./components/admin/Dashboard";
 //------------------------------
 
 function App() {
+  const { myProfile } = useSelector((state) => state.profile);
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -51,6 +56,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/myinfo"
+            element={
+              <ProtectedRoute>
+                <MyInfo />
               </ProtectedRoute>
             }
           />
@@ -87,10 +100,26 @@ function App() {
             }
           />
           <Route
+            path="/edit-profile"
+            element={
+              <ProtectedRoute>
+                {myProfile ? <EditProfile /> : <Home />}
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/view-profile"
+            element={
+              <ProtectedRoute>
+                {myProfile ? <ViewProfile /> : <Home />}
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/add-education"
             element={
               <ProtectedRoute>
-                <AddEducation />
+                {myProfile ? <AddEducation /> : <Home />}
               </ProtectedRoute>
             }
           />
@@ -98,7 +127,7 @@ function App() {
             path="/add-experience"
             element={
               <ProtectedRoute>
-                <AddExperience />
+                {myProfile ? <AddExperience /> : <Home />}
               </ProtectedRoute>
             }
           />
@@ -135,14 +164,7 @@ function App() {
               </ProtectedDoctorRoute>
             }
           />
-          <Route
-            path="/edit-profile"
-            element={
-              <ProtectedDoctorRoute>
-                <EditProfile />
-              </ProtectedDoctorRoute>
-            }
-          />
+
           <Route
             path="/patient-appointments"
             element={
@@ -165,6 +187,14 @@ function App() {
             element={
               <ProtectedAdminRoute>
                 <DoctorsList />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route
+            path="/doctor-list/doctor/:id"
+            element={
+              <ProtectedAdminRoute>
+                <Profile />
               </ProtectedAdminRoute>
             }
           />

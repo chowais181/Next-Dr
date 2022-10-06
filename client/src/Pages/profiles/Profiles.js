@@ -75,7 +75,7 @@ export default function Profiles() {
             <Loader />
           ) : (
             <Fragment>
-              {isProfileNotFound ? (
+              {isProfileNotFound && keyword !== "" ? (
                 <SearchNotFound searchQuery={keyword} />
               ) : (
                 <Fragment>

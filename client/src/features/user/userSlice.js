@@ -7,6 +7,7 @@ import {
   getAllUser,
   deleteUser,
   updateUserRole,
+  updateUser,
 } from "./userActions";
 import toast from "react-hot-toast";
 // initialize userToken from local storage
@@ -84,13 +85,32 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = payload;
     },
+
+    // update user
+    [updateUser.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [updateUser.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true; // update successful
+      state.isUpdated = true;
+      toast.success("Your Profile updated successfully");
+    },
+    [updateUser.rejected]: (state, { payload }) => {
+      state.loading = false;
+      // toast.error(payload);
+    },
+
     // get user details
     [getUserDetails.pending]: (state) => {
       state.loading = true;
+      state.isUpdated=false;
     },
     [getUserDetails.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.userInfo = payload.user;
+      state.isUpdated=false;
     },
     [getUserDetails.rejected]: (state, { payload }) => {
       state.loading = false;

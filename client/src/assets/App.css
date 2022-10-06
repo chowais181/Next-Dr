@@ -480,7 +480,7 @@ h5 {
 }
 
 .common-details {
-  display: flex;
+  /* display: flex; */
   flex-direction: column;
   height: auto;
   justify-content: space-between;
@@ -731,7 +731,7 @@ h5 {
   width: auto;
   display: flex;
   flex-direction: column;
-  /* height: 19.3rem; */
+  /* height: 25.3rem; */
   justify-content: center;
   border: 2px solid #17a2b8;
   border-radius: 0.25rem;
@@ -865,6 +865,7 @@ h5 {
     font-size: 1.5rem;
   }
   #landing .container {
+    overflow: scroll;
     grid-template-areas:
       "heading   heading"
       "img        img"

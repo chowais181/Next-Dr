@@ -104,7 +104,7 @@ export default function UsersList() {
                   height="25"
                   color="#fcba03"
                   onClick={() => {
-                    navigate(`/home/doctor/${params.row.id}`);
+                    navigate(`/doctor-list/doctor/${params.row.id}`);
                   }}
                 />
               </Tooltip>

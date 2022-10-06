@@ -1,10 +1,10 @@
 import React, { Fragment } from "react";
-import Loader from "../Loader";
-import { useSelector, useDispatch } from "react-redux";
+
+import { useSelector } from "react-redux";
 import AdminCards from "./admin-cards/AdminCards";
 
 const AdminDashboard = () => {
-  const { loading, userInfo } = useSelector((state) => state.user);
+  const { userInfo } = useSelector((state) => state.user);
 
   return (
     <Fragment>

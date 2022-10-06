@@ -7,7 +7,7 @@ import { updateProfile } from "../../features/profile/profileActions";
 const EditProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, isUpdated, profile } = useSelector((state) => state.profile);
+  const { loading, isUpdated, myProfile } = useSelector((state) => state.profile);
 
   const [social, setSocial] = useState({
     twitter: "",
@@ -56,22 +56,22 @@ const EditProfile = () => {
 
   useEffect(() => {
     setFormData({
-      hospital: loading || !profile.hospital ? "" : profile.hospital,
-      website: loading || !profile.website ? "" : profile.website,
-      location: loading || !profile.location ? "" : profile.location,
-      specialist: loading || !profile.specialist ? "" : profile.specialist,
-      fees: loading || !profile.fees ? "" : profile.fees,
-      timing: loading || !profile.timing ? "" : profile.timing,
-      bio: loading || !profile.bio ? "" : profile.bio,
+      hospital: loading || !myProfile?.hospital ? "" : myProfile?.hospital,
+      website: loading || !myProfile?.website ? "" : myProfile?.website,
+      location: loading || !myProfile?.location ? "" : myProfile?.location,
+      specialist: loading || !myProfile?.specialist ? "" : myProfile?.specialist,
+      fees: loading || !myProfile?.fees ? "" : myProfile?.fees,
+      timing: loading || !myProfile?.timing ? "" : myProfile?.timing,
+      bio: loading || !myProfile?.bio ? "" : myProfile?.bio,
     });
 
     setSocial({
-      twitter: loading || !profile.social ? "" : profile.social.twitter,
-      facebook: loading || !profile.social ? "" : profile.social.facebook,
-      youtube: loading || !profile.social ? "" : profile.social.youtube,
-      instagram: loading || !profile.social ? "" : profile.social.instagram,
+      twitter: loading || !myProfile?.social ? "" : myProfile?.social?.twitter,
+      facebook: loading || !myProfile?.social ? "" : myProfile?.social?.facebook,
+      youtube: loading || !myProfile?.social ? "" : myProfile?.social?.youtube,
+      instagram: loading || !myProfile?.social ? "" : myProfile?.social?.instagram,
     });
-  }, [loading, profile]);
+  }, [loading, myProfile]);
 
   return (
     <Fragment>
@@ -85,8 +85,8 @@ const EditProfile = () => {
                   <i className="far fa-id-card"></i>
                 </h1>
                 <p className="lead">
-                  <i className="fas fa-user"></i> Let's get some information to
-                  make your profile stand out
+                  <i className="fas fa-user"></i> Edit your profile, enter all
+                  the correct information to make your profile stand out.
                 </p>
               </div>
               <form onSubmit={(e) => onSubmit(e)}>
@@ -193,7 +193,7 @@ const EditProfile = () => {
                     type="button"
                     className="btn btn-outline-secondary"
                   >
-                    Add Social Network Links
+                    Edit Social Network Links
                   </button>
                   <span className="text-muted"> Optional</span>
                 </div>

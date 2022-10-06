@@ -4,8 +4,8 @@ import { alpha, styled } from "@mui/material/styles";
 import { Card, Typography } from "@mui/material";
 // utils
 
-import { useDispatch, useSelector } from "react-redux";
-import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
+
 import numeral from "numeral";
 // ----------------------------------------------------------------------
 
@@ -35,8 +35,6 @@ const IconWrapperStyle = styled("div")(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-
-
 export default function TotalDoctor() {
   const total_doctors = useSelector((state) => state.user?.total_doctors);
 
@@ -46,7 +44,7 @@ export default function TotalDoctor() {
         <Icon icon="healthicons:doctor" width="26" height="26" />
       </IconWrapperStyle>
       <Typography variant="h3">{numeral(total_doctors).format()}</Typography>
-      <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
+      <Typography variant="subtitle2" sx={{ opacity: 0.72, fontSize: 20 }}>
         Total Doctors
       </Typography>
     </RootStyle>

@@ -1,14 +1,10 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-
 import { userLogout } from "../../features/user/userActions";
 import { Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
-import { Badge } from "antd";
 import { Icon } from "@iconify/react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-
 import "../../assets/Navbar.css";
-
 const logoutUserMenu = [];
 
 const userMenu = [
@@ -27,17 +23,13 @@ const profileUserDropdown = [
     name: "Create Profile",
     path: "/apply-doctor",
   },
-  {
-    name: "Add Education",
-    path: "/add-education",
-  },
-  {
-    name: "Add Experience",
-    path: "/add-experience",
-  },
 ];
 
 const profileDoctorDropdown = [
+  {
+    name: "View Profile",
+    path: "/view-profile",
+  },
   {
     name: "Edit Profile",
     path: "/edit-profile",
@@ -62,21 +54,16 @@ const doctorMenu = [
     path: "/dashboard",
   },
   {
-    name: "Appointments",
+    name: "Patients",
     path: "/patient-appointments",
   },
   {
-    name: "Profile",
-    // path: `/doctor/profile/${user?._id}`,
-    path: "/",
+    name: "Appointments",
+    path: "/appointments",
   },
 ];
 
 const adminMenu = [
-  {
-    name: "Home",
-    path: "/home",
-  },
   {
     name: "Dashboard",
     path: "/admin-dashboard",
@@ -89,10 +76,6 @@ const adminMenu = [
     name: "Doctors",
     path: "/doctor-list",
   },
-  {
-    name: "Profile",
-    path: "/profile",
-  },
 ];
 
 // const role = user?.isAdmin ? "Admin" : user?.isDoctor ? "Doctor" : "User";
@@ -103,6 +86,7 @@ function NavMenu() {
   const pathname = `/${pathElements[1]}`;
 
   const { userInfo, userToken } = useSelector((state) => state.user);
+  const { myProfile } = useSelector((state) => state.profile);
 
   const menuToBeRendered =
     userInfo?.role === "admin"
@@ -144,11 +128,11 @@ function NavMenu() {
             style={{ maxHeight: "100px", fontSize: "20px", marginLeft: "10%" }}
             navbarScroll
           >
-            {menuToBeRendered.map((item) => {
+            {menuToBeRendered.map((item, index) => {
               const isActive = pathname === item.path;
 
               return (
-                <div key={item.name + "3asfd2"}>
+                <div key={index}>
                   <Nav.Link
                     as={Link}
                     to={item.path}
@@ -161,7 +145,7 @@ function NavMenu() {
             })}
 
             {/* --------------------------for user ------------------ */}
-            {userInfo ? (
+            {userInfo && userInfo?.role === "patient" && !myProfile ? (
               <>
                 <NavDropdown
                   id="navbarScrollingDropdown"
@@ -189,7 +173,7 @@ function NavMenu() {
             ) : null}
 
             {/* ------------------------for doctor------------------ */}
-            {userInfo ? (
+            {(userInfo && userInfo.role === "doctor") || myProfile ? (
               <>
                 <NavDropdown
                   id="navbarScrollingDropdown"
@@ -220,7 +204,7 @@ function NavMenu() {
             <>
               {/* user icon */}
               <Nav className="NavIcon">
-                <Badge count={1} color="white">
+                {/* <Badge count={1} color="white">
                   <Icon
                     icon="clarity:notification-line"
                     color="white"
@@ -230,7 +214,7 @@ function NavMenu() {
                     style={{ cursor: "pointer" }}
                     onClick={() => navigate("/")}
                   />
-                </Badge>
+                </Badge> */}
                 <NavDropdown
                   title={
                     <Icon
@@ -249,12 +233,10 @@ function NavMenu() {
                     <h6> {userInfo.name}</h6>
                   </div>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.2">
-                    Profile
+                  <NavDropdown.Item as={Link} to="/myinfo">
+                    My Info
                   </NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.3">
-                    Something
-                  </NavDropdown.Item>
+
                   <NavDropdown.Divider />
 
                   <Button

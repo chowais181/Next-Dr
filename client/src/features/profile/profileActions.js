@@ -14,7 +14,12 @@ export const createProfile = createAsyncThunk(
         },
       };
 
-      await axios.post(`/api/v1/create-profile`, formData, config);
+      const { data } = await axios.post(
+        `/api/v1/create-profile`,
+        formData,
+        config
+      );
+      return data;
     } catch (error) {
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);
@@ -37,7 +42,8 @@ export const updateProfile = createAsyncThunk(
         },
       };
 
-      await axios.put(`/api/v1/my-profile`, formData, config);
+      const { data } = await axios.put(`/api/v1/my-profile`, formData, config);
+      return data;
     } catch (error) {
       if (error.response && error.response.data.message) {
         return rejectWithValue(error.response.data.message);
@@ -227,6 +233,26 @@ export const updateProfileStatus = createAsyncThunk(
         return rejectWithValue(error.response.data.message);
       } else {
         return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+// admin ----- get all  profiles stats
+
+export const getAdminProfilesStats = createAsyncThunk(
+  "profile/getAdminProfilesStats",
+  async () => {
+    try {
+      let link = `/api/v1/all-profiles-admin`;
+
+      const { data } = await axios.get(link);
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return error.response.data.message;
+      } else {
+        return error.message;
       }
     }
   }

@@ -29,8 +29,10 @@ const Review = ({ review, patient }) => {
             </div>
           </div>
         </div>
+        <br />
         <div className="common-details">
           <h2 className="credentials">
+            <br />
             <strong>Total Appointments</strong>
           </h2>
           <br />

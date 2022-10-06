@@ -15,7 +15,9 @@ export default function Footer() {
           />
         </Link>
 
-        <p className="copyright">Copyright © 2022, Nextdr. All Rights Reserved.</p>
+        <p className="copyright">
+          Copyright © {new Date().getFullYear()}, Nextdr. All Rights Reserved.
+        </p>
       </div>
     </div>
   );

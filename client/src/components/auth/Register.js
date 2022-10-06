@@ -24,7 +24,7 @@ const Register = () => {
       .required("Password is required")
       .matches(
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,20}$/,
-        `Password must contain lowercase, uppercase,number & special character `
+        `Password must contain lowercase, uppercase,number, special character & length 8-20`
       )
       .min(8, "Password must be at least 8 characters")
       .max(20, "Password must not exceed 20 characters"),
@@ -59,7 +59,7 @@ const Register = () => {
       //for false is register
       dispatch(registerUser());
     }
-  }, [navigate, isRegister,dispatch]);
+  }, [navigate, isRegister, dispatch]);
 
   return (
     <Fragment>

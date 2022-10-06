@@ -113,3 +113,23 @@ export const updateAppointmentStatusDoctor = createAsyncThunk(
     }
   }
 );
+
+// admin appointmenps stats ---
+
+export const getAdminAppStats = createAsyncThunk(
+  "appointment/getAdminAppStats",
+  async () => {
+    try {
+      let link = `/api/v1/admin-appointments-stats`;
+
+      const { data } = await axios.get(link);
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return error.response.data.message;
+      } else {
+        return error.message;
+      }
+    }
+  }
+);

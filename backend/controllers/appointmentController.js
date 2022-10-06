@@ -98,7 +98,7 @@ exports.checkAppointmentAvailability = catchAsyncErrors(
 
 // get my appointments for User
 exports.getMyAppointmentsUser = catchAsyncErrors(async (req, res, next) => {
-  let resultPerPage = 6;
+  let resultPerPage = 4;
 
   if (!req.user) {
     return next(new ErrorHander("Please login to access this resource.", 404));
@@ -268,15 +268,15 @@ exports.getAppointmentsStat = catchAsyncErrors(async (req, res, next) => {
   let avg_patient_age = [0, 0, 0, 0, 0];
 
   appointments.map((apt) => {
-    if (apt.age > 1 && apt.age < 10) {
+    if (apt.age >= 1 && apt.age <= 10) {
       avg_patient_age[0] += 1;
-    } else if (apt.age > 10 && apt.age < 20) {
+    } else if (apt.age > 10 && apt.age <= 20) {
       avg_patient_age[1] += 1;
-    } else if (apt.age > 20 && apt.age < 30) {
+    } else if (apt.age > 20 && apt.age <= 30) {
       avg_patient_age[2] += 1;
-    } else if (apt.age > 30 && apt.age < 50) {
+    } else if (apt.age > 30 && apt.age <= 50) {
       avg_patient_age[3] += 1;
-    } else if (apt.age > 50 && apt.age < 70) {
+    } else if (apt.age > 50) {
       avg_patient_age[4] += 1;
     }
   });

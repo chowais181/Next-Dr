@@ -5,6 +5,7 @@ import {
   getMyAppointmentsDoctor,
   deleteAppointmentUser,
   updateAppointmentStatusDoctor,
+  getAdminAppStats,
 } from "./appointmentActions";
 import toast from "react-hot-toast";
 
@@ -19,6 +20,8 @@ const initialState = {
   isCreated: false,
   isUpdated: false,
   isDeleted: false,
+  all_no_appointments: 0,
+  avg_patient_age: null,
 };
 
 const profileSlice = createSlice({
@@ -108,6 +111,22 @@ const profileSlice = createSlice({
       state.loading = false;
       state.error = payload;
       toast.error(payload);
+    },
+
+    //admin appointments stats
+    [getAdminAppStats.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [getAdminAppStats.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.all_no_appointments = payload.total_appointments;
+      state.avg_patient_age = payload.avg_patient_age;
+    },
+    [getAdminAppStats.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
     },
   },
 });

@@ -57,7 +57,16 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
       runValidators: true,
       useFindAndModify: false,
     }
-  );
+  )
+    .populate("doctor", "name email phoneNumber avatar")
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "user",
+        model: "User",
+        select: "name avatar",
+      },
+    });
   res.status(201).json({
     success: true,
     message: "Doctor profile updated successfully",
@@ -166,9 +175,7 @@ exports.getAllProfilesUser = catchAsyncErrors(async (req, res, next) => {
       profileStatus: "accepted",
     }).populate("doctor", "name phoneNumber avatar"),
     req.query
-  )
-    .search()
-    .filter();
+  ).search();
 
   let profiles = await apiFeature.query;
   let filteredProfilesCount = profiles.length;
@@ -313,8 +320,12 @@ exports.deleteProfileReview = catchAsyncErrors(async (req, res, next) => {
 
 //profiles -----stats---- get all profiles ---- admin
 exports.getAllProfilesAdmin = catchAsyncErrors(async (req, res, next) => {
+  const pending_profiles = await Profile.find({
+    profileStatus: "pending",
+  });
+  let pending_requests = pending_profiles?.length;
+
   const profiles = await Profile.find({
-    doctor: { $ne: req.user.id },
     profileStatus: "accepted",
   }).populate("doctor", "name phoneNumber avatar");
 
@@ -332,12 +343,13 @@ exports.getAllProfilesAdmin = catchAsyncErrors(async (req, res, next) => {
       dr.id = p.id;
     }
   });
-
+  let top_dr = dr;
   avg_fee = Math.round(avg_fee / profiles.length);
 
   res.status(201).json({
     success: true,
     avg_fee,
-    dr,
+    top_dr,
+    pending_requests,
   });
 });

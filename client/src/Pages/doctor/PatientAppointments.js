@@ -271,7 +271,8 @@ export default function PatientAppointments() {
                   <DataGrid
                     rows={rows}
                     columns={columns}
-                    pageSize={13}
+                    pageSize={5}
+                    rowsPerPageOptions={[5]}
                     disableSelectionOnClick
                     components={{ Toolbar: GridToolbar }}
                     autoHeight

@@ -15,7 +15,7 @@ const RootStyle = styled(Card)(({ theme }) => ({
   textAlign: "center",
   padding: theme.spacing(5, 0),
   color: "white",
-  backgroundColor: "#088a87",
+  backgroundColor: "#1a05a3",
 }));
 
 const IconWrapperStyle = styled("div")(({ theme }) => ({
@@ -49,7 +49,7 @@ export default function TotalUser() {
         <Icon icon="carbon:user-multiple" width={26} height={26} />
       </IconWrapperStyle>
       <Typography variant="h3">{numeral(total_user).format()}</Typography>
-      <Typography variant="subtitle2" sx={{ opacity: 0.72 }}>
+      <Typography variant="subtitle2" sx={{ opacity: 0.72, fontSize: 20 }}>
         Total Users
       </Typography>
     </RootStyle>

@@ -1,14 +1,13 @@
+import React, { useEffect } from "react";
 import { Icon } from "@iconify/react";
 // material
 import { alpha, styled } from "@mui/material/styles";
 import { Card, Typography } from "@mui/material";
 // utils
-
+import { getAdminProfilesStats } from "../../../features/profile/profileActions";
 import { useDispatch, useSelector } from "react-redux";
-import React, { useEffect } from "react";
-import numeral from "numeral";
-import { getAdminAppStats } from "../../../features/appointment/appointmentActions";
 
+import numeral from "numeral";
 // ----------------------------------------------------------------------
 
 const RootStyle = styled(Card)(({ theme }) => ({
@@ -16,7 +15,7 @@ const RootStyle = styled(Card)(({ theme }) => ({
   textAlign: "center",
   padding: theme.spacing(5, 0),
   color: "white",
-  backgroundColor: "#630406",
+  backgroundColor: "#2d034d",
 }));
 
 const IconWrapperStyle = styled("div")(({ theme }) => ({
@@ -36,27 +35,22 @@ const IconWrapperStyle = styled("div")(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-
-
-export default function TotalAppointments() {
+export default function TotalUser() {
   const dispatch = useDispatch();
-
-  const { all_no_appointments } = useSelector((state) => state.appointment);
+  const avg_fee = useSelector((state) => state.profile?.avg_fee);
 
   useEffect(() => {
-    dispatch(getAdminAppStats());
+    dispatch(getAdminProfilesStats());
   }, [dispatch]);
 
   return (
     <RootStyle>
       <IconWrapperStyle>
-        <Icon icon="wpf:doctors-bag" width="26" height="26" />
+        <Icon icon="fa6-solid:money-bill-trend-up" width="26" height="26" />
       </IconWrapperStyle>
-      <Typography variant="h3">
-        {numeral(all_no_appointments).format()}
-      </Typography>
+      <Typography variant="h3">Rs. {numeral(avg_fee).format()}</Typography>
       <Typography variant="subtitle2" sx={{ opacity: 0.72, fontSize: 20 }}>
-        Total Appointments
+        Average Dr Charges
       </Typography>
     </RootStyle>
   );

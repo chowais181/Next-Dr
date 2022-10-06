@@ -6,6 +6,10 @@ import * as React from "react";
 import TotalUser from "./TotalUser";
 import TotalDoctor from "./TotalDoctor";
 import TotalAppointments from "./TotalAppointments";
+import AvgFee from "./AvgFee";
+import TopDr from "./TopDr";
+import PendingProfileStatus from "./PendingProfileStatus";
+import PatientAgeGraph from "./PatientAgeChart";
 
 export default function AdminCards() {
   return (
@@ -18,7 +22,19 @@ export default function AdminCards() {
           <TotalDoctor />
         </Grid>
         <Grid item xs={12} sm={6} md={4}>
+          <PendingProfileStatus />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
           <TotalAppointments />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <AvgFee />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <TopDr />
+        </Grid>
+        <Grid item xs={12} sm={6} md={5}>
+          <PatientAgeGraph />
         </Grid>
       </Grid>
     </Container>

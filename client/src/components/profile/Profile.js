@@ -27,31 +27,36 @@ const Profile = () => {
       <section id="profile-page">
         <div className="container">
           <div className="current-profile">
-            <div className="current-btn">
-              <Link className="rounded-pill btn btn-dark" to="/home">
-                Back to Profiles
-              </Link>
-              <Fragment>
-                <Link
-                  to={`/home/appointment/${id}`}
-                  type="button"
-                  className="rounded-pill btn btn-info"
-                >
-                  <i className="fas fa-calendar-check"></i> Book Appointment
+            {userInfo?.role === "admin" ? (
+              ""
+            ) : (
+              <div className="current-btn">
+                <Link className="rounded-pill btn btn-dark" to="/home">
+                  Back to Profiles
                 </Link>
-              </Fragment>
+                <Fragment>
+                  <Link
+                    to={`/home/appointment/${id}`}
+                    type="button"
+                    className="rounded-pill btn btn-info"
+                  >
+                    <i className="fas fa-calendar-check"></i> Book Appointment
+                  </Link>
+                </Fragment>
 
-              {id === userInfo?._id ? (
-                <Link
-                  to="/edit-profile"
-                  className="rounded-pill btn btn-secondary"
-                >
-                  <i className="fas fa-edit"></i>
-                </Link>
-              ) : (
-                ""
-              )}
-            </div>
+                {id === userInfo?._id ? (
+                  <Link
+                    to="/edit-profile"
+                    className="rounded-pill btn btn-secondary"
+                  >
+                    <i className="fas fa-edit"></i>
+                  </Link>
+                ) : (
+                  ""
+                )}
+              </div>
+            )}
+
             <br />
             {profile === null || loading ? (
               <Loader />
@@ -93,9 +98,16 @@ const Profile = () => {
                     )}
                   </div>
                 </div>
+                <br/>
                 <div className="patient-review">
                   <h2 className="exp-common-heading">Patient Reviews</h2>
-                  <ReviewForm profileId={profile?._id} />
+
+                  {userInfo?.role === "admin" ? (
+                    ""
+                  ) : (
+                    <ReviewForm profileId={profile?._id} />
+                  )}
+
                   {profile?.reviews?.length > 0 ? (
                     <Fragment>
                       <h4 className="exp-common-heading1">

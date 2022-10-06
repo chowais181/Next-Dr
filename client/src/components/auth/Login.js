@@ -31,7 +31,7 @@ const Login = () => {
       toast.success("Login successfully");
     }
     if (userInfo) {
-      navigate("/home");
+      navigate("/admin-dashboard");
     }
   }, [navigate, userInfo, isLogin]);
 
