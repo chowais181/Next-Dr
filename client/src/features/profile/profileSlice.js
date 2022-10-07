@@ -11,6 +11,10 @@ import {
   updateProfileStatus,
   getAllProfilesUser,
   getAdminProfilesStats,
+  addEducation,
+  addExperience,
+  deleteEducation,
+  deleteExperience,
 } from "./profileActions";
 import toast from "react-hot-toast";
 
@@ -27,6 +31,7 @@ const initialState = {
   isCreated: false,
   isUpdated: false,
   isDeleted: false,
+  isDeletedProfile: false,
   avg_fee: 0,
   top_dr: null,
   total_pending_requests: 0,
@@ -55,8 +60,78 @@ const profileSlice = createSlice({
       toast.error(payload);
     },
 
-    //update profile
+    //add education
+    [addEducation.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [addEducation.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true; // education added successfully
+      state.isUpdated = true;
+      state.myProfile = payload.profile;
+      toast.success("Education added successfully");
+    },
+    [addEducation.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      toast.error(payload);
+    },
+    //add experience
+    [addExperience.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [addExperience.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true; // exp added  successfully
+      state.isUpdated = true;
+      state.myProfile = payload.profile;
+      toast.success("Experience added successfully");
+    },
+    [addExperience.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      toast.error(payload);
+    },
 
+    //delete education
+    [deleteEducation.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [deleteEducation.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.isUpdated = true;
+      state.myProfile = payload.profile;
+      toast.success("Education deleted successfully");
+    },
+    [deleteEducation.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      toast.error(payload);
+    },
+
+    //delte experience
+    [deleteExperience.pending]: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    [deleteExperience.fulfilled]: (state, { payload }) => {
+      state.loading = false;
+      state.success = true;
+      state.isDeleted = true;
+      state.myProfile = payload.profile;
+      toast.success("Experience deleted successfully");
+    },
+    [deleteExperience.rejected]: (state, { payload }) => {
+      state.loading = false;
+      state.error = payload;
+      toast.error(payload);
+    },
+
+    //update profile
     [updateProfile.pending]: (state) => {
       state.loading = true;
       state.error = null;
@@ -100,7 +175,7 @@ const profileSlice = createSlice({
     [deleteProfile.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.success = true; // profile created successfully
-      state.isDeleted = true;
+      state.isDeletedProfile = true;
       toast.success("Profile deleted successfully");
     },
     [deleteProfile.rejected]: (state, { payload }) => {
@@ -115,6 +190,7 @@ const profileSlice = createSlice({
       state.isCreated = false;
       state.isUpdated = false;
       state.isDeleted = false;
+      state.isDeletedProfile = false;
     },
     [getAllProfiles.fulfilled]: (state, { payload }) => {
       state.loading = false;
@@ -131,6 +207,7 @@ const profileSlice = createSlice({
       state.isCreated = false;
       state.isUpdated = false;
       state.isDeleted = false;
+      state.isDeletedProfile = false;
     },
     [getAdminProfilesStats.fulfilled]: (state, { payload }) => {
       state.loading = false;
@@ -151,6 +228,7 @@ const profileSlice = createSlice({
       state.isCreated = false;
       state.isUpdated = false;
       state.isDeleted = false;
+      state.isDeletedProfile = false;
     },
     [getAllProfilesUser.fulfilled]: (state, { payload }) => {
       state.loading = false;

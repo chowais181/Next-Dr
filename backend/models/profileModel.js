@@ -22,7 +22,7 @@ const profileSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please enter timing"],
     },
-   
+
     status: {
       type: String,
       enum: ["available", "not-available"],

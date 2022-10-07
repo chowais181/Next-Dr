@@ -130,7 +130,7 @@ exports.getSingleProfile = catchAsyncErrors(async (req, res, next) => {
 
 // get all profiles
 exports.getAllProfiles = catchAsyncErrors(async (req, res, next) => {
-  const resultPerPage = 5;
+  const resultPerPage = 10;
   const total_profiles = await Profile.countDocuments();
   const apiFeature = new ApiFeatures(
     Profile.find({ doctor: { $ne: req.user.id } }).populate(
@@ -206,6 +206,15 @@ exports.deleteProfile = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHander("Profile not found"));
   }
 
+  const role = {
+    role: "patient",
+  };
+  const user = await User.findByIdAndUpdate(req.user.id, role, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
+  });
+
   res.status(200).json({
     success: true,
     message: "Doctor profile deleted successfully",
@@ -244,6 +253,137 @@ exports.createProfileReview = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: "Review added successfully",
+    profile,
+  });
+});
+
+// -- add education
+exports.addEducation = catchAsyncErrors(async (req, res, next) => {
+  const { university, degree, from, to, description, current } = req.body;
+
+  const newEdu = {
+    university,
+    degree,
+    from,
+    to,
+    description,
+    current,
+  };
+
+  const profileDoc = await Profile.findOne({ doctor: req.user.id });
+  if (!profileDoc) return next(new ErrorHander("profile not found", 404));
+
+  profileDoc.education.unshift(newEdu);
+  await profileDoc.save();
+
+  const profile = await Profile.findOne({ doctor: req.user.id })
+    .populate("doctor", "name phoneNumber avatar")
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "user",
+        model: "User",
+        select: "name avatar",
+      },
+    });
+  res.status(200).json({
+    success: true,
+    message: "Education added successfully",
+    profile,
+  });
+});
+
+// -- add experience
+exports.addExperience = catchAsyncErrors(async (req, res, next) => {
+  const { position, institute, from, to, current, description } = req.body;
+
+  const newExp = {
+    position,
+    institute,
+    from,
+    to,
+    current,
+    description,
+  };
+
+  const profileDoc = await Profile.findOne({ doctor: req.user.id });
+  if (!profileDoc) return next(new ErrorHander("profile not found", 404));
+
+  profileDoc.experience.unshift(newExp);
+  await profileDoc.save();
+
+  const profile = await Profile.findOne({ doctor: req.user.id })
+    .populate("doctor", "name phoneNumber avatar")
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "user",
+        model: "User",
+        select: "name avatar",
+      },
+    });
+  res.status(200).json({
+    success: true,
+    message: "Experience added successfully",
+    profile,
+  });
+});
+
+// Delete Education
+exports.deleteEdu = catchAsyncErrors(async (req, res, next) => {
+  const profil = await Profile.findOne({ doctor: req.user.id });
+  // Get remove index
+  const removeIndex = profil.education
+    .map((item) => item.id)
+    .indexOf(req.params.id);
+
+  profil.education.splice(removeIndex, 1);
+  await profil.save();
+
+  const profile = await Profile.findOne({ doctor: req.user.id })
+    .populate("doctor", "name phoneNumber avatar")
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "user",
+        model: "User",
+        select: "name avatar",
+      },
+    });
+
+  res.status(200).json({
+    success: true,
+    message: "Education deleted successfully",
+    profile,
+  });
+});
+
+// Delete Experience
+exports.deleteExp = catchAsyncErrors(async (req, res, next) => {
+  const profil = await Profile.findOne({ doctor: req.user.id });
+  // Get remove index
+
+  const removeIndex = profil.experience
+    .map((item) => item.id)
+    .indexOf(req.params.id);
+
+  profil.experience.splice(removeIndex, 1);
+  await profil.save();
+
+  const profile = await Profile.findOne({ doctor: req.user.id })
+    .populate("doctor", "name phoneNumber avatar")
+    .populate({
+      path: "reviews",
+      populate: {
+        path: "user",
+        model: "User",
+        select: "name avatar",
+      },
+    });
+
+  res.status(200).json({
+    success: true,
+    message: "Experience deleted successfully",
     profile,
   });
 });

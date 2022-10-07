@@ -227,21 +227,18 @@ export default function PatientAppointments() {
   ];
   const rows = [];
   // we slice the array bcz we cannot sort the array in strict mode without it
-  appointments
-    ?.slice()
-    .reverse()
-    .map((item, index) => {
-      rows.push({
-        index: index + 1,
-        id: item._id,
-        name: item.patientName,
-        date: item.bookingDate.substring(0, 10),
-        time: item.bookingTime,
-        status: item.status,
-        phoneNumber: "+" + item?.user?.phoneNumber,
-      });
-      return 1;
+  appointments.map((item, index) => {
+    rows.push({
+      index: index + 1,
+      id: item._id,
+      name: item.patientName,
+      date: item.bookingDate.substring(0, 10),
+      time: item.bookingTime,
+      status: item.status,
+      phoneNumber: "+" + item?.user?.phoneNumber,
     });
+    return 1;
+  });
 
   return (
     <Fragment>

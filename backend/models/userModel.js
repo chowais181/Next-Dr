@@ -47,7 +47,8 @@ const userSchema = new mongoose.Schema(
       required: [true, "Enter a valid phone number"],
       validate: {
         validator: function (v) {
-          var no = /^(\+92|0|92)[0-9]{10}$/;
+          var no = /^(\+92|0|92)(3)[0-9]{9}$/;
+
           return no.test(v);
         },
         message: "Not a valid number",

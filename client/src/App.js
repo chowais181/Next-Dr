@@ -190,6 +190,7 @@ function App() {
               </ProtectedAdminRoute>
             }
           />
+
           <Route
             path="/doctor-list/doctor/:id"
             element={

@@ -40,7 +40,7 @@ export default function TotalUser() {
   return (
     <RootStyle>
       <Link
-        to={`/home/doctor/${top_dr?.id}`}
+        to={`/doctor-list/doctor/${top_dr?.id}`}
         style={{ all: "unset", cursor: "pointer" }}
       >
         <IconWrapperStyle>

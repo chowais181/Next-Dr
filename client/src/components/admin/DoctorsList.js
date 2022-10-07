@@ -165,21 +165,18 @@ export default function UsersList() {
   ];
   const rows = [];
   // we slice the array bcz we cannot sort the array in strict mode without it
-  profiles
-    ?.slice()
-    .reverse()
-    ?.map((item, index) => {
-      rows.push({
-        id: item._id,
-        name: item.name,
-        hospital: item.hospital,
-        location: item.location,
-        createdAt: item.createdAt.substring(0, 10),
-        phoneNumber: "+" + item?.doctor?.phoneNumber,
-        profileStatus: item.profileStatus,
-      });
-      return 1;
+  profiles?.map((item, index) => {
+    rows.push({
+      id: item._id,
+      name: item.name,
+      hospital: item.hospital,
+      location: item.location,
+      createdAt: item.createdAt.substring(0, 10),
+      phoneNumber: "+" + item?.doctor?.phoneNumber,
+      profileStatus: item.profileStatus,
     });
+    return 1;
+  });
 
   return (
     <Fragment>

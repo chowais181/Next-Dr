@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { updateProfile } from "../../features/profile/profileActions";
+import { addEducation } from "../../features/profile/profileActions";
 
 const AddEducation = () => {
   const navigate = useNavigate();
@@ -53,7 +53,7 @@ const AddEducation = () => {
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
-                  dispatch(updateProfile({ education: formData }));
+                  dispatch(addEducation(formData));
                 }}
               >
                 <small>* = required field</small>
@@ -86,6 +86,7 @@ const AddEducation = () => {
                     className="form-control"
                     name="from"
                     value={from}
+                    max={new Date().toISOString().split("T")[0]}
                     onChange={(e) => onChange(e)}
                   />
                 </div>
@@ -112,6 +113,7 @@ const AddEducation = () => {
                     name="to"
                     value={to}
                     onChange={(e) => onChange(e)}
+                    max={new Date().toISOString().split("T")[0]}
                     disabled={toDateDisabled ? "disabled" : ""}
                     required={!toDateDisabled ? "required" : ""}
                   />
@@ -120,7 +122,7 @@ const AddEducation = () => {
                   <textarea
                     name="description"
                     className="form-control"
-                    placeholder="* Program Description"
+                    placeholder=" Program Description"
                     value={description}
                     onChange={(e) => onChange(e)}
                   ></textarea>

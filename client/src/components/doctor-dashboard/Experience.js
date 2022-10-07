@@ -1,18 +1,31 @@
 import React, { Fragment } from "react";
 import Moment from "react-moment";
+import { deleteExperience } from "../../features/profile/profileActions";
 
+import { useDispatch } from "react-redux";
 const Experience = ({ experience }) => {
+   const dispatch = useDispatch();
   const experiences = experience.map((exp) => (
     <tr key={exp._id}>
       <td>{exp.institute}</td>
       <td>{exp.position}</td>
       <td>
-        <Moment format="DD/MM/YYYY">{exp.from}</Moment> -{" "}
+        <Moment format="DD/MM/YYYY">{exp.from}</Moment> - {" "}
         {exp.to === null ? (
           "Now"
         ) : (
           <Moment format="DD/MM/YYYY">{exp.to}</Moment>
         )}
+      </td>
+      <td>
+        <button
+          onClick={() => dispatch(deleteExperience(exp._id))}
+          type="button"
+          className="btn btn-danger"
+          style={{ color: "red" }}
+        >
+          X
+        </button>
       </td>
     </tr>
   ));

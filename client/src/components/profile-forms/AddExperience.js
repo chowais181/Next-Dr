@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { updateProfile } from "../../features/profile/profileActions";
+import { addExperience } from "../../features/profile/profileActions";
 const AddExperience = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -54,7 +54,7 @@ const AddExperience = () => {
                 <form
                   onSubmit={(e) => {
                     e.preventDefault();
-                    dispatch(updateProfile({ experience: formData }));
+                    dispatch(addExperience(formData));
                   }}
                 >
                   <small>* = required field</small>
@@ -87,6 +87,7 @@ const AddExperience = () => {
                       className="form-control"
                       name="from"
                       value={from}
+                      max={new Date().toISOString().split("T")[0]}
                       onChange={(e) => onChange(e)}
                     />
                   </div>
@@ -113,6 +114,7 @@ const AddExperience = () => {
                       name="to"
                       value={to}
                       onChange={(e) => onChange(e)}
+                      max={new Date().toISOString().split("T")[0]}
                       disabled={toDateDisabled ? "disabled" : ""}
                       required={!toDateDisabled ? "required" : ""}
                     />
@@ -121,7 +123,7 @@ const AddExperience = () => {
                     <textarea
                       name="description"
                       className="form-control"
-                      placeholder="* Program Description"
+                      placeholder=" Program Description"
                       value={description}
                       onChange={(e) => onChange(e)}
                     ></textarea>

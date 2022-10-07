@@ -32,7 +32,7 @@ const Appointments = () => {
         <div className="container">
           <div className="heading-common">
             <h1>
-              <strong>Appointments</strong>
+              <strong>My Appointments</strong>
             </h1>
             <h2 className="welcome-heading">
               <i className="fas fa-calendar-check"></i> {userInfo?.name}'s

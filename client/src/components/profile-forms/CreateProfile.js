@@ -61,7 +61,7 @@ const CreateProfile = () => {
             <div className="form-side">
               <div className="heading-common">
                 <h1>
-                  <strong>Add Profile </strong>
+                  <strong>Create Profile </strong>
                   <i className="far fa-id-card"></i>
                 </h1>
                 <p className="lead">

@@ -145,7 +145,7 @@ function NavMenu() {
             })}
 
             {/* --------------------------for user ------------------ */}
-            {userInfo && userInfo?.role === "patient" && !myProfile ? (
+            {userInfo && userInfo?.role !== "admin" && !myProfile ? (
               <>
                 <NavDropdown
                   id="navbarScrollingDropdown"

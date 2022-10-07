@@ -136,20 +136,17 @@ export default function UsersList() {
   const rows = [];
 
   // we slice the array bcz we cannot sort the array in strict mode without it
-  users
-    ?.slice()
-    .reverse()
-    .map((item) => {
-      rows.push({
-        id: item._id,
-        name: item.name,
-        email: item.email,
-        role: item.role,
-        createdAt: item.createdAt.substring(0, 10),
-        phoneNumber: "+" + item.phoneNumber,
-      });
-      return 1;
+  users.map((item) => {
+    rows.push({
+      id: item._id,
+      name: item.name,
+      email: item.email,
+      role: item.role,
+      createdAt: item.createdAt.substring(0, 10),
+      phoneNumber: "+" + item.phoneNumber,
     });
+    return 1;
+  });
 
   return (
     <Fragment>

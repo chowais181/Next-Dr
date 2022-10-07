@@ -40,7 +40,10 @@ class ApiFeatures {
 
     const skip = resultPerPage * (currentPage - 1);
 
-    this.query = this.query.limit(resultPerPage).skip(skip);
+    this.query = this.query
+      .sort({ createdAt: -1 })
+      .limit(resultPerPage)
+      .skip(skip);
 
     return this;
   }

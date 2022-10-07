@@ -12,6 +12,10 @@ const {
   updateProfileStatus,
   getAllProfilesUser,
   getAllProfilesAdmin,
+  addEducation,
+  addExperience,
+  deleteExp,
+  deleteEdu,
 } = require("../controllers/profileController");
 const { isAuthenticatedUser } = require("../middleware/auth");
 const router = express.Router();
@@ -23,6 +27,17 @@ router
   .get(isAuthenticatedUser, myProfile)
   .put(isAuthenticatedUser, updateProfile)
   .delete(isAuthenticatedUser, deleteProfile);
+
+
+// add education and experience
+router.route("/education").put(isAuthenticatedUser, addEducation);
+router.route("/experience").put(isAuthenticatedUser, addExperience);
+router
+  .route("/education/:id")
+  .delete(isAuthenticatedUser, deleteEdu);
+router
+  .route("/experience/:id")
+  .delete(isAuthenticatedUser, deleteExp);
 
 // user will give the review to doctor profile
 router

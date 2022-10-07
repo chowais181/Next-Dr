@@ -16,6 +16,13 @@ body {
   min-height: 100vh;
 }
 
+.container {
+  min-height: 100vh;
+}
+#profile-page .container {
+  min-height: 100vh;
+}
+
 /* for action buttons  */
 
 .btn-action {

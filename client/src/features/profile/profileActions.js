@@ -257,3 +257,100 @@ export const getAdminProfilesStats = createAsyncThunk(
     }
   }
 );
+
+// add education
+export const addEducation = createAsyncThunk(
+  "profile/addEducation",
+  async (formData, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.put(`/api/v1/education`, formData, config);
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+// add experiece
+export const addExperience = createAsyncThunk(
+  "profile/addExperience",
+  async (formData, { rejectWithValue }) => {
+    console.log(formData);
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.put(`/api/v1/experience`, formData, config);
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+
+// delete education
+export const deleteEducation = createAsyncThunk(
+  "profile/deleteEducation",
+  async (id, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.delete(`/api/v1/education/${id}`, config);
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+// delete experience
+export const deleteExperience = createAsyncThunk(
+  "profile/deleteExperience",
+  async (id, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+
+      const { data } = await axios.delete(`/api/v1/experience/${id}`, config);
+      return data;
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
+    }
+  }
+);
+
+
+
