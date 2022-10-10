@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 export default function UsersList() {
   const { loading, profiles, isUpdated, total_profiles, resultPerPage } =
     useSelector((state) => state.profile);
+    
   const navigate = useNavigate();
   const changeStatus = (id, status) => {
     dispatch(updateProfileStatus({ id, status }));

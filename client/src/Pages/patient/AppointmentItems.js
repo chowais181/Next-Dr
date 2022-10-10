@@ -26,7 +26,9 @@ const AppointmentItems = ({ appointment }) => {
             <strong>{appnt.patientName.toUpperCase()}</strong>
           </h2>
           <p className="profile-p">
-            <strong>Father's name: {appnt.fatherName}</strong>
+            <strong style={{ textTransform: "capitalize" }}>
+              Father's Name: {appnt.fatherName}
+            </strong>
           </p>
           <p className="profile-p2">
             <strong>Age: </strong>
@@ -47,15 +49,16 @@ const AppointmentItems = ({ appointment }) => {
             {appnt._id}
           </p>
           <h4 className="profile-status">
-            <p>Status: </p>
             <p
               style={{
+                marginTop: "8px",
+                textTransform: "capitalize",
                 color:
                   appnt.status === "pending"
                     ? "rgb(22, 186, 227)"
                     : appnt.status === "booked"
-                    ? "rgb(102, 255, 102)"
-                    : "red",
+                    ? "#41d171"
+                    : "#ed1c11",
               }}
             >
               {" "}

@@ -228,9 +228,14 @@ function NavMenu() {
                   id="collasible-nav-dropdown"
                 >
                   <div className="profile-popover">
-                    <strong>{userInfo.role}</strong>
+                    <strong style={{ textTransform: "capitalize" }}>
+                      {userInfo?.role}
+                    </strong>
                     <br />
-                    <h6> {userInfo.name}</h6>
+                    <h6 style={{ textTransform: "capitalize" }}>
+                      {" "}
+                      {userInfo?.name}
+                    </h6>
                   </div>
                   <NavDropdown.Divider />
                   <NavDropdown.Item as={Link} to="/myinfo">

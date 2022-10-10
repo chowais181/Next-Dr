@@ -47,9 +47,18 @@ function MyVerticallyCenteredModal(props) {
 }
 
 export default function PatientAppointments() {
-  const { loading, appointments, isUpdated } = useSelector(
-    (state) => state.appointment
-  );
+  const {
+    loading,
+    appointments,
+    isUpdated,
+    total_appointments,
+    resultPerPage,
+  } = useSelector((state) => state.appointment);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const setCurrentPageNo = (e) => {
+    setCurrentPage(e + 1);
+  };
 
   //--------------modal
   const [value, setValue] = useState([]);
@@ -57,10 +66,14 @@ export default function PatientAppointments() {
   const modalBody = appointments?.map((pat) => (
     <Fragment key={pat._id}>
       <h2 className="style-heading">
-        <strong>{pat.patientName}</strong>
+        <strong style={{ textTransform: "capitalize" }}>
+          {pat.patientName}
+        </strong>
       </h2>
       <p className="profile-p">
-        <strong>Father's name: {pat.fatherName}</strong>
+        <strong style={{ textTransform: "capitalize" }}>
+          Father's Name: {pat.fatherName}
+        </strong>
       </p>
       <p className="profile-p2">
         <strong>Age: </strong>
@@ -94,8 +107,8 @@ export default function PatientAppointments() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getMyAppointmentsDoctor());
-  }, [dispatch, isUpdated]);
+    dispatch(getMyAppointmentsDoctor(currentPage));
+  }, [dispatch, isUpdated, currentPage]);
 
   // ------------- columns
   const columns = [
@@ -227,7 +240,7 @@ export default function PatientAppointments() {
   ];
   const rows = [];
   // we slice the array bcz we cannot sort the array in strict mode without it
-  appointments.map((item, index) => {
+  appointments?.map((item, index) => {
     rows.push({
       index: index + 1,
       id: item._id,
@@ -268,10 +281,16 @@ export default function PatientAppointments() {
                   <DataGrid
                     rows={rows}
                     columns={columns}
-                    pageSize={5}
-                    rowsPerPageOptions={[5]}
+                    rowsPerPageOptions={[resultPerPage]}
+                    pagination
+                    page={currentPage - 1}
+                    pageSize={resultPerPage}
+                    paginationMode="server"
+                    rowCount={total_appointments}
+                    onPageChange={setCurrentPageNo}
                     disableSelectionOnClick
                     components={{ Toolbar: GridToolbar }}
+                    loading={loading}
                     autoHeight
                     sx={{
                       m: 1,

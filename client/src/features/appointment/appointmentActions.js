@@ -52,9 +52,10 @@ export const getMyAppointmentsUser = createAsyncThunk(
 // get my appointments ---- doctor
 export const getMyAppointmentsDoctor = createAsyncThunk(
   "appointment/getMyAppointmentsDoctor",
-  async () => {
+  async (currentPage) => {
+    console.log(currentPage);
     try {
-      let link = `/api/v1/myAppointments`;
+      let link = `/api/v1/myAppointments?page=${currentPage}`;
 
       const { data } = await axios.get(link);
       return data;

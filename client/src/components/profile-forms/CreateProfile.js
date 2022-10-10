@@ -70,7 +70,7 @@ const CreateProfile = () => {
                 </p>
               </div>
               <form onSubmit={(e) => onSubmit(e)}>
-                <small>* = required field</small>
+            
                 <div className="form-group">
                   <input
                     type="text"

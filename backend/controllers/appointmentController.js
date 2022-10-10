@@ -201,20 +201,30 @@ exports.deleteAppointmentUser = catchAsyncErrors(async (req, res, next) => {
 
 // get my appointments for Doctor
 exports.getMyAppointmentsDoctor = catchAsyncErrors(async (req, res, next) => {
+  let resultPerPage = 10;
   if (!req.user) {
     return next(new ErrorHander("Please login to access this resource.", 404));
   }
   // first get the doctor profile and then his/her appointments
   const profile = await Profile.findOne({ doctor: req.user.id });
-  const myAppointments = await Appointment.find({
+  const appts = await Appointment.find({
     doctorProfile: profile.id,
-  }).populate("user", "name email phoneNumber avatar");
+  });
 
-  const total_appointments = myAppointments.length;
+  const total_appointments = appts.length;
+  const apiFeature = new ApiFeatures(
+    Appointment.find({
+      doctorProfile: profile.id,
+    }).populate("user", "name email phoneNumber avatar"),
+    req.query
+  ).pagination(resultPerPage);
+
+  const myAppointments = await apiFeature.query;
 
   res.status(200).json({
     success: true,
     total_appointments,
+    resultPerPage,
     myAppointments,
   });
 });

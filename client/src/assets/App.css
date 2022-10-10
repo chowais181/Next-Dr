@@ -39,19 +39,16 @@ body {
 }
 
 .profile-status {
-  background: linear-gradient(90deg, #1cb5e0 0%, #000851 100%);
-  color: #d9c6c6;
+
+  background-color: #333333;
   justify-content: center;
   display: flex;
   border: 1px solid;
   border-radius: 20px;
-
   padding-top: 1%;
-  /* margin: 1%; */
+
 }
-.profile-status p {
-  padding: 2%;
-}
+
 
 .pagination {
   margin: 3%;
@@ -262,8 +259,7 @@ h5 {
 }
 
 .profile-p {
-  color: #738f93;
-  font-family: "Prata", serif;
+  color: #054f58;
 }
 .profile-p2 {
   font-family: "IBM Plex Sans", sans-serif;

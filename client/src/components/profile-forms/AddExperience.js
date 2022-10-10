@@ -57,7 +57,7 @@ const AddExperience = () => {
                     dispatch(addExperience(formData));
                   }}
                 >
-                  <small>* = required field</small>
+                 
                   <div className="form-group">
                     <input
                       type="text"

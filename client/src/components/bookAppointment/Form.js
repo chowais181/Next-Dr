@@ -70,7 +70,6 @@ const Form = ({ profile, profileId }) => {
           dispatch(createAppointment({ profileId, formData }));
         }}
       >
-        <small>* = required field</small>
         <div className="form-group">
           <input
             type="text"
@@ -148,7 +147,7 @@ const Form = ({ profile, profileId }) => {
         <div className="form-group">
           <textarea
             className="form-control"
-            placeholder="* Health Problem Description"
+            placeholder="Health Problem Description"
             name="description"
             value={description}
             onChange={(e) => onChange(e)}

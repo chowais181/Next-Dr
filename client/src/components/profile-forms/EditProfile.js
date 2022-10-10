@@ -7,7 +7,9 @@ import { updateProfile } from "../../features/profile/profileActions";
 const EditProfile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { loading, isUpdated, myProfile } = useSelector((state) => state.profile);
+  const { loading, isUpdated, myProfile } = useSelector(
+    (state) => state.profile
+  );
 
   const [social, setSocial] = useState({
     twitter: "",
@@ -59,7 +61,8 @@ const EditProfile = () => {
       hospital: loading || !myProfile?.hospital ? "" : myProfile?.hospital,
       website: loading || !myProfile?.website ? "" : myProfile?.website,
       location: loading || !myProfile?.location ? "" : myProfile?.location,
-      specialist: loading || !myProfile?.specialist ? "" : myProfile?.specialist,
+      specialist:
+        loading || !myProfile?.specialist ? "" : myProfile?.specialist,
       fees: loading || !myProfile?.fees ? "" : myProfile?.fees,
       timing: loading || !myProfile?.timing ? "" : myProfile?.timing,
       bio: loading || !myProfile?.bio ? "" : myProfile?.bio,
@@ -67,9 +70,11 @@ const EditProfile = () => {
 
     setSocial({
       twitter: loading || !myProfile?.social ? "" : myProfile?.social?.twitter,
-      facebook: loading || !myProfile?.social ? "" : myProfile?.social?.facebook,
+      facebook:
+        loading || !myProfile?.social ? "" : myProfile?.social?.facebook,
       youtube: loading || !myProfile?.social ? "" : myProfile?.social?.youtube,
-      instagram: loading || !myProfile?.social ? "" : myProfile?.social?.instagram,
+      instagram:
+        loading || !myProfile?.social ? "" : myProfile?.social?.instagram,
     });
   }, [loading, myProfile]);
 
@@ -90,7 +95,6 @@ const EditProfile = () => {
                 </p>
               </div>
               <form onSubmit={(e) => onSubmit(e)}>
-                <small>* = required field</small>
                 <div className="form-group">
                   <input
                     type="text"
