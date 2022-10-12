@@ -305,7 +305,6 @@ export const addExperience = createAsyncThunk(
   }
 );
 
-
 // delete education
 export const deleteEducation = createAsyncThunk(
   "profile/deleteEducation",
@@ -351,6 +350,3 @@ export const deleteExperience = createAsyncThunk(
     }
   }
 );
-
-
-

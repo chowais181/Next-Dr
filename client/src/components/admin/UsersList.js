@@ -116,7 +116,13 @@ export default function UsersList() {
                       buttons: [
                         {
                           label: "Yes",
-                          onClick: () => dispatch(deleteUser(params.row.id)),
+                          onClick: () =>
+                            dispatch(
+                              deleteUser({
+                                id: params.row.id,
+                                avatar: params.row.avatar,
+                              })
+                            ),
                         },
                         {
                           label: "No",
@@ -139,6 +145,7 @@ export default function UsersList() {
   users.map((item) => {
     rows.push({
       id: item._id,
+      avatar: item.avatar,
       name: item.name,
       email: item.email,
       role: item.role,

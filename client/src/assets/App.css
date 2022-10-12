@@ -39,16 +39,13 @@ body {
 }
 
 .profile-status {
-
   background-color: #333333;
   justify-content: center;
   display: flex;
   border: 1px solid;
   border-radius: 20px;
   padding-top: 1%;
-
 }
-
 
 .pagination {
   margin: 3%;
@@ -250,8 +247,20 @@ h5 {
   margin-top: 2rem;
 }
 .round-img {
+  background-color: white;
+  object-fit: contain;
+  width: 170px;
+  height: 170px;
   border-radius: 50%;
 }
+
+.round-img-myInfo {
+  object-fit: cover;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+
 .profile-top-p {
   font-size: 1.3rem;
   color: #f4f4f4;
@@ -518,6 +527,8 @@ h5 {
   justify-content: space-evenly;
 }
 .profile-img > img {
+  width: 170px;
+  height: 170px;
   border-radius: 50%;
   margin: 2rem auto;
 }
@@ -660,7 +671,9 @@ h5 {
 }
 .user-pic {
   margin-bottom: 1rem;
-  width: 100px;
+  width: 110px;
+  height: 110px;
+  object-fit: cover;
 }
 .user-review {
   grid-area: user-review;

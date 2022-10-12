@@ -4,12 +4,22 @@ import "../../assets/App.css";
 import Alert from "@mui/material/Alert";
 //-------------------
 import toast from "react-hot-toast";
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { registerUser } from "../../features/user/userActions";
 //------------------
 const Register = () => {
+  const initialValues = {
+    name: "",
+    phoneNumber: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    // profileImage: null,
+    acceptTerms: false,
+  };
+
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .required("Enter full name")
@@ -32,22 +42,31 @@ const Register = () => {
       .required("Confirm Password is required")
       .oneOf([Yup.ref("password"), null], "Confirm Password does not match"),
     acceptTerms: Yup.bool().oneOf([true], "Accept Terms is required"),
+
+    // profileImage: Yup.mixed()
+    //   .test("type", "Invalid Image format", (value) => {
+    //     return (
+    //       (value && value.type === "image/jpeg") ||
+    //       value.type === "image/jpg" ||
+    //       value.type === "image/png"
+    //     );
+    //   })
+    //   .test(
+    //     "size",
+    //     "File size is too big",
+    //     (value) => value && value.size <= 1 * 1024 * 1024 // 1MB),
+    //   ),
   });
 
-  const initialValues = {
-    name: "",
-    phoneNumber: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    acceptTerms: false,
-  };
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, error, isRegister } = useSelector((state) => state.user);
 
+  const [pic, setPic] = useState(null);
+
   const handleSubmit = (data) => {
-    console.log(JSON.stringify(data, null, 2));
+    data.profileImage = pic;
+    console.log(data);
     dispatch(registerUser(data));
   };
 
@@ -68,142 +87,166 @@ const Register = () => {
         validationSchema={validationSchema}
         onSubmit={handleSubmit}
       >
-        <section id="common">
-          <div className="container">
-            <div className="common-form">
-              <div className="form-side">
-                <div className="heading-common">
-                  <h1>
-                    <strong>Sign Up </strong>
-                    <i className="fas fa-user-plus"></i>
-                  </h1>
+        {(formikProps) => (
+          <section id="common">
+            <div className="container">
+              <div className="common-form">
+                <div className="form-side">
+                  <div className="heading-common">
+                    <h1>
+                      <strong>Sign Up </strong>
+                      <i className="fas fa-user-plus"></i>
+                    </h1>
+                  </div>
+
+                  <div className="register-form">
+                    <hr />
+                    {error && (
+                      <Alert variant="outlined" severity="error">
+                        {error}
+                      </Alert>
+                    )}
+                    <Form>
+                      <div className="form-group">
+                        <label className="label">Name</label>
+                        <Field
+                          name="name"
+                          type="text"
+                          className="form-control"
+                        />
+                        <ErrorMessage
+                          name="name"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label htmlFor="email" className="label">
+                          {" "}
+                          Email{" "}
+                        </label>
+                        <Field
+                          name="email"
+                          type="email"
+                          className="form-control"
+                        />
+                        <ErrorMessage
+                          name="email"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label htmlFor="username" className="label">
+                          {" "}
+                          Phone Number{" "}
+                        </label>
+                        <Field
+                          name="phoneNumber"
+                          className="form-control"
+                          placeholder="E.g. 03001234567"
+                        />
+                        <ErrorMessage
+                          name="phoneNumber"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label htmlFor="password" className="label">
+                          {" "}
+                          Password{" "}
+                        </label>
+                        <Field
+                          name="password"
+                          type="password"
+                          className="form-control"
+                        />
+                        <ErrorMessage
+                          name="password"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label htmlFor="confirmPassword" className="label">
+                          {" "}
+                          Confirm Password{" "}
+                        </label>
+                        <Field
+                          name="confirmPassword"
+                          type="password"
+                          className="form-control"
+                        />
+                        <ErrorMessage
+                          name="confirmPassword"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <label htmlFor="profileImage" className="label">
+                          {" "}
+                          Upload Image{" "}
+                        </label>
+                        <input
+                          name="profileImage"
+                          id="profileImage"
+                          type="file"
+                          className="form-control"
+                          onChange={(event) => {
+                            setPic(event.target.files[0]);
+                          }}
+                        />
+                      </div>
+
+                      <div className="form-group form-check">
+                        <Field
+                          name="acceptTerms"
+                          type="checkbox"
+                          className="form-check-input"
+                        />
+                        <label
+                          htmlFor="acceptTerms"
+                          className="form-check-label"
+                        >
+                          I have read and agree to the Terms
+                        </label>
+                        <ErrorMessage
+                          name="acceptTerms"
+                          component="div"
+                          className="text-danger"
+                        />
+                      </div>
+
+                      <div className="form-group">
+                        <button
+                          type="submit"
+                          className="btn btn-info"
+                          disabled={loading}
+                        >
+                          Sign Up
+                        </button>
+                      </div>
+                    </Form>
+                  </div>
                 </div>
-
-                <div className="register-form">
-                  <hr />
-                  {error && (
-                    <Alert variant="outlined" severity="error">
-                      {error}
-                    </Alert>
-                  )}
-                  <Form>
-                    <div className="form-group">
-                      <label className="label">Name</label>
-                      <Field name="name" type="text" className="form-control" />
-                      <ErrorMessage
-                        name="name"
-                        component="div"
-                        className="text-danger"
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="email" className="label">
-                        {" "}
-                        Email{" "}
-                      </label>
-                      <Field
-                        name="email"
-                        type="email"
-                        className="form-control"
-                      />
-                      <ErrorMessage
-                        name="email"
-                        component="div"
-                        className="text-danger"
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="username" className="label">
-                        {" "}
-                        Phone Number{" "}
-                      </label>
-                      <Field
-                        name="phoneNumber"
-                        className="form-control"
-                       
-                        placeholder="E.g. 03001234567"
-                      />
-                      <ErrorMessage
-                        name="phoneNumber"
-                        component="div"
-                        className="text-danger"
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="password" className="label">
-                        {" "}
-                        Password{" "}
-                      </label>
-                      <Field
-                        name="password"
-                        type="password"
-                        className="form-control"
-                      />
-                      <ErrorMessage
-                        name="password"
-                        component="div"
-                        className="text-danger"
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <label htmlFor="confirmPassword" className="label">
-                        {" "}
-                        Confirm Password{" "}
-                      </label>
-                      <Field
-                        name="confirmPassword"
-                        type="password"
-                        className="form-control"
-                      />
-                      <ErrorMessage
-                        name="confirmPassword"
-                        component="div"
-                        className="text-danger"
-                      />
-                    </div>
-
-                    <div className="form-group form-check">
-                      <Field
-                        name="acceptTerms"
-                        type="checkbox"
-                        className="form-check-input"
-                      />
-                      <label htmlFor="acceptTerms" className="form-check-label">
-                        I have read and agree to the Terms
-                      </label>
-                      <ErrorMessage
-                        name="acceptTerms"
-                        component="div"
-                        className="text-danger"
-                      />
-                    </div>
-
-                    <div className="form-group">
-                      <button
-                        type="submit"
-                        className="btn btn-info"
-                        disabled={loading}
-                      >
-                        Sign Up
-                      </button>
-                    </div>
-                  </Form>
+                <div className="img-side">
+                  <img
+                    className="register-user"
+                    src={process.env.PUBLIC_URL + "images/newDoctor1.svg"}
+                    alt=""
+                  />
                 </div>
-              </div>
-              <div className="img-side">
-                <img
-                  className="register-user"
-                  src={process.env.PUBLIC_URL + "images/newDoctor1.svg"}
-                  alt=""
-                />
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </Formik>
     </Fragment>
   );

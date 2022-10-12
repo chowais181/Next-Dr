@@ -4,8 +4,8 @@ import "../../assets/App.css";
 import Alert from "@mui/material/Alert";
 import Loader from "../../components/Loader";
 //-----------------------
-import React, { Fragment, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { Fragment, useEffect, useState } from "react";
+
 import { useSelector, useDispatch } from "react-redux";
 import { updateUser, getUserDetails } from "../../features/user/userActions";
 //------------------
@@ -30,12 +30,18 @@ const MyInfo = () => {
     name: userInfo?.name,
     phoneNumber: userInfo?.phoneNumber,
     email: userInfo?.email,
+    previousPic: userInfo?.avatar,
   };
-  const navigate = useNavigate();
+
   const dispatch = useDispatch();
 
+  const [pic, setPic] = useState(null);
+
   const handleSubmit = (data) => {
-    console.log(JSON.stringify(data, null, 2));
+    console.log(data);
+    data.avatar = pic;
+    // set the set pic null again
+    setPic(null);
     if (JSON.stringify(data) !== JSON.stringify(initialValues)) {
       dispatch(updateUser(data));
       dispatch(getUserDetails());
@@ -44,10 +50,8 @@ const MyInfo = () => {
 
   // redirect to login page
   useEffect(() => {
-    if (isUpdated) {
-      navigate("/");
-    }
-  }, [navigate, isUpdated]);
+    dispatch(getUserDetails());
+  }, [dispatch, isUpdated]);
 
   return (
     <Fragment>
@@ -70,6 +74,14 @@ const MyInfo = () => {
                         <i className="fas fa-user"></i>
                       </h1>
                     </div>
+
+                    {/* <div className="top-img"> */}
+                    <img
+                      className="round-img-myInfo"
+                      src={userInfo?.avatar}
+                      alt=""
+                    />
+                    {/* </div> */}
 
                     <div className="register-form">
                       <hr />
@@ -127,39 +139,22 @@ const MyInfo = () => {
                           />
                         </div>
 
-                        {/* <div className="form-group">
-                <label htmlFor="password" className="label">
-                  {" "}
-                  Password{" "}
-                </label>
-                <Field
-                  name="password"
-                  type="password"
-                  className="form-control"
-                />
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="text-danger"
-                />
-              </div>
+                        <div className="form-group">
+                          <label htmlFor="profileImage" className="label">
+                            {" "}
+                            Profile Image{" "}
+                          </label>
+                          <input
+                            name="profileImage"
+                            id="profileImage"
+                            type="file"
+                            className="form-control"
+                            onChange={(event) => {
+                              setPic(event.target.files[0]);
+                            }}
+                          />
+                        </div>
 
-              <div className="form-group">
-                <label htmlFor="confirmPassword" className="label">
-                  {" "}
-                  Confirm Password{" "}
-                </label>
-                <Field
-                  name="confirmPassword"
-                  type="password"
-                  className="form-control"
-                />
-                <ErrorMessage
-                  name="confirmPassword"
-                  component="div"
-                  className="text-danger"
-                />
-              </div> */}
                         <br />
                         <div className="form-group">
                           <button
@@ -182,6 +177,7 @@ const MyInfo = () => {
                   </div>
                 </div>
               </div>
+              <br />
             </section>
           </Formik>
         </Fragment>

@@ -50,17 +50,22 @@ export const userLogout = createAsyncThunk("user/logout", async () => {
 //register user action
 export const registerUser = createAsyncThunk(
   "user/register",
-  async ({ name, email, password, phoneNumber }, { rejectWithValue }) => {
+  async (
+    { name, email, password, phoneNumber, profileImage },
+    { rejectWithValue }
+  ) => {
     try {
       const config = {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+          type: "formData",
         },
       };
 
       await axios.post(
         "/api/v1/register-user",
-        { name, email, password, phoneNumber },
+        { name, email, password, phoneNumber, profileImage },
         config
       );
     } catch (error) {
@@ -76,17 +81,23 @@ export const registerUser = createAsyncThunk(
 //update user profile
 export const updateUser = createAsyncThunk(
   "user/updateUser",
-  async ({ name, email, phoneNumber }, { rejectWithValue }) => {
+  async (
+    { name, email, phoneNumber, previousPic, avatar },
+    { rejectWithValue }
+  ) => {
+    console.log(avatar);
+
     try {
       const config = {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "multipart/form-data",
+          Accept: "application/json",
+          type: "formData",
         },
       };
-
       await axios.put(
         "/api/v1/me/update",
-        { name, email, phoneNumber },
+        { name, email, phoneNumber, avatar, previousPic },
         config
       );
     } catch (error) {
@@ -154,22 +165,32 @@ export const getAllUser = createAsyncThunk(
   }
 );
 
-// admin ------ get all doctors ---
+// admin -------delete User ----------
+export const deleteUser = createAsyncThunk(
+  "user/deleteUser",
+  async (arg, { rejectWithValue }) => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const { data } = await axios.delete(
+        `/api/v1/admin/user/${arg.id}?avatar=${arg.avatar}`,
 
-// admin -------delete user ----------
-export const deleteUser = createAsyncThunk("user/deleteUser", async (id) => {
-  try {
-    const { data } = await axios.delete(`/api/v1/admin/user/${id}`);
-    return data;
-  } catch (error) {
-    // return custom error message from API if any
-    if (error.response && error.response.data.message) {
-      return error.response.data.message;
-    } else {
-      return error.message;
+        config
+      );
+      return data;
+    } catch (error) {
+      // return custom error message from API if any
+      if (error.response && error.response.data.message) {
+        return rejectWithValue(error.response.data.message);
+      } else {
+        return rejectWithValue(error.message);
+      }
     }
   }
-});
+);
 
 // admin -------update user status ----------
 export const updateUserRole = createAsyncThunk(

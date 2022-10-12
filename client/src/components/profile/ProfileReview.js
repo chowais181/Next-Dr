@@ -5,7 +5,7 @@ import { deleteReview } from "../../features/profile/profileActions";
 
 const ProfileReview = ({
   doctorId,
-  review: { _id, comment, date, user, createdAt },
+  review: { _id, comment, user, createdAt },
 }) => {
   const dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.user);
@@ -16,7 +16,7 @@ const ProfileReview = ({
         <div className="img-user">
           <img className="user-pic round-img" src={user?.avatar} alt="" />
           <h6>
-            <strong>{user?.name}</strong>
+            <strong>{user ? user?.name : "Deleted User"}</strong>
           </h6>
         </div>
         <div className="user-review">

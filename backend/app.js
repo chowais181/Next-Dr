@@ -2,7 +2,7 @@ const express = require("express");
 //we have to store the token in cookie
 var bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
-const fileUpload = require("express-fileupload");
+
 // CORS defines a way in which a browser and server can
 // interact to determine whether it is safe to allow the cross-origin request
 // it is more secure than simply allowing the cross-origin request
@@ -16,10 +16,12 @@ app.use(cookieParser());
 // parse application/x-www-form-urlencoded
 //Returns middleware that only parses urlencoded bodies and
 //only looks at requests where the Content-Type header matches the type option.
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(fileUpload());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(cors());
 
+app.use(express.static("public"));
 // .....Routes imports
 
 const user = require("./routes/userRoute");
