@@ -32,6 +32,16 @@ app.use("/api/v1", user);
 app.use("/api/v1", profile);
 app.use("/api/v1", appointment);
 
+
+// if (process.env.NODE_ENV === "production") {  
+    app.use("/", express.static("../client/build"));
+  
+    app.get("*", (req, res) => {
+      res.sendFile(path.resolve(__dirname, "../client/build/index.html"));
+    });
+//   }
+
+
 // ..error middleware we handle the error through it so over server would not stop
 const errormiddleware = require("./middleware/error");
 app.use(errormiddleware);

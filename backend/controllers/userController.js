@@ -18,7 +18,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
   if (req.file) {
     fileName =
       uuidv4() + req.file.originalname.toLowerCase().split(" ").join("-");
-    avatar = process.env.API_URL + "images/" + fileName;
+    avatar = `${req.protocol}://${req.get("host")}/images/${fileName}`;
   } else {
     avatar = gravtar.url(req.body.email, {
       s: "200",
@@ -123,7 +123,7 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
   if (req.file) {
     fileName =
       uuidv4() + req.file.originalname.toLowerCase().split(" ").join("-");
-    avatar = process.env.API_URL + "images/" + fileName;
+    avatar = `${req.protocol}://${req.get("host")}/images/${fileName}`;
   }
 
   const uploadPic = async () => {
