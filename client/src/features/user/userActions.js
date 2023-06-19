@@ -1,6 +1,7 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 //login user action
 export const userLogin = createAsyncThunk(
   "user/login",
@@ -14,7 +15,7 @@ export const userLogin = createAsyncThunk(
       };
 
       const { data } = await axios.post(
-        "/api/v1/login-user",
+        REACT_APP_API_URL + "/api/v1/login-user",
         { email, password },
         config
       );
@@ -36,7 +37,7 @@ export const userLogin = createAsyncThunk(
 // logout user action
 export const userLogout = createAsyncThunk("user/logout", async () => {
   try {
-    await axios.get("/api/v1/logout-user");
+    await axios.get(REACT_APP_API_URL + "/api/v1/logout-user");
   } catch (error) {
     // return custom error message from API if any
     if (error.response && error.response.data.message) {
@@ -64,7 +65,7 @@ export const registerUser = createAsyncThunk(
       };
 
       await axios.post(
-        "/api/v1/register-user",
+        REACT_APP_API_URL + "/api/v1/register-user",
         { name, email, password, phoneNumber, profileImage },
         config
       );
@@ -96,7 +97,7 @@ export const updateUser = createAsyncThunk(
         },
       };
       await axios.put(
-        "/api/v1/me/update",
+        REACT_APP_API_URL + "/api/v1/me/update",
         { name, email, phoneNumber, avatar, previousPic },
         config
       );
@@ -125,7 +126,10 @@ export const getUserDetails = createAsyncThunk(
         },
       };
 
-      const { data } = await axios.get(`/api/v1/me`, config);
+      const { data } = await axios.get(
+        REACT_APP_API_URL + `/api/v1/me`,
+        config
+      );
       return data;
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -151,7 +155,7 @@ export const getAllUser = createAsyncThunk(
       };
 
       const { data } = await axios.get(
-        `/api/v1/admin/users?page=${currentPage}`,
+        REACT_APP_API_URL + `/api/v1/admin/users?page=${currentPage}`,
         config
       );
       return data;
@@ -176,7 +180,7 @@ export const deleteUser = createAsyncThunk(
         },
       };
       const { data } = await axios.delete(
-        `/api/v1/admin/user/${arg.id}?avatar=${arg.avatar}`,
+        REACT_APP_API_URL + `/api/v1/admin/user/${arg.id}?avatar=${arg.avatar}`,
 
         config
       );
@@ -203,7 +207,7 @@ export const updateUserRole = createAsyncThunk(
         },
       };
       const { data } = await axios.put(
-        `/api/v1/admin/user/${arg.id}`,
+        REACT_APP_API_URL + `/api/v1/admin/user/${arg.id}`,
         { role: arg.role },
         config
       );
