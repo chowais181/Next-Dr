@@ -2,7 +2,7 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 // create profile
-
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 export const createProfile = createAsyncThunk(
   "profile/createProfile",
   async (formData, { rejectWithValue }) => {
@@ -15,7 +15,7 @@ export const createProfile = createAsyncThunk(
       };
 
       const { data } = await axios.post(
-        `/api/v1/create-profile`,
+        REACT_APP_API_URL + `/api/v1/create-profile`,
         formData,
         config
       );
@@ -42,7 +42,11 @@ export const updateProfile = createAsyncThunk(
         },
       };
 
-      const { data } = await axios.put(`/api/v1/my-profile`, formData, config);
+      const { data } = await axios.put(
+        REACT_APP_API_URL + `/api/v1/my-profile`,
+        formData,
+        config
+      );
       return data;
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -63,7 +67,10 @@ export const myProfile = createAsyncThunk("profile/myProfile", async () => {
       },
     };
 
-    const { data } = await axios.get(`/api/v1/my-profile`, config);
+    const { data } = await axios.get(
+      REACT_APP_API_URL + `/api/v1/my-profile`,
+      config
+    );
     return data;
   } catch (error) {
     if (error.response && error.response.data.message) {
@@ -85,7 +92,7 @@ export const deleteProfile = createAsyncThunk(
         },
       };
 
-      await axios.delete(`/api/v1/my-profile`, config);
+      await axios.delete(REACT_APP_API_URL + `/api/v1/my-profile`, config);
     } catch (error) {
       if (error.response && error.response.data.message) {
         return error.response.data.message;
@@ -103,9 +110,11 @@ export const getAllProfiles = createAsyncThunk(
     try {
       let link;
       if (keyword === "") {
-        link = `/api/v1/all-profiles?page=${currentPage}`;
+        link = REACT_APP_API_URL + `/api/v1/all-profiles?page=${currentPage}`;
       } else {
-        link = `/api/v1/all-profiles?page=${currentPage}&keyword=${keyword}`;
+        link =
+          REACT_APP_API_URL +
+          `/api/v1/all-profiles?page=${currentPage}&keyword=${keyword}`;
       }
 
       const { data } = await axios.get(link);
@@ -127,9 +136,12 @@ export const getAllProfilesUser = createAsyncThunk(
     try {
       let link;
       if (keyword === "") {
-        link = `/api/v1/all-profiles-user?page=${currentPage}`;
+        link =
+          REACT_APP_API_URL + `/api/v1/all-profiles-user?page=${currentPage}`;
       } else {
-        link = `/api/v1/all-profiles-user?page=${currentPage}&keyword=${keyword}`;
+        link =
+          REACT_APP_API_URL +
+          `/api/v1/all-profiles-user?page=${currentPage}&keyword=${keyword}`;
       }
 
       const { data } = await axios.get(link);
@@ -149,7 +161,9 @@ export const getSingleProfile = createAsyncThunk(
   "profile/getSingleProfile",
   async (id, { rejectWithValue }) => {
     try {
-      const { data } = await axios.get(`/api/v1/single-profile/${id}`);
+      const { data } = await axios.get(
+        REACT_APP_API_URL + `/api/v1/single-profile/${id}`
+      );
       return data;
     } catch (error) {
       // return custom error message from API if any
@@ -174,7 +188,7 @@ export const addReview = createAsyncThunk(
       };
 
       const { data } = await axios.post(
-        `/api/v1/create-profile-review`,
+        REACT_APP_API_URL + `/api/v1/create-profile-review`,
         {
           profileId,
           comment,
@@ -198,7 +212,8 @@ export const deleteReview = createAsyncThunk(
   async ({ _id, doctorId }) => {
     try {
       const { data } = await axios.delete(
-        `/api/v1/profile-reviews?id=${_id}&profileId=${doctorId}`
+        REACT_APP_API_URL +
+          `/api/v1/profile-reviews?id=${_id}&profileId=${doctorId}`
       );
       return data;
     } catch (error) {
@@ -223,7 +238,7 @@ export const updateProfileStatus = createAsyncThunk(
         },
       };
       const { data } = await axios.put(
-        `/api/v1/update-profile-status/${id}`,
+        REACT_APP_API_URL + `/api/v1/update-profile-status/${id}`,
         { status },
         config
       );
@@ -244,7 +259,7 @@ export const getAdminProfilesStats = createAsyncThunk(
   "profile/getAdminProfilesStats",
   async () => {
     try {
-      let link = `/api/v1/all-profiles-admin`;
+      let link = REACT_APP_API_URL + `/api/v1/all-profiles-admin`;
 
       const { data } = await axios.get(link);
       return data;
@@ -269,7 +284,11 @@ export const addEducation = createAsyncThunk(
         },
       };
 
-      const { data } = await axios.put(`/api/v1/education`, formData, config);
+      const { data } = await axios.put(
+        REACT_APP_API_URL + `/api/v1/education`,
+        formData,
+        config
+      );
       return data;
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -293,7 +312,11 @@ export const addExperience = createAsyncThunk(
         },
       };
 
-      const { data } = await axios.put(`/api/v1/experience`, formData, config);
+      const { data } = await axios.put(
+        REACT_APP_API_URL + `/api/v1/experience`,
+        formData,
+        config
+      );
       return data;
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -316,7 +339,10 @@ export const deleteEducation = createAsyncThunk(
         },
       };
 
-      const { data } = await axios.delete(`/api/v1/education/${id}`, config);
+      const { data } = await axios.delete(
+        REACT_APP_API_URL + `/api/v1/education/${id}`,
+        config
+      );
       return data;
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -339,7 +365,10 @@ export const deleteExperience = createAsyncThunk(
         },
       };
 
-      const { data } = await axios.delete(`/api/v1/experience/${id}`, config);
+      const { data } = await axios.delete(
+        REACT_APP_API_URL + `/api/v1/experience/${id}`,
+        config
+      );
       return data;
     } catch (error) {
       if (error.response && error.response.data.message) {

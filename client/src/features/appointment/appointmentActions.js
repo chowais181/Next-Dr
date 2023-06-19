@@ -2,7 +2,7 @@ import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 // create Appointment
-
+const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 export const createAppointment = createAsyncThunk(
   "appointment/createAppointment",
   async ({ profileId, formData }, { rejectWithValue }) => {
@@ -14,7 +14,7 @@ export const createAppointment = createAsyncThunk(
       };
 
       await axios.post(
-        `/api/v1/create-appointment?profileId=${profileId}`,
+        REACT_APP_API_URL + `/api/v1/create-appointment?profileId=${profileId}`,
 
         formData,
 
@@ -35,7 +35,8 @@ export const getMyAppointmentsUser = createAsyncThunk(
   "appointment/getMyAppointmentsUser",
   async ({ currentPage }) => {
     try {
-      let link = `/api/v1/my-appointments?page=${currentPage}`;
+      let link =
+        REACT_APP_API_URL + `/api/v1/my-appointments?page=${currentPage}`;
 
       const { data } = await axios.get(link);
       return data;
@@ -55,7 +56,8 @@ export const getMyAppointmentsDoctor = createAsyncThunk(
   async (currentPage) => {
     console.log(currentPage);
     try {
-      let link = `/api/v1/myAppointments?page=${currentPage}`;
+      let link =
+        REACT_APP_API_URL + `/api/v1/myAppointments?page=${currentPage}`;
 
       const { data } = await axios.get(link);
       return data;
@@ -75,7 +77,9 @@ export const deleteAppointmentUser = createAsyncThunk(
   async (id) => {
     console.log(id);
     try {
-      const { data } = await axios.delete(`/api/v1/appointment/${id}`);
+      const { data } = await axios.delete(
+        REACT_APP_API_URL + `/api/v1/appointment/${id}`
+      );
       return data;
     } catch (error) {
       // return custom error message from API if any
@@ -100,7 +104,7 @@ export const updateAppointmentStatusDoctor = createAsyncThunk(
         },
       };
       const { data } = await axios.put(
-        `/api/v1/myAppointment/${id}`,
+        REACT_APP_API_URL + `/api/v1/myAppointment/${id}`,
         { status },
         config
       );
@@ -121,7 +125,7 @@ export const getAdminAppStats = createAsyncThunk(
   "appointment/getAdminAppStats",
   async () => {
     try {
-      let link = `/api/v1/admin-appointments-stats`;
+      let link = REACT_APP_API_URL + `/api/v1/admin-appointments-stats`;
 
       const { data } = await axios.get(link);
       return data;
