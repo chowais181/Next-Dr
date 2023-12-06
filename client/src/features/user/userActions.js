@@ -1,6 +1,8 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+axios.defaults.withCredentials = true;
+
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 //login user action
 export const userLogin = createAsyncThunk(
@@ -124,6 +126,7 @@ export const getUserDetails = createAsyncThunk(
         headers: {
           Authorization: `Bearer ${user.userToken}`,
         },
+        withCredentials: true,
       };
 
       const { data } = await axios.get(

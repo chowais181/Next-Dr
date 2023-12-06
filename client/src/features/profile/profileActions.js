@@ -1,6 +1,8 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+axios.defaults.withCredentials = true;
+
 // create profile
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 export const createProfile = createAsyncThunk(
@@ -65,6 +67,7 @@ export const myProfile = createAsyncThunk("profile/myProfile", async () => {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     };
 
     const { data } = await axios.get(
@@ -117,7 +120,7 @@ export const getAllProfiles = createAsyncThunk(
           `/api/v1/all-profiles?page=${currentPage}&keyword=${keyword}`;
       }
 
-      const { data } = await axios.get(link);
+      const { data } = await axios.get(link, { withCredentials: true });
       return data;
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -144,7 +147,7 @@ export const getAllProfilesUser = createAsyncThunk(
           `/api/v1/all-profiles-user?page=${currentPage}&keyword=${keyword}`;
       }
 
-      const { data } = await axios.get(link);
+      const { data } = await axios.get(link, { withCredentials: true });
       return data;
     } catch (error) {
       if (error.response && error.response.data.message) {
@@ -162,7 +165,8 @@ export const getSingleProfile = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(
-        REACT_APP_API_URL + `/api/v1/single-profile/${id}`
+        REACT_APP_API_URL + `/api/v1/single-profile/${id}`,
+        { withCredentials: true }
       );
       return data;
     } catch (error) {

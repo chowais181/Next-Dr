@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createAsyncThunk } from "@reduxjs/toolkit";
+axios.defaults.withCredentials = true;
 
 // create Appointment
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
