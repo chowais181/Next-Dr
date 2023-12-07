@@ -6,16 +6,16 @@ import { myProfile } from "../../features/profile/profileActions";
 
 const ProtectedDoctorRoute = (props) => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.user);
+  const { userInfo, isLogin } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (!userInfo) {
+    if (!userInfo && isLogin) {
       dispatch(getUserDetails());
     }
     dispatch(myProfile());
-  }, [dispatch, userInfo]);
+  }, [dispatch, userInfo, isLogin]);
   // show unauthorized screen if no user is found in redux store
-  if (!localStorage.getItem("userToken") || userInfo?.role !== "doctor") {
+  if (!isLogin || userInfo?.role !== "doctor") {
     return <Navigate to="/" />;
   }
   // return the rest of the code here

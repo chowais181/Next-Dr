@@ -29,7 +29,7 @@ const Register = () => {
     email: Yup.string().required("Email is required").email("Email is invalid"),
     phoneNumber: Yup.string()
       .required("Phone number is required")
-      .matches(/^(\+92|0|92)(3)[0-9]{9}$/, "Not a valid number"),
+      .matches(/^[0-9]{12}$/, "Not a valid number"),
     password: Yup.string()
       .required("Password is required")
       .matches(
@@ -146,7 +146,7 @@ const Register = () => {
                         <Field
                           name="phoneNumber"
                           className="form-control"
-                          placeholder="E.g. 03001234567"
+                          placeholder="E.g. 923001234567"
                         />
                         <ErrorMessage
                           name="phoneNumber"

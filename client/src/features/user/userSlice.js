@@ -25,7 +25,7 @@ const initialState = {
   total_user: 0,
   resultPerPage: 0,
   success: false,
-  isLogin: false,
+  isLogin: !!userToken,
   isRegister: false,
   isDeleted: false,
   isUpdated: false,
@@ -34,7 +34,17 @@ const initialState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {},
+  reducers: {
+    logoutUser: (state) => {
+      state.userInfo = null;
+      state.userToken = null;
+      state.isLogin = false;
+      state.success = false;
+      state.isRegister = false;
+      state.isDeleted = false;
+      state.isUpdated = false;
+    },
+  },
 
   extraReducers: {
     // logout reducers
@@ -45,9 +55,8 @@ const userSlice = createSlice({
     },
     [userLogout.fulfilled]: (state, { payload }) => {
       state.loading = false;
-      state.userInfo = null;
-      state.userToken = null;
       state.isLogin = false;
+      userSlice.caseReducers.logoutUser(state);
     },
     [userLogout.rejected]: (state, { payload }) => {
       state.loading = false;
@@ -105,12 +114,12 @@ const userSlice = createSlice({
     // get user details
     [getUserDetails.pending]: (state) => {
       state.loading = true;
-      state.isUpdated=false;
+      state.isUpdated = false;
     },
     [getUserDetails.fulfilled]: (state, { payload }) => {
       state.loading = false;
       state.userInfo = payload.user;
-      state.isUpdated=false;
+      state.isUpdated = false;
     },
     [getUserDetails.rejected]: (state, { payload }) => {
       state.loading = false;

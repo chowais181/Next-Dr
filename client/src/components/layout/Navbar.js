@@ -78,8 +78,6 @@ const adminMenu = [
   },
 ];
 
-// const role = user?.isAdmin ? "Admin" : user?.isDoctor ? "Doctor" : "User";
-
 function NavMenu() {
   const location = useLocation();
   const pathElements = location.pathname.split("/");
@@ -102,9 +100,9 @@ function NavMenu() {
 
   //logout user function
   function logoutUser() {
-    navigate("/", { replace: true });
-    dispatch(userLogout());
     localStorage.clear();
+    dispatch(userLogout());
+    navigate("/", { replace: true });
   }
 
   // automatically authenticate user if token is found
@@ -173,7 +171,8 @@ function NavMenu() {
             ) : null}
 
             {/* ------------------------for doctor------------------ */}
-            {(userInfo && userInfo.role === "doctor") || myProfile ? (
+            {(userInfo && userInfo?.role === "doctor") ||
+            (userInfo && myProfile) ? (
               <>
                 <NavDropdown
                   id="navbarScrollingDropdown"
@@ -204,17 +203,6 @@ function NavMenu() {
             <>
               {/* user icon */}
               <Nav className="NavIcon">
-                {/* <Badge count={1} color="white">
-                  <Icon
-                    icon="clarity:notification-line"
-                    color="white"
-                    hFlip={true}
-                    width="26"
-                    height="26"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => navigate("/")}
-                  />
-                </Badge> */}
                 <NavDropdown
                   title={
                     <Icon
@@ -251,7 +239,6 @@ function NavMenu() {
                   >
                     Logout
                   </Button>
-                  {/* </NavDropdown.Item> */}
                 </NavDropdown>
               </Nav>
             </>

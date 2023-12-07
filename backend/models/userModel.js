@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema(
       required: [true, "Enter a valid phone number"],
       validate: {
         validator: function (v) {
-          var no = /^(\+92|0|92)(3)[0-9]{9}$/;
+          var no = /^[0-9]{12}$/;
 
           return no.test(v);
         },
@@ -67,9 +67,6 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-
-
-
 
 //....encrypting the password before saving it to the database
 userSchema.pre("save", async function (next) {

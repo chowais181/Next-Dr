@@ -8,7 +8,7 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const { userInfo, isLogin } = useSelector((state) => state.user);
   useEffect(() => {
-    if (userInfo) {
+    if (isLogin) {
       navigate("/home");
     }
   }, [navigate, userInfo, isLogin]);

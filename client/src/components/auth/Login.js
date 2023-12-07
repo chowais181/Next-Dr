@@ -30,9 +30,6 @@ const Login = () => {
     if (isLogin) {
       toast.success("Login successfully");
     }
-    if (userInfo) {
-      navigate("/admin-dashboard");
-    }
   }, [navigate, userInfo, isLogin]);
 
   const handleSubmit = (data) => {

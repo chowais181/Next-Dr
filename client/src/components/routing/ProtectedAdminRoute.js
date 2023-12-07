@@ -5,15 +5,15 @@ import { getUserDetails } from "../../features/user/userActions";
 
 const ProtectedAdminRoute = (props) => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.user);
+  const { userInfo, isLogin } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (!userInfo) {
+    if (!userInfo && isLogin) {
       dispatch(getUserDetails());
     }
-  }, [dispatch, userInfo]);
+  }, [dispatch, userInfo, isLogin]);
   // show unauthorized screen if no user is found in redux store
-  if (!localStorage.getItem("userToken") || userInfo?.role !== "admin") {
+  if (!isLogin || userInfo?.role !== "admin") {
     return <Navigate to="/" />;
   }
   // return the rest of the code here

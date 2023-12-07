@@ -1,10 +1,13 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function PublicRoute(props) {
- 
-  if (localStorage.getItem("userToken")) {
-    console.log(localStorage.getItem("userRole"));
+  const isLogin = useSelector((state) => state.user.isLogin);
+
+  if (isLogin) {
+    // Assuming userRole is not stored in Redux state
+    // If userRole is also in Redux state, you can use it in the condition
     if (localStorage.getItem("userRole") === "admin") {
       return <Navigate to="/admin-dashboard" />;
     } else {

@@ -3,20 +3,26 @@ import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { getUserDetails } from "../../features/user/userActions";
 import { myProfile } from "../../features/profile/profileActions";
+
 const ProtectedRoute = (props) => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.user);
+  const { userInfo, isLogin } = useSelector((state) => state.user);
+
   useEffect(() => {
-    if (!userInfo) {
-      dispatch(getUserDetails());
+    if (isLogin) {
+      if (!userInfo) {
+        dispatch(getUserDetails());
+      }
+      dispatch(myProfile());
     }
-    dispatch(myProfile());
-  }, [dispatch, userInfo]);
-  // show unauthorized screen if no user is found in redux store
-  if (!localStorage.getItem("userToken")) {
+  }, [dispatch, userInfo, isLogin]);
+
+  // Show unauthorized screen if no user is found in Redux store
+  if (!isLogin) {
     return <Navigate to="/" />;
   }
-  // return the rest of the code here
+
+  // Return the rest of the code here
   return props.children;
 };
 
