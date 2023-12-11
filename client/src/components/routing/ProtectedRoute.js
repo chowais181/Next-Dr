@@ -20,6 +20,10 @@ const ProtectedRoute = (props) => {
   // Show unauthorized screen if no user is found in Redux store
   if (!isLogin) {
     return <Navigate to="/" />;
+  } else {
+    if (userInfo?.role === "admin") {
+      return <Navigate to="/admin-dashboard" />;
+    }
   }
 
   // Return the rest of the code here

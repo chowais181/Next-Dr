@@ -9,10 +9,12 @@ const ProtectedDoctorRoute = (props) => {
   const { userInfo, isLogin } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (!userInfo && isLogin) {
-      dispatch(getUserDetails());
+    if (isLogin) {
+      if (!userInfo) {
+        dispatch(getUserDetails());
+      }
+      dispatch(myProfile());
     }
-    dispatch(myProfile());
   }, [dispatch, userInfo, isLogin]);
   // show unauthorized screen if no user is found in redux store
   if (!isLogin || userInfo?.role !== "doctor") {

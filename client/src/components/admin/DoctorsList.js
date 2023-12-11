@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 export default function UsersList() {
   const { loading, profiles, isUpdated, total_profiles, resultPerPage } =
     useSelector((state) => state.profile);
-    
+
   const navigate = useNavigate();
   const changeStatus = (id, status) => {
     dispatch(updateProfileStatus({ id, status }));
@@ -28,7 +28,6 @@ export default function UsersList() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllProfiles({ currentPage, keyword }));
-    console.log(currentPage);
   }, [dispatch, currentPage, keyword, isUpdated]);
 
   // ------------- columns -------------
@@ -166,18 +165,19 @@ export default function UsersList() {
   ];
   const rows = [];
   // we slice the array bcz we cannot sort the array in strict mode without it
-  profiles?.map((item, index) => {
-    rows.push({
-      id: item._id,
-      name: item.name,
-      hospital: item.hospital,
-      location: item.location,
-      createdAt: item.createdAt.substring(0, 10),
-      phoneNumber: "+" + item?.doctor?.phoneNumber,
-      profileStatus: item.profileStatus,
+  profiles &&
+    profiles?.map((item, index) => {
+      rows.push({
+        id: item._id,
+        name: item.name,
+        hospital: item.hospital,
+        location: item.location,
+        createdAt: item.createdAt.substring(0, 10),
+        phoneNumber: "+" + item?.doctor?.phoneNumber,
+        profileStatus: item.profileStatus,
+      });
+      return 1;
     });
-    return 1;
-  });
 
   return (
     <Fragment>
@@ -194,7 +194,7 @@ export default function UsersList() {
 
           <br />
 
-          {profiles?.length > 0 ? (
+          {profiles && profiles?.length > 0 ? (
             <div className="datagrid">
               <DataGrid
                 rows={rows}

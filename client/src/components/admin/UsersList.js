@@ -142,18 +142,19 @@ export default function UsersList() {
   const rows = [];
 
   // we slice the array bcz we cannot sort the array in strict mode without it
-  users.map((item) => {
-    rows.push({
-      id: item._id,
-      avatar: item.avatar,
-      name: item.name,
-      email: item.email,
-      role: item.role,
-      createdAt: item.createdAt.substring(0, 10),
-      phoneNumber: "+" + item.phoneNumber,
+  users &&
+    users.map((item) => {
+      rows.push({
+        id: item._id,
+        avatar: item.avatar,
+        name: item.name,
+        email: item.email,
+        role: item.role,
+        createdAt: item.createdAt.substring(0, 10),
+        phoneNumber: "+" + item.phoneNumber,
+      });
+      return 1;
     });
-    return 1;
-  });
 
   return (
     <Fragment>
@@ -169,7 +170,7 @@ export default function UsersList() {
           </h2>
           <br />
 
-          {users?.length > 0 ? (
+          {users && users?.length > 0 ? (
             <div className="datagrid">
               <DataGrid
                 rows={rows}

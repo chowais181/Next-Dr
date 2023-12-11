@@ -8,14 +8,17 @@ const ProtectedAdminRoute = (props) => {
   const { userInfo, isLogin } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (!userInfo && isLogin) {
-      dispatch(getUserDetails());
+    if (isLogin) {
+      if (!userInfo) {
+        dispatch(getUserDetails());
+      }
     }
   }, [dispatch, userInfo, isLogin]);
   // show unauthorized screen if no user is found in redux store
   if (!isLogin || userInfo?.role !== "admin") {
     return <Navigate to="/" />;
   }
+
   // return the rest of the code here
   return props.children;
 };
