@@ -7,9 +7,14 @@ import "../assets/App.css";
 export default function LandingPage() {
   const navigate = useNavigate();
   const { userInfo, isLogin } = useSelector((state) => state.user);
+
   useEffect(() => {
-    if (isLogin) {
-      navigate("/home");
+    if (isLogin && userInfo) {
+      if (userInfo?.role === "admin") {
+        navigate("/admin-dashboard");
+      } else {
+        navigate("/home");
+      }
     }
   }, [navigate, userInfo, isLogin]);
   return (

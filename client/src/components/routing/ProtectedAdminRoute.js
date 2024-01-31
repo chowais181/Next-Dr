@@ -15,7 +15,7 @@ const ProtectedAdminRoute = (props) => {
     }
   }, [dispatch, userInfo, isLogin]);
   // show unauthorized screen if no user is found in redux store
-  if (!isLogin || userInfo?.role !== "admin") {
+  if (!isLogin || !userInfo || userInfo?.role !== "admin") {
     return <Navigate to="/" />;
   }
 
